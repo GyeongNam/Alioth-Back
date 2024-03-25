@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AilothApplication {
+public class AliothApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AilothApplication.class, args);
+		SpringApplication.run(AliothApplication.class, args);
 	}
 
 }
