@@ -1,0 +1,5 @@
+jwt:
+  accesskey: b55db528fa0ac410666ebd43ecf44d25aad339e3a7661
+  refresh: f7cadd7ad04b457d342e09fe98008036f114864d3b95aaa8170b250b1d98
+  accessexpired: 180
+  refreshexpired: 3600
