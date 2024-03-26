@@ -3,11 +3,12 @@ package com.alioth.server.domain.schedule.service;
 import com.alioth.server.common.domain.TypeChange;
 import com.alioth.server.domain.schedule.domain.Schedule;
 import com.alioth.server.domain.schedule.domain.ScheduleType;
-import com.alioth.server.domain.schedule.dto.ScheduleCreateDto;
+import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
 
-import com.alioth.server.domain.schedule.dto.ScheduleResDto;
-import com.alioth.server.domain.schedule.dto.ScheduleUpdateDto;
+import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
+import com.alioth.server.domain.schedule.dto.req.ScheduleUpdateDto;
 import com.alioth.server.domain.schedule.repository.ScheduleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,8 +44,9 @@ class ScheduleServiceTest {
                 .allDay("1")
                 .build();
 
-        Schedule savedSchedule = scheduleRepository.save(typeChange.ScheduleCreateDtoToSchedule(scheduleCreateDto));
-        this.schedule = scheduleService.findById(savedSchedule.getScheduleId());
+        ScheduleResDto savedScheduleResDto = scheduleService.save(scheduleCreateDto);
+        this.schedule = scheduleRepository.findById(savedScheduleResDto.scheduleId())
+                .orElseThrow(() -> new EntityNotFoundException("Saved schedule not found"));
     }
 
     @Test
@@ -79,7 +81,7 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("특정 사용자의 모든 일정 조회 테스트")
     void list() {
-        List<ScheduleResDto> schedules = scheduleService.list(schedule.getMemberId());
+        List<ScheduleResDto> schedules = scheduleService.list();
         assertFalse(schedules.isEmpty());
     }
 }

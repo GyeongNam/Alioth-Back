@@ -1,4 +1,4 @@
-package com.alioth.server.domain.schedule.dto;
+package com.alioth.server.domain.schedule.dto.res;
 
 import com.alioth.server.domain.schedule.domain.ScheduleType;
 import lombok.*;

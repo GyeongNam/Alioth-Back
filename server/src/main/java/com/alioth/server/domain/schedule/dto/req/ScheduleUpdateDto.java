@@ -1,4 +1,4 @@
-package com.alioth.server.domain.schedule.dto;
+package com.alioth.server.domain.schedule.dto.req;
 
 import com.alioth.server.domain.schedule.domain.ScheduleType;
 import jakarta.validation.constraints.NotBlank;

@@ -1,7 +1,9 @@
 package com.alioth.server.domain.schedule.domain;
 
 import com.alioth.server.common.domain.BaseEntity;
-import com.alioth.server.domain.schedule.dto.ScheduleUpdateDto;
+import com.alioth.server.domain.dummy.domain.InsuranceProduct;
+import com.alioth.server.domain.member.domain.SalesMembers;
+import com.alioth.server.domain.schedule.dto.req.ScheduleUpdateDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,8 +40,9 @@ public class Schedule extends BaseEntity {
     @Builder.Default
     private String scheduleDel_YN = "N";
 
-    @Column(nullable = false)
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "SM_id")
+    private SalesMembers salesMembers;
 
     public void delete(){
         this.scheduleDel_YN = "Y";

@@ -1,14 +1,11 @@
 package com.alioth.server.domain.schedule.controller;
 
 import com.alioth.server.common.response.CommonResponse;
-import com.alioth.server.domain.schedule.domain.Schedule;
-import com.alioth.server.domain.schedule.dto.ScheduleCreateDto;
-import com.alioth.server.domain.schedule.dto.ScheduleResDto;
-import com.alioth.server.domain.schedule.dto.ScheduleUpdateDto;
+import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
+import com.alioth.server.domain.schedule.dto.req.ScheduleUpdateDto;
 import com.alioth.server.domain.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +38,7 @@ public class ScheduleController {
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
                 "일정 리스트",
-                scheduleService.list(1L)
+                scheduleService.list()
         );
     }
 
@@ -57,7 +54,7 @@ public class ScheduleController {
     @DeleteMapping("/delete/{scheduleId}")
     public ResponseEntity<CommonResponse> deleteSchedule(@PathVariable Long scheduleId){
         return CommonResponse.responseMessage(
-                HttpStatus.CREATED,
+                HttpStatus.OK,
                 "일정이 삭제되었습니다.",
                 scheduleService.delete(scheduleId)
         );

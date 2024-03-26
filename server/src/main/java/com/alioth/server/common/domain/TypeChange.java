@@ -1,22 +1,22 @@
 package com.alioth.server.common.domain;
 
+import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.schedule.domain.Schedule;
-import com.alioth.server.domain.schedule.dto.ScheduleCreateDto;
-import com.alioth.server.domain.schedule.dto.ScheduleResDto;
-import com.alioth.server.domain.schedule.dto.ScheduleUpdateDto;
+import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
+import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TypeChange {
 
-    public Schedule ScheduleCreateDtoToSchedule(ScheduleCreateDto scheduleCreateDto){
+    public Schedule ScheduleCreateDtoToSchedule(ScheduleCreateDto scheduleCreateDto, SalesMembers salesMembers){
         return Schedule.builder()
                 .scheduleStartTime(scheduleCreateDto.scheduleStartTime())
                 .scheduleEndTime(scheduleCreateDto.scheduleEndTime())
                 .scheduleNote(scheduleCreateDto.scheduleNote())
                 .scheduleType(scheduleCreateDto.scheduleType())
                 .allDay(scheduleCreateDto.allDay())
-                .memberId(1L) // 사원 id
+                .salesMembers(salesMembers) // 사원
                 .build();
     }
 
@@ -29,7 +29,7 @@ public class TypeChange {
                 .scheduleType(schedule.getScheduleType())
                 .allDay(schedule.getAllDay())
                 .del_yn(schedule.getScheduleDel_YN())
-                .MemberId(schedule.getMemberId())
+                .MemberId(schedule.getSalesMembers().getId())
                 .build();
     }
 

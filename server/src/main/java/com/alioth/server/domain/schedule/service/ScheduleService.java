@@ -1,17 +1,18 @@
 package com.alioth.server.domain.schedule.service;
 
 import com.alioth.server.common.domain.TypeChange;
+import com.alioth.server.domain.member.domain.SalesMembers;
+import com.alioth.server.domain.member.repository.SalesMemberRepository;
 import com.alioth.server.domain.schedule.domain.Schedule;
-import com.alioth.server.domain.schedule.dto.ScheduleCreateDto;
-import com.alioth.server.domain.schedule.dto.ScheduleResDto;
-import com.alioth.server.domain.schedule.dto.ScheduleUpdateDto;
+import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
+import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
+import com.alioth.server.domain.schedule.dto.req.ScheduleUpdateDto;
 import com.alioth.server.domain.schedule.repository.ScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,13 +22,17 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final TypeChange typeChange;
 
+    private final SalesMemberRepository salesMemberRepository;
+
     @Autowired
     ScheduleService(
             ScheduleRepository scheduleRepository,
-            TypeChange typeChange
+            TypeChange typeChange,
+            SalesMemberRepository salesMemberRepository
     ){
         this.scheduleRepository = scheduleRepository;
         this.typeChange = typeChange;
+        this.salesMemberRepository = salesMemberRepository;
     }
 
     public Schedule findById(Long scheduleId){
@@ -35,9 +40,10 @@ public class ScheduleService {
     }
 
     public ScheduleResDto save(ScheduleCreateDto scheduleCreateDto) {
+        SalesMembers salesMembers = salesMemberRepository.findById(1L).orElseThrow(()->new EntityNotFoundException("존재하지 않는 사원입니다."));
         return typeChange.scheduleToScheduleResDto(
                 scheduleRepository.save(
-                        typeChange.ScheduleCreateDtoToSchedule(scheduleCreateDto)
+                        typeChange.ScheduleCreateDtoToSchedule(scheduleCreateDto, salesMembers)
                 )
         );
     }
@@ -54,8 +60,9 @@ public class ScheduleService {
         return typeChange.scheduleToScheduleResDto(schedule);
     }
 
-    public List<ScheduleResDto> list(long memberId) {
-        return scheduleRepository.findAllByMemberId(memberId)
+    public List<ScheduleResDto> list() {
+        SalesMembers salesMembers = salesMemberRepository.findById(1L).orElseThrow(()->new EntityNotFoundException("존재하지 않는 사원입니다."));
+        return scheduleRepository.findAllBySalesMembers(salesMembers)
                 .stream()
                 .map(typeChange::scheduleToScheduleResDto)
                 .collect(Collectors.toList());
