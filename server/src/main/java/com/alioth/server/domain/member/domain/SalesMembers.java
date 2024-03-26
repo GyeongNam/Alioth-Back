@@ -32,7 +32,7 @@ public class SalesMembers extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 8)
     private String password;
 
     @Column(nullable = false)
@@ -48,4 +48,9 @@ public class SalesMembers extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SalesMemberType rank;
+
+
+    public void updatePassword(String updatePassword) {
+        this.password = updatePassword;
+    }
 }
