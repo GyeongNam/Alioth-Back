@@ -8,7 +8,6 @@ public record BoardResDto(
         Long boardId,
         String title,
         String content,
-        Long viewCount,
         BoardType boardType,
         Long memberId
 ) {}

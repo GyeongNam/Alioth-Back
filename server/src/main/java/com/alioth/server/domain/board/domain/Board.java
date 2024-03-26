@@ -25,10 +25,6 @@ public class Board {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Builder.Default
-    @Column(nullable = false)
-    private Long viewCount = 0L;
-
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private BoardType boardType;

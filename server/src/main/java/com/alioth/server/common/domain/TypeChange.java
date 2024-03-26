@@ -41,7 +41,6 @@ public class TypeChange {
                 .boardId(board.getBoardId())
                 .title(board.getTitle())
                 .content(board.getContent())
-                .viewCount(board.getViewCount())
                 .boardType(board.getBoardType())
                 .memberId(board.getSalesMembers().getId())
                 .build();
