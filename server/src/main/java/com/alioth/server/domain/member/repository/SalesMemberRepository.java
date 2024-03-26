@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SalesMemberRepository extends JpaRepository<SalesMembers, Long> {
 
+
+    SalesMembers findFirstByOrderByIdDesc();
+    SalesMembers findBySalesMemberCode(Long salesMemberCode);
 }
