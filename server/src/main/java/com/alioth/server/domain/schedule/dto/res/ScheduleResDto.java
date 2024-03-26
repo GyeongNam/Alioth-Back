@@ -14,7 +14,7 @@ public record ScheduleResDto(
          ScheduleType scheduleType,
          String allDay,
          String del_yn,
-         Long MemberId
+         Long memberId
 ){}
 
 

@@ -41,7 +41,7 @@ public class ScheduleService {
 
     public ScheduleResDto save(ScheduleCreateDto scheduleCreateDto) {
         SalesMembers salesMembers = salesMemberRepository.findById(1L).orElseThrow(()->new EntityNotFoundException("존재하지 않는 사원입니다."));
-        return typeChange.scheduleToScheduleResDto(
+        return typeChange.ScheduleToScheduleResDto(
                 scheduleRepository.save(
                         typeChange.ScheduleCreateDtoToSchedule(scheduleCreateDto, salesMembers)
                 )
@@ -51,20 +51,20 @@ public class ScheduleService {
     public ScheduleResDto update(ScheduleUpdateDto scheduleUpdateDto) {
         Schedule schedule = this.findById(scheduleUpdateDto.scheduleId());
         schedule.update(scheduleUpdateDto);
-        return typeChange.scheduleToScheduleResDto(schedule);
+        return typeChange.ScheduleToScheduleResDto(schedule);
     }
 
     public ScheduleResDto delete(Long scheduleId) {
         Schedule schedule =  this.findById(scheduleId);
         schedule.delete();
-        return typeChange.scheduleToScheduleResDto(schedule);
+        return typeChange.ScheduleToScheduleResDto(schedule);
     }
 
     public List<ScheduleResDto> list() {
         SalesMembers salesMembers = salesMemberRepository.findById(1L).orElseThrow(()->new EntityNotFoundException("존재하지 않는 사원입니다."));
         return scheduleRepository.findAllBySalesMembers(salesMembers)
                 .stream()
-                .map(typeChange::scheduleToScheduleResDto)
+                .map(typeChange::ScheduleToScheduleResDto)
                 .collect(Collectors.toList());
     }
 }
