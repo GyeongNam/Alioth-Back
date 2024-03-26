@@ -2,6 +2,8 @@ package com.alioth.server.common.domain;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 @NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
@@ -21,5 +24,4 @@ public abstract class BaseEntity {
 
     @UpdateTimestamp
     private LocalDateTime updated_at;
-
 }
