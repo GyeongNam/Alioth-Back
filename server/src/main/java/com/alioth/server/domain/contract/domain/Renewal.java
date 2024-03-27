@@ -1,4 +1,4 @@
-package com.alioth.server.domain.dummy.domain;
+package com.alioth.server.domain.contract.domain;
 
 import com.alioth.server.common.domain.BaseEntity;
 import jakarta.persistence.*;

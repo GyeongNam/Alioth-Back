@@ -1,13 +1,13 @@
 package com.alioth.server.domain.dummy.service;
 
+import com.alioth.server.domain.contract.repository.RenewalRepository;
 import com.alioth.server.domain.dummy.domain.*;
 import com.alioth.server.domain.dummy.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import net.datafaker.Faker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,5 +82,15 @@ public class DummyService {
         contractMembersRepository.saveAll(contractMembersList);
         customRepository.saveAll(customList);
         insuranceProductRepository.saveAll(insuranceProductList);
+    }
+
+    public ContractMembers contractManagerFindById(Long cm_id){
+        return contractMembersRepository.findById(cm_id).orElseThrow(() -> new EntityNotFoundException("계약사원이 존재하지않습니다."));
+    }
+    public Custom customFindById(Long customer_id){
+        return customRepository.findById(customer_id).orElseThrow(() -> new EntityNotFoundException("고객이 존재하지않습니다."));
+    }
+    public InsuranceProduct insuranceProductFindById(Long insurance_id){
+        return insuranceProductRepository.findById(insurance_id).orElseThrow(() -> new EntityNotFoundException("보험상품이 존재하지않습니다."));
     }
 }

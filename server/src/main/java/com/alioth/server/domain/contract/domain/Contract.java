@@ -1,20 +1,18 @@
-package com.alioth.server.domain.dummy.domain;
+package com.alioth.server.domain.contract.domain;
 
 import com.alioth.server.common.domain.BaseEntity;
+import com.alioth.server.domain.contract.dto.req.ContractUpdateDto;
+import com.alioth.server.domain.dummy.domain.*;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Contract extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +30,7 @@ public class Contract extends BaseEntity {
     @Column(nullable = false)
     private String contractPaymentAmount;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private PaymentFrequency contractPaymentFrequency;
     @Column(nullable = false)
     private Long contractPaymentMaturityInstallment;
@@ -44,10 +43,12 @@ public class Contract extends BaseEntity {
     @Column(nullable = false)
     private String contractConsultation;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ContractStatus contractStatus;
 
     @ManyToOne
     @JoinColumn(name = "insurance_id")
+    @Enumerated(EnumType.STRING)
     private InsuranceProduct insuranceProduct;
 
     @ManyToOne
@@ -56,9 +57,29 @@ public class Contract extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "CM_id")
+    @Enumerated(EnumType.STRING)
     private ContractMembers contractMembers;
 
     @ManyToOne
     @JoinColumn(name = "SM_id")
     private SalesMembers salesMembers;
+
+
+    public void update(ContractUpdateDto dto) {
+        if (dto.contractPeriod() != null) {
+            this.contractPeriod = dto.contractPeriod();
+        }
+        if (dto.contractPaymentFrequency() != null) {
+            this.contractPaymentFrequency = dto.contractPaymentFrequency();
+        }
+        if (dto.contractPayer() != null) {
+            this.contractPayer = dto.contractPayer();
+        }
+        if (dto.contractPaymentMethod() != null) {
+            this.contractPaymentMethod = dto.contractPaymentMethod();
+        }
+        if (dto.contractConsultation() != null) {
+            this.contractConsultation = dto.contractConsultation();
+        }
+    }
 }
