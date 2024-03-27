@@ -16,8 +16,6 @@ public interface SalesMemberRepository extends JpaRepository<SalesMembers, Long>
 
     SalesMembers findFirstByOrderByIdDesc();
 
-    SalesMembers findBySalesMemberCode(Long salesMemberCode);
-
     List<SalesMembers> findAllByTeamId(Long teamId);
 
     Optional<SalesMembers> findBySalesMemberCode(Long salesMemberCode);
