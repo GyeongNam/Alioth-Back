@@ -10,6 +10,7 @@ import com.alioth.server.domain.schedule.dto.req.ScheduleUpdateDto;
 import com.alioth.server.domain.schedule.repository.ScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,22 +19,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final TypeChange typeChange;
-
     private final SalesMemberRepository salesMemberRepository;
-
-    @Autowired
-    ScheduleService(
-            ScheduleRepository scheduleRepository,
-            TypeChange typeChange,
-            SalesMemberRepository salesMemberRepository
-    ){
-        this.scheduleRepository = scheduleRepository;
-        this.typeChange = typeChange;
-        this.salesMemberRepository = salesMemberRepository;
-    }
 
     public Schedule findById(Long scheduleId){
         return scheduleRepository.findById(scheduleId).orElseThrow(()->new EntityNotFoundException("존재하지 않는 일정입니다."));
