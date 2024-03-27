@@ -1,11 +1,13 @@
 package com.alioth.server.domain.member.service;
 
+import com.alioth.server.common.jwt.JwtTokenProvider;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
 import com.alioth.server.domain.member.dto.req.SalesMemberUpdatePassword;
 import com.alioth.server.domain.member.repository.SalesMemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +17,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class SalesMemberService {
 
+    private final PasswordEncoder passwordEncoder;
     private final SalesMemberRepository salesMemberRepository;
+
 
     @Transactional
     public SalesMembers create(SalesMemberCreateReqDto dto) {
@@ -28,7 +32,7 @@ public class SalesMemberService {
                 .email(dto.email())
                 .phone(dto.phone())
                 .name(dto.name())
-                .password(dto.password())
+                .password(passwordEncoder.encode(dto.password()))
                 .birthDay(dto.birthDay())
                 .address(dto.address())
                 .rank(dto.rank())
