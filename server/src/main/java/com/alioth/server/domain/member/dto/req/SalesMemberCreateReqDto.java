@@ -32,6 +32,8 @@ public record SalesMemberCreateReqDto(
 
     @Valid
     SalesMemberType rank
+
+
 ) {
 
 }
