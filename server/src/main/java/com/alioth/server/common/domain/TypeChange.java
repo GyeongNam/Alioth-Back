@@ -4,6 +4,7 @@ import com.alioth.server.domain.board.domain.Board;
 import com.alioth.server.domain.board.dto.req.BoardCreateDto;
 import com.alioth.server.domain.board.dto.res.BoardResDto;
 import com.alioth.server.domain.member.domain.SalesMembers;
+import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
 import com.alioth.server.domain.schedule.domain.Schedule;
 import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
 import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
@@ -34,6 +35,22 @@ public class TypeChange {
                 .del_yn(schedule.getScheduleDel_YN())
                 .memberId(schedule.getSalesMembers().getId())
                 .build();
+    }
+
+
+    public SalesMembers salesMemberCreateReqDtoToSalesMembers(SalesMemberCreateReqDto dto, Long salesMemberCode, String encodePassword) {
+        SalesMembers member = SalesMembers.builder()
+                .salesMemberCode(salesMemberCode)
+                .email(dto.email())
+                .phone(dto.phone())
+                .name(dto.name())
+                .password(encodePassword)
+                .birthDay(dto.birthDay())
+                .address(dto.address())
+                .rank(dto.rank())
+                .build();
+
+        return member;
     }
 
     public BoardResDto BoardToBoardResDto(Board board){

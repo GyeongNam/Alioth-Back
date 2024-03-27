@@ -6,6 +6,7 @@ import com.alioth.server.domain.board.dto.req.BoardUpdateDto;
 import com.alioth.server.domain.board.service.BoardService;
 import com.alioth.server.domain.schedule.dto.req.ScheduleUpdateDto;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,16 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/board")
 public class BoardController {
-    private final BoardService boardService;
 
-    @Autowired
-    public BoardController(
-            BoardService boardService
-    ) {
-        this.boardService = boardService;
-    }
+    private final BoardService boardService;
 
     @PostMapping("/create")
     public ResponseEntity<CommonResponse> createBoard(@RequestBody @Valid BoardCreateDto boardCreateDto){
