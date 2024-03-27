@@ -38,9 +38,9 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers(LoginApiUrl).permitAll()
-                                .requestMatchers(MemberApiUrl).permitAll()
-                                //.requestMatchers().permitAll()
+//                                .requestMatchers(LoginApiUrl).permitAll()
+//                                .requestMatchers(MemberApiUrl).permitAll()
+                                .requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
