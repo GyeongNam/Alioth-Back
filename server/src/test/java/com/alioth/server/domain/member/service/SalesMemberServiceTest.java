@@ -1,5 +1,6 @@
 package com.alioth.server.domain.member.service;
 
+import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.member.domain.SalesMemberType;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
@@ -30,10 +31,10 @@ class SalesMemberServiceTest {
         SalesMemberCreateReqDto dto = SalesMemberCreateReqDto.builder()
                 .email("sj@naver.com") // 마스킹
                 .phone("010-1234-1234") // 끝 4자리 마스킹
-                .name("준스틴")
-                .password("djaksdqw12@")
+                .name("손흥민")
+                .password("a1234567")
                 .birthDay("990123") // 마스킹
-                .address("서울특별시 용산에사는 대통령") // 마스킹
+                .address("축신") // 마스킹
                 .rank(SalesMemberType.FP)
                 .build();
 
