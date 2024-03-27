@@ -13,6 +13,7 @@ import com.alioth.server.domain.schedule.domain.Schedule;
 import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,21 +21,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BoardService {
 
     private final BoardRepository boardRepository;
     private final TypeChange typeChange;
     private final SalesMemberRepository salesMemberRepository;
-
-    public BoardService(
-            BoardRepository boardRepository,
-            TypeChange typeChange,
-            SalesMemberRepository salesMemberRepository
-    ) {
-        this.boardRepository = boardRepository;
-        this.typeChange = typeChange;
-        this.salesMemberRepository = salesMemberRepository;
-    }
 
     public Board findById(Long BoardId){
         return boardRepository.findById(BoardId).orElseThrow(()->new EntityNotFoundException("존재하지 않는 글입니다."));

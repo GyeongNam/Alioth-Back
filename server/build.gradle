@@ -35,6 +35,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.security:spring-security-test'
+
+	// 더미 데이터 삽입을 위한 라이브러리
+	implementation 'net.datafaker:datafaker:2.1.0'
 }
 
 tasks.named('test') {
