@@ -1,5 +1,6 @@
 package com.alioth.server.domain.member.controller;
 
+import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
 import com.alioth.server.domain.member.dto.req.SalesMemberUpdatePassword;
@@ -18,10 +19,10 @@ public class SalesMemberController {
 
     @PostMapping("/api/members")
     public ResponseEntity<?> createMember(@RequestBody @Valid SalesMemberCreateReqDto dto) {
-        SalesMembers members = salesMemberService.create(dto);
+        CommonResponse commonResponse = salesMemberService.create(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(members.getName()+ "님 회원가입이 되었습니다.");
+                .body(commonResponse);
     }
 
     @PatchMapping("/api/members/{id}/password")
