@@ -6,11 +6,8 @@ import com.alioth.server.domain.dummy.domain.PaymentFrequency;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import lombok.Builder;
-
 import java.time.LocalDateTime;
-
 @Builder
 public record ContractCreateDto(
         @NotBlank(message = "계약코드가 필요합니다.")
@@ -44,5 +41,7 @@ public record ContractCreateDto(
         @NotNull(message = "고객 ID를 입력해주세요.")
         Long customId,
         @NotNull(message = "계약 사원 ID를 입력해주세요.")
-        Long contractMemberId
+        Long contractMemberId,
+        @NotNull(message = "영업사원을 입력해주세요")
+        Long salesMemberId
 ) {}

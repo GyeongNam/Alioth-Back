@@ -5,6 +5,10 @@ import com.alioth.server.domain.contract.dto.req.ContractCreateDto;
 import com.alioth.server.domain.contract.dto.req.ContractUpdateDto;
 import com.alioth.server.domain.contract.dto.res.ContractResDto;
 import com.alioth.server.domain.contract.repository.ContractRepository;
+import com.alioth.server.domain.dummy.domain.ContractMembers;
+import com.alioth.server.domain.dummy.domain.Custom;
+import com.alioth.server.domain.dummy.domain.InsuranceProduct;
+import com.alioth.server.domain.dummy.service.DummyService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +23,12 @@ import java.util.stream.Collectors;
 public class ContractService {
 
     private final ContractRepository contractRepository;
+    private final DummyService dummyService;
 
     public ContractResDto createContract(ContractCreateDto dto) {
+        ContractMembers contractMembers = dummyService.contractManagerFindById(dto.contractMemberId());
+        Custom custom = dummyService.customFindById(dto.customId());
+        InsuranceProduct insuranceProduct = dummyService.insuranceProductFindById(dto.insuranceProductId());
         Contract contract = Contract.builder()
                 .contractCode(dto.contractCode())
                 .contractDate(dto.contractDate())
@@ -35,6 +43,9 @@ public class ContractService {
                 .contractPayer(dto.contractPayer())
                 .contractConsultation(dto.contractConsultation())
                 .contractStatus(dto.contractStatus())
+                .contractMembers(contractMembers)
+                .custom(custom)
+                .insuranceProduct(insuranceProduct)
                 .build();
         contract = contractRepository.save(contract);
         return toContractResDto(contract);
