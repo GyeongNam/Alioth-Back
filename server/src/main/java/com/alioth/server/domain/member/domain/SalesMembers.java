@@ -3,6 +3,7 @@ package com.alioth.server.domain.member.domain;
 import com.alioth.server.common.domain.BaseEntity;
 import com.alioth.server.domain.member.dto.req.SalesMemberAdminUpdateReqDto;
 import com.alioth.server.domain.member.dto.req.SalesMemberUpdatePerformanceReview;
+import com.alioth.server.domain.member.dto.req.SalesMemberUpdateReqDto;
 import com.alioth.server.domain.team.domain.Team;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -45,6 +46,12 @@ public class SalesMembers extends BaseEntity {
     @Column
     private String profileImage;
 
+    @Column
+    private String officeAddress;
+
+    @Column
+    private String extensionNumber;
+
     @Builder.Default
     @Column(nullable = false)
     private String quit = "N";
@@ -65,9 +72,21 @@ public class SalesMembers extends BaseEntity {
     }
 
     public void updateAdmin(SalesMemberAdminUpdateReqDto dto, Team team){
-        this.rank=dto.rank();
-        this.team=team;
+        this.rank = dto.rank();
+        this.team = team;
     }
+
+    public void updateMyInfo(SalesMemberUpdateReqDto dto){
+        this.email = dto.email();
+        this.phone = dto.phone();
+        this.address = dto.address();
+        this.birthDay = dto.birthDay();
+        this.name = dto.name();
+        this.profileImage = dto.profileImage();
+        this.officeAddress = dto.officeAddress();
+        this.extensionNumber = dto.extensionNumber();
+    }
+
     public void updatePr(SalesMemberUpdatePerformanceReview dto){
         this.performanceReview = dto.performanceReview();
     }
@@ -75,5 +94,6 @@ public class SalesMembers extends BaseEntity {
     public void updateTeam(Team team){
         this.team= team;
     }
+
 
 }

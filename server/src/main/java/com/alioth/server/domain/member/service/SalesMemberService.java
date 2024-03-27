@@ -1,11 +1,9 @@
 package com.alioth.server.domain.member.service;
 
 import com.alioth.server.domain.member.domain.SalesMembers;
-import com.alioth.server.domain.member.dto.req.SalesMemberUpdatePerformanceReview;
-import com.alioth.server.domain.member.dto.res.SalesMemberAdminResDto;
-import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
-import com.alioth.server.domain.member.dto.req.SalesMemberUpdatePassword;
-import com.alioth.server.domain.member.dto.req.SalesMemberAdminUpdateReqDto;
+import com.alioth.server.domain.member.dto.req.*;
+import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
+import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
 import com.alioth.server.domain.member.repository.SalesMemberRepository;
 import com.alioth.server.domain.team.domain.Team;
 import com.alioth.server.domain.team.service.TeamService;
@@ -85,17 +83,17 @@ public class SalesMemberService {
 
     //관리자 사원 정보 수정(권한, 팀 소속) : HJ
     @Transactional
-    public SalesMemberAdminResDto adminMemberUpdate (Long memberId,SalesMemberAdminUpdateReqDto dto) {
+    public SalesMemberTeamListResDto adminMemberUpdate (Long memberId, SalesMemberAdminUpdateReqDto dto) {
         SalesMembers member = this.findById(memberId);
         Team team = teamService.getTeam(dto.teamCode());
         member.updateAdmin(dto, team);
 
-        return SalesMemberAdminResDto.builder()
+        return SalesMemberTeamListResDto.builder()
                 .rank(member.getRank())
-                .birthDay(member.getBirthDay())
-                .address(member.getAddress())
-                .phone(member.getPhone())
                 .name(member.getName())
+                .profileImage(member.getProfileImage())
+                .salesMemberCode(member.getSalesMemberCode())
+                .phone(member.getPhone())
                 .email(member.getEmail())
                 .build();
     }
@@ -107,35 +105,61 @@ public class SalesMemberService {
         salesMemberRepository.save(member);
     }
 
-    //관리자 사원 정보 조회
+    //사원 정보 조회
     @Transactional
-    public SalesMemberAdminResDto memberDetail(Long memberId) {
+    public SalesMemberResDto memberDetail(Long memberId) {
         SalesMembers salesMembers = salesMemberRepository.findById(memberId).orElseThrow(()->
                                                             new EntityNotFoundException("존재하지 않는 사원입니다."));
-        return SalesMemberAdminResDto.builder()
+        return SalesMemberResDto.builder()
                 .rank(salesMembers.getRank())
+                .salesMemberCode(salesMembers.getSalesMemberCode())
                 .birthDay(salesMembers.getBirthDay())
+                .performanceReview(salesMembers.getPerformanceReview())
+                .teamCode(salesMembers.getTeam().getTeamCode())
+                .teamName(salesMembers.getTeam().getTeamName())
                 .address(salesMembers.getAddress())
+                .officeAddress(salesMembers.getOfficeAddress())
+                .extensionNumber(salesMembers.getExtensionNumber())
                 .phone(salesMembers.getPhone())
                 .name(salesMembers.getName())
                 .email(salesMembers.getEmail())
                 .build();
     }
 
+    public SalesMemberResDto updateMyInfo(Long memberId, SalesMemberUpdateReqDto dto){
+        SalesMembers member = this.findById(memberId);
+        member.updateMyInfo(dto);
+        salesMemberRepository.save(member);
+        return SalesMemberResDto.builder()
+                .rank(member.getRank())
+                .salesMemberCode(member.getSalesMemberCode())
+                .birthDay(member.getBirthDay())
+                .teamCode(member.getTeam().getTeamCode())
+                .teamName(member.getTeam().getTeamName())
+                .address(member.getAddress())
+                .officeAddress(member.getOfficeAddress())
+                .extensionNumber(member.getExtensionNumber())
+                .phone(member.getPhone())
+                .name(member.getName())
+                .email(member.getEmail())
+                .build();
+    }
+/*
     //사원 리스트
-    public List<SalesMemberAdminResDto> findAllByTeamId(Long teamId){
+    public List<SalesMemberTeamListResDto> findAllByTeamId(Long teamId){
         List<SalesMembers> memberList= salesMemberRepository.findAllByTeamId(teamId);
-        List<SalesMemberAdminResDto> list = new ArrayList<>();
+        List<SalesMemberTeamListResDto> list = new ArrayList<>();
         for(SalesMembers sm: memberList){
-            SalesMemberAdminResDto dto= SalesMemberAdminResDto.builder()
+            SalesMemberTeamListResDto dto= SalesMemberTeamListResDto.builder()
                     .name(sm.getName())
                     .rank(sm.getRank())
                     .profileImage(sm.getProfileImage())
                     .build();
-            list.add(dto);
+
+           list.add(dto);
         }
         return list;
-    }
+    }*/
 
     public void updateTeam(Long memberId,Team team){
         SalesMembers member= this.findById(memberId);

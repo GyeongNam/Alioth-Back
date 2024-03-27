@@ -2,7 +2,7 @@ package com.alioth.server.domain.team.controller;
 
 import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.member.domain.SalesMembers;
-import com.alioth.server.domain.member.dto.res.SalesMemberAdminResDto;
+import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
 import com.alioth.server.domain.member.service.SalesMemberService;
 import com.alioth.server.domain.team.domain.Team;
 import com.alioth.server.domain.team.dto.TeamAddMemberDto;
@@ -40,13 +40,15 @@ public class TeamController {
                 .teamCode(team.getTeamCode())
                 .teamMemberList(team.getTeamMembers().stream()
                         .map(a->
-                                SalesMemberAdminResDto.builder()
+                                SalesMemberTeamListResDto.builder()
                                         .name(a.getName())
                                         .email(a.getEmail())
                                         .phone(a.getPhone())
+                                        .extensionNumber(a.getExtensionNumber())
+                                        .officeAddress(a.getOfficeAddress())
                                         .rank(a.getRank())
-                                        .birthDay(a.getBirthDay())
                                         .address(a.getAddress())
+                                        .salesMemberCode(a.getSalesMemberCode())
                                         .profileImage(a.getProfileImage())
                                         .build()
                         ).collect(Collectors.toList()))
@@ -102,6 +104,7 @@ public class TeamController {
         List<SalesMembers> teamMembers = new ArrayList<>();
         for(Long salesMemberCode: dto.salesMemberCodes()){
             SalesMembers teamMember=salesMemberService.findBySalesMemberCode(salesMemberCode);
+            salesMemberService.updateTeam(teamMember.getId(),teamService.findById(teamId));
             teamMembers.add(teamMember);
         }
         teamService.addMembersToTeam(teamId,teamMembers);

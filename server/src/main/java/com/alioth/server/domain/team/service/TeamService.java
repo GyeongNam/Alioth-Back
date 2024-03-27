@@ -1,7 +1,7 @@
 package com.alioth.server.domain.team.service;
 
 import com.alioth.server.domain.member.domain.SalesMembers;
-import com.alioth.server.domain.member.dto.res.SalesMemberAdminResDto;
+import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
 import com.alioth.server.domain.team.dto.TeamDto;
 import com.alioth.server.domain.team.dto.TeamUpdateDto;
 import com.alioth.server.domain.team.repository.TeamRepository;
@@ -65,7 +65,7 @@ public class TeamService {
     //팀 상세 조회
     public TeamDto findByTeamId(Long teamId) throws EntityNotFoundException {
         Team team = this.findById(teamId);
-        List<SalesMemberAdminResDto> list= this.findAllByTeamId(team.getId());
+        List<SalesMemberTeamListResDto> list= this.findAllByTeamId(team.getId());
         return TeamDto.builder()
                 .teamCode(team.getTeamCode())
                 .teamName(team.getTeamName())
@@ -82,13 +82,19 @@ public class TeamService {
         }
     }
     //사원 리스트 가져오기
-    public List<SalesMemberAdminResDto> findAllByTeamId(Long teamId){
+    public List<SalesMemberTeamListResDto> findAllByTeamId(Long teamId){
         List<SalesMembers> memberList= teamRepository.findSalesMembersByTeamId(teamId);
-        List<SalesMemberAdminResDto> list = new ArrayList<>();
+        List<SalesMemberTeamListResDto> list = new ArrayList<>();
         for(SalesMembers sm: memberList){
-            SalesMemberAdminResDto dto= SalesMemberAdminResDto.builder()
+            SalesMemberTeamListResDto dto= SalesMemberTeamListResDto.builder()
                     .name(sm.getName())
+                    .phone(sm.getPhone())
+                    .email(sm.getEmail())
+                    .address(sm.getAddress())
+                    .officeAddress(sm.getOfficeAddress())
+                    .extensionNumber(sm.getExtensionNumber())
                     .rank(sm.getRank())
+                    .salesMemberCode(sm.getSalesMemberCode())
                     .profileImage(sm.getProfileImage())
                     .build();
             list.add(dto);

@@ -2,10 +2,7 @@ package com.alioth.server.domain.member.controller;
 
 import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.member.domain.SalesMembers;
-import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
-import com.alioth.server.domain.member.dto.req.SalesMemberUpdatePassword;
-import com.alioth.server.domain.member.dto.req.SalesMemberAdminUpdateReqDto;
-import com.alioth.server.domain.member.dto.req.SalesMemberUpdatePerformanceReview;
+import com.alioth.server.domain.member.dto.req.*;
 import com.alioth.server.domain.member.service.SalesMemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +72,17 @@ public class SalesMemberController {
                 HttpStatus.OK,
                 "success",
                 salesMemberService.memberDetail(memberId)
+        );
+    }
+
+    //사원 정보 수정 (사원 본인만)
+    @PatchMapping("/details/update/{memberId}")
+    public ResponseEntity<CommonResponse> updateMyInfo(@PathVariable("memberId") Long memberId,
+                                                       @RequestBody @Valid SalesMemberUpdateReqDto dto) {
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "success",
+                salesMemberService.updateMyInfo(memberId,dto)
         );
     }
 }

@@ -5,16 +5,15 @@ import com.alioth.server.domain.member.domain.SalesMemberType;
 import lombok.Builder;
 
 @Builder
-public record SalesMemberAdminResDto(
-    String email,
+public record SalesMemberTeamListResDto(
     String phone,
     String name,
-    String password,
-    String birthDay,
+    String email,
     String address,
+    String officeAddress,
+    String extensionNumber,
     String profileImage,
-    String performanceReview,
-    Long teamId,
+    Long salesMemberCode,
     SalesMemberType rank
 
 ) {
