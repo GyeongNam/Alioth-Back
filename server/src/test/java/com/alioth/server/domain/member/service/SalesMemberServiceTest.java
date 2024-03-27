@@ -1,5 +1,6 @@
 package com.alioth.server.domain.member.service;
 
+import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.member.domain.SalesMemberType;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
