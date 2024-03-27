@@ -1,13 +1,14 @@
 package com.alioth.server.domain.member.domain;
 
 import com.alioth.server.common.domain.BaseEntity;
+import com.alioth.server.domain.member.dto.req.SalesMemberAdminUpdateReqDto;
+import com.alioth.server.domain.member.dto.req.SalesMemberUpdatePerformanceReview;
+import com.alioth.server.domain.team.domain.Team;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -41,6 +42,9 @@ public class SalesMembers extends BaseEntity {
     @Column(nullable = false)
     private String address;
 
+    @Column
+    private String profileImage;
+
     @Builder.Default
     @Column(nullable = false)
     private String quit = "N";
@@ -49,8 +53,27 @@ public class SalesMembers extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SalesMemberType rank;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private String performanceReview = "C";
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Team team;
 
     public void updatePassword(String updatePassword) {
         this.password = updatePassword;
     }
+
+    public void updateAdmin(SalesMemberAdminUpdateReqDto dto, Team team){
+        this.rank=dto.rank();
+        this.team=team;
+    }
+    public void updatePr(SalesMemberUpdatePerformanceReview dto){
+        this.performanceReview = dto.performanceReview();
+    }
+
+    public void updateTeam(Team team){
+        this.team= team;
+    }
+
 }
