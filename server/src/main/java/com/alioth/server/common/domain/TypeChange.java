@@ -1,6 +1,10 @@
 package com.alioth.server.common.domain;
 
+import com.alioth.server.domain.board.domain.Board;
+import com.alioth.server.domain.board.dto.req.BoardCreateDto;
+import com.alioth.server.domain.board.dto.res.BoardResDto;
 import com.alioth.server.domain.member.domain.SalesMembers;
+import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
 import com.alioth.server.domain.schedule.domain.Schedule;
 import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
 import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
@@ -20,7 +24,7 @@ public class TypeChange {
                 .build();
     }
 
-    public ScheduleResDto scheduleToScheduleResDto(Schedule schedule){
+    public ScheduleResDto ScheduleToScheduleResDto(Schedule schedule){
         return ScheduleResDto.builder()
                 .scheduleId(schedule.getScheduleId())
                 .scheduleStartTime(schedule.getScheduleStartTime())
@@ -29,9 +33,42 @@ public class TypeChange {
                 .scheduleType(schedule.getScheduleType())
                 .allDay(schedule.getAllDay())
                 .del_yn(schedule.getScheduleDel_YN())
-                .MemberId(schedule.getSalesMembers().getId())
+                .memberId(schedule.getSalesMembers().getId())
                 .build();
     }
 
+
+    public SalesMembers salesMemberCreateReqDtoToSalesMembers(SalesMemberCreateReqDto dto, Long salesMemberCode, String encodePassword) {
+        SalesMembers member = SalesMembers.builder()
+                .salesMemberCode(salesMemberCode)
+                .email(dto.email())
+                .phone(dto.phone())
+                .name(dto.name())
+                .password(encodePassword)
+                .birthDay(dto.birthDay())
+                .address(dto.address())
+                .rank(dto.rank())
+                .build();
+
+        return member;
+    }
+
+    public BoardResDto BoardToBoardResDto(Board board){
+        return BoardResDto.builder()
+                .boardId(board.getBoardId())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .boardType(board.getBoardType())
+                .memberId(board.getSalesMembers().getId())
+                .build();
+    }
+    public Board BoardCreateDtoToBoard(BoardCreateDto boardCreateDto, SalesMembers salesMembers){
+        return Board.builder()
+                .title(boardCreateDto.title())
+                .content(boardCreateDto.content())
+                .boardType(boardCreateDto.boardType())
+                .salesMembers(salesMembers)
+                .build();
+    }
 
 }

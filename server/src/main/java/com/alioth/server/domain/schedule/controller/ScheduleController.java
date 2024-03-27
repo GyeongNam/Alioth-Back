@@ -5,6 +5,7 @@ import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
 import com.alioth.server.domain.schedule.dto.req.ScheduleUpdateDto;
 import com.alioth.server.domain.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/schedule")
 public class ScheduleController {
     private final ScheduleService scheduleService;
-
-    ScheduleController (
-            ScheduleService scheduleService
-    ){
-        this.scheduleService = scheduleService;
-    }
-
 
     @PostMapping("/create")
     public ResponseEntity<CommonResponse> createSchedule(@RequestBody @Valid ScheduleCreateDto scheduleCreateDto){

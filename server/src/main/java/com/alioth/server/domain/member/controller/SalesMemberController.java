@@ -19,10 +19,16 @@ public class SalesMemberController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createMember(@RequestBody @Valid SalesMemberCreateReqDto dto) {
-        SalesMembers members = salesMemberService.create(dto);
+        SalesMembers member = salesMemberService.create(dto);
+
+        CommonResponse commonResponse = CommonResponse.builder()
+                .httpStatus(HttpStatus.CREATED)
+                .message(member.getName() + "님의 회원가입이 완료되었습니다.")
+                .result(member.getSalesMemberCode())
+                .build();
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(members.getName()+ "님 회원가입이 되었습니다.");
+                .body(commonResponse);
     }
 
     @PatchMapping("/{id}/password")
@@ -30,8 +36,14 @@ public class SalesMemberController {
                                                   @PathVariable("id")Long id) {
         SalesMembers member = salesMemberService.updatePassword(dto, id);
 
+        CommonResponse commonResponse = CommonResponse.builder()
+                .httpStatus(HttpStatus.OK)
+                .message(member.getName() + "님 비밀번호 변경되었습니다.")
+                .result(member.getSalesMemberCode())
+                .build();
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(member.getName());
+                .body(commonResponse);
     }
 
     @PatchMapping("/{id}/info")
