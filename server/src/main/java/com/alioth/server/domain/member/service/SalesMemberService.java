@@ -1,5 +1,6 @@
 package com.alioth.server.domain.member.service;
 
+import com.alioth.server.common.domain.TypeChange;
 import com.alioth.server.common.jwt.JwtTokenProvider;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
@@ -19,26 +20,18 @@ public class SalesMemberService {
 
     private final PasswordEncoder passwordEncoder;
     private final SalesMemberRepository salesMemberRepository;
-
+    private final TypeChange typeChange;
 
     @Transactional
     public SalesMembers create(SalesMemberCreateReqDto dto) {
         LocalDateTime date = LocalDateTime.now();
         String year = String.valueOf(date.getYear());
         String month = String.valueOf(date.getMonthValue());
+        Long salesMemberCode = createSalesMemberCode();
+        String encodePassword = passwordEncoder.encode(dto.password());
+        SalesMembers createMember = typeChange.salesMemberCreateReqDtoToSalesMembers(dto, salesMemberCode, encodePassword);
 
-        SalesMembers member = SalesMembers.builder()
-                .salesMemberCode(createSalesMemberCode())
-                .email(dto.email())
-                .phone(dto.phone())
-                .name(dto.name())
-                .password(passwordEncoder.encode(dto.password()))
-                .birthDay(dto.birthDay())
-                .address(dto.address())
-                .rank(dto.rank())
-                .build();
-
-        return salesMemberRepository.save(member);
+        return salesMemberRepository.save(createMember);
     }
 
     private Long createSalesMemberCode() {
@@ -50,8 +43,9 @@ public class SalesMemberService {
 
         if(findFirstMember == null) {
             id = 1L;
+        }else {
+            id = findFirstMember.getId() + 1;
         }
-        id = findFirstMember.getId() + 1;
 
         Long MemberCode = Long.valueOf(year + month + id.toString());
 

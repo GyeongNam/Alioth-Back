@@ -1,6 +1,7 @@
 package com.alioth.server.common.domain;
 
 import com.alioth.server.domain.member.domain.SalesMembers;
+import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
 import com.alioth.server.domain.schedule.domain.Schedule;
 import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
 import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
@@ -32,6 +33,15 @@ public class TypeChange {
                 .MemberId(schedule.getSalesMembers().getId())
                 .build();
     }
+
+    public SalesMembers salesMemberCreateReqDtoToSalesMembers(SalesMemberCreateReqDto dto, Long salesMemberCode, String encodePassword) {
+        SalesMembers salesMembers = null;
+
+
+        return salesMembers;
+    }
+
+
 
 
 }
