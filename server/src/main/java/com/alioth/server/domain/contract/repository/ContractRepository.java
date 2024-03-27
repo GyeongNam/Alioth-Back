@@ -1,6 +1,7 @@
-package com.alioth.server.domain.dummy.repository;
+package com.alioth.server.domain.contract.repository;
 
-import com.alioth.server.domain.dummy.domain.Contract;
+
+import com.alioth.server.domain.contract.domain.Contract;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
