@@ -35,10 +35,18 @@ public class TypeChange {
     }
 
     public SalesMembers salesMemberCreateReqDtoToSalesMembers(SalesMemberCreateReqDto dto, Long salesMemberCode, String encodePassword) {
-        SalesMembers salesMembers = null;
+        SalesMembers member = SalesMembers.builder()
+                .salesMemberCode(salesMemberCode)
+                .email(dto.email())
+                .phone(dto.phone())
+                .name(dto.name())
+                .password(encodePassword)
+                .birthDay(dto.birthDay())
+                .address(dto.address())
+                .rank(dto.rank())
+                .build();
 
-
-        return salesMembers;
+        return member;
     }
 
 

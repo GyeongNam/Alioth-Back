@@ -24,14 +24,9 @@ public class SalesMemberService {
 
     @Transactional
     public SalesMembers create(SalesMemberCreateReqDto dto) {
-        LocalDateTime date = LocalDateTime.now();
-        String year = String.valueOf(date.getYear());
-        String month = String.valueOf(date.getMonthValue());
         Long salesMemberCode = createSalesMemberCode();
         String encodePassword = passwordEncoder.encode(dto.password());
         SalesMembers createMember = typeChange.salesMemberCreateReqDtoToSalesMembers(dto, salesMemberCode, encodePassword);
-
-
 
         salesMemberRepository.save(createMember);
 
