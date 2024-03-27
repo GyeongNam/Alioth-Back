@@ -1,6 +1,7 @@
 package com.alioth.server.domain.schedule.dto.req;
 
 import com.alioth.server.domain.schedule.domain.ScheduleType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
@@ -13,6 +14,7 @@ public record ScheduleCreateDto (
         LocalDateTime scheduleEndTime,
         @NotNull(message="일정 상세 정보를 입력해주세요.")
         String scheduleNote,
+        @Valid
         ScheduleType scheduleType,
         String allDay
 ){}
