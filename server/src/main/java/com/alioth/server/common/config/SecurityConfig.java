@@ -43,6 +43,8 @@ public class SecurityConfig {
                                 .requestMatchers(BoardApiUrl).permitAll()
                                 .requestMatchers(ScheduleApiUrl).permitAll()
                                 .requestMatchers(TeamApiUrl).permitAll()
+                                .requestMatchers(ContractApiUrl).permitAll()
+                                .requestMatchers("/dummy/add/CMSize/{CMSize}/ProductSize/{ProductSize}/CustomSize/{CustomSize}").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -125,5 +127,10 @@ public class SecurityConfig {
             "/api/team/addMembers/*",
     };
 
-
+    private static final String[] ContractApiUrl = {
+            "/api/contract/create",
+            "/api/contract/update/*",
+            "/api/contract/delete/*",
+            "/api/contract/list",
+    };
 }

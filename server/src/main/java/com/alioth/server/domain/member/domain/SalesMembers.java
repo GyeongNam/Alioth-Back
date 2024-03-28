@@ -34,7 +34,7 @@ public class SalesMembers extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, length = 8)
+    @Column(nullable = false, length = 64)
     private String password;
 
     @Column(nullable = false)
