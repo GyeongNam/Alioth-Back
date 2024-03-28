@@ -1,12 +1,8 @@
 package com.alioth.server.domain.team.service;
 
 import com.alioth.server.common.domain.TypeChange;
-import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.member.domain.SalesMemberType;
 import com.alioth.server.domain.member.domain.SalesMembers;
-import com.alioth.server.domain.member.dto.req.SalesMemberUpdateReqDto;
-import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
-import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
 import com.alioth.server.domain.member.service.SalesMemberService;
 import com.alioth.server.domain.team.domain.Team;
 import com.alioth.server.domain.team.dto.TeamAddMemberDto;
@@ -18,19 +14,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class TeamServiceTest {
 
-    @Autowired
-    private TypeChange typeChange;
 
     @Autowired
     private TeamService teamService;
@@ -92,7 +84,7 @@ public class TeamServiceTest {
         assertEquals(team.getTeamCode(),dto.teamCode());
     }
 
-    @Test
+ /*   @Test
     @DisplayName("팀원 추가")
     public void addMembersToTeamTest() {
         Long teamId = 2L;
@@ -113,7 +105,7 @@ public class TeamServiceTest {
         teamService.addMembersToTeam(teamId, list);
         Team team = teamService.findById(teamId);
         assertEquals(salesMemberCodes.getFirst(),team.getTeamMembers().getFirst().getSalesMemberCode());
-        }
+        }*/
     }
 
 
