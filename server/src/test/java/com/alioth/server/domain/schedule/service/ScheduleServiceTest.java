@@ -3,10 +3,9 @@ package com.alioth.server.domain.schedule.service;
 import com.alioth.server.common.domain.TypeChange;
 import com.alioth.server.domain.schedule.domain.Schedule;
 import com.alioth.server.domain.schedule.domain.ScheduleType;
-import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
+import com.alioth.server.domain.schedule.dto.req.ScheduleReqDto;
 
 import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
-import com.alioth.server.domain.schedule.dto.req.ScheduleUpdateDto;
 import com.alioth.server.domain.schedule.repository.ScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +35,7 @@ class ScheduleServiceTest {
 
     @BeforeEach
     void setUp() {
-        ScheduleCreateDto scheduleCreateDto = ScheduleCreateDto.builder()
+        ScheduleReqDto scheduleReqDto = ScheduleReqDto.builder()
                 .scheduleStartTime(LocalDateTime.now())
                 .scheduleEndTime(LocalDateTime.now().plusHours(1))
                 .scheduleNote("Test Note")
@@ -44,7 +43,7 @@ class ScheduleServiceTest {
                 .allDay("1")
                 .build();
 
-        ScheduleResDto savedScheduleResDto = scheduleService.save(scheduleCreateDto);
+        ScheduleResDto savedScheduleResDto = scheduleService.save(scheduleReqDto);
         this.schedule = scheduleRepository.findById(savedScheduleResDto.scheduleId())
                 .orElseThrow(() -> new EntityNotFoundException("Saved schedule not found"));
     }
@@ -67,7 +66,7 @@ class ScheduleServiceTest {
                 .allDay(schedule.getAllDay())
                 .build();
 
-        ScheduleResDto updatedSchedule = scheduleService.update(scheduleUpdateDto);
+        ScheduleResDto updatedSchedule = scheduleService.update(scheduleUpdateDto, scheduleId);
         assertEquals("Updated Note", updatedSchedule.scheduleNote());
     }
 
