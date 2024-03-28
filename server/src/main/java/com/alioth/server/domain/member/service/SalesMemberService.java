@@ -75,10 +75,8 @@ public class SalesMemberService {
     }
 
     public SalesMembers findBySalesMemberCode(Long salesMemberCode){
-        return salesMemberRepository.findBySalesMemberCode(salesMemberCode);
+        return salesMemberRepository.findBySalesMemberCode(salesMemberCode).orElseThrow(()-> new EntityNotFoundException("존재하지 않는 사원입니다."));
     }
-
-
 
     //관리자 사원 정보 수정(권한, 팀 소속) : HJ
     @Transactional
@@ -165,6 +163,5 @@ public class SalesMemberService {
         member.updateTeam(team);
         salesMemberRepository.save(member);
     }
-
 
 }
