@@ -5,7 +5,6 @@ import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
 import com.alioth.server.domain.member.repository.SalesMemberRepository;
 import com.alioth.server.domain.member.service.SalesMemberService;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
