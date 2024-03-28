@@ -57,8 +57,7 @@ class ScheduleServiceTest {
     @Test
     @DisplayName("일정 수정 테스트")
     void update() {
-        ScheduleUpdateDto scheduleUpdateDto = ScheduleUpdateDto.builder()
-                .scheduleId(schedule.getScheduleId())
+        ScheduleReqDto scheduleUpdateDto = ScheduleReqDto.builder()
                 .scheduleStartTime(schedule.getScheduleStartTime())
                 .scheduleEndTime(schedule.getScheduleEndTime())
                 .scheduleNote("Updated Note")
@@ -66,7 +65,7 @@ class ScheduleServiceTest {
                 .allDay(schedule.getAllDay())
                 .build();
 
-        ScheduleResDto updatedSchedule = scheduleService.update(scheduleUpdateDto, scheduleId);
+        ScheduleResDto updatedSchedule = scheduleService.update(scheduleUpdateDto, schedule.getScheduleId());
         assertEquals("Updated Note", updatedSchedule.scheduleNote());
     }
 
