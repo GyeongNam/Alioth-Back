@@ -8,6 +8,8 @@ import com.alioth.server.domain.login.service.LogoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,5 +39,13 @@ public class LoginController {
                 "로그아웃 되었습니다"
         );
     }
+
+    @GetMapping("/api/test")
+    public String testUrl() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return name;
+    }
+
 
 }
