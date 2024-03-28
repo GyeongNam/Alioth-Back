@@ -43,6 +43,7 @@ public class SecurityConfig {
                                 .requestMatchers(BoardApiUrl).permitAll()
                                 .requestMatchers(ScheduleApiUrl).permitAll()
                                 .requestMatchers(TeamApiUrl).permitAll()
+                                .requestMatchers(SwaggerUrl).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -119,10 +120,17 @@ public class SecurityConfig {
             "/api/team/create",
             "/api/team/update/*",
             "/api/team/delete/*",
-
             "/api/team/detail/*",
             "/api/team/info/*",
             "/api/team/addMembers/*",
+    };
+
+    private static final String[] SwaggerUrl = {
+            "/api/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml"
     };
 
 
