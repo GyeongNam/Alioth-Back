@@ -45,7 +45,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         } catch (ExpiredJwtException e) {
-            //reissueAccessToken(request, response, e);
             String accessToken = parseBearerToken(request);
             String name = jwtTokenProvider.decodeJwtPayloadSubject(accessToken).split(":")[0];
             String reqRefreshToken = parseBearerTokenRefresh(request);
