@@ -3,6 +3,7 @@ package com.alioth.server.common.domain;
 import com.alioth.server.domain.board.domain.Board;
 import com.alioth.server.domain.board.dto.req.BoardCreateDto;
 import com.alioth.server.domain.board.dto.res.BoardResDto;
+import com.alioth.server.domain.login.dto.res.LoginResDto;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
 import com.alioth.server.domain.schedule.domain.Schedule;
@@ -70,5 +71,15 @@ public class TypeChange {
                 .salesMembers(salesMembers)
                 .build();
     }
+
+    public LoginResDto memberToLoginResDto(SalesMembers findMember, String accessToken, String refreshToken) {
+        return LoginResDto.builder()
+                .memberCode(findMember.getSalesMemberCode())
+                .name(findMember.getName())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
 
 }
