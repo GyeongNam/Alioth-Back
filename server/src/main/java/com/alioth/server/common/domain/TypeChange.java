@@ -6,10 +6,17 @@ import com.alioth.server.domain.board.dto.res.BoardResDto;
 import com.alioth.server.domain.login.dto.res.LoginResDto;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
+import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
+import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
 import com.alioth.server.domain.schedule.domain.Schedule;
 import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
 import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
+import com.alioth.server.domain.team.domain.Team;
+import com.alioth.server.domain.team.dto.TeamCreateDto;
+import com.alioth.server.domain.team.dto.TeamDto;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class TypeChange {
@@ -80,6 +87,57 @@ public class TypeChange {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+
+    public SalesMemberTeamListResDto salesMemberToSalesMemberTeamListResDto(SalesMembers member){
+        return SalesMemberTeamListResDto.builder()
+                .rank(member.getRank())
+                .name(member.getName())
+                .profileImage(member.getProfileImage())
+                .salesMemberCode(member.getSalesMemberCode())
+                .phone(member.getPhone())
+                .email(member.getEmail())
+                .build();
+    }
+
+    public SalesMemberResDto salesMembersToSalesMemberResDto(SalesMembers member){
+        return SalesMemberResDto.builder()
+                .rank(member.getRank())
+                .salesMemberCode(member.getSalesMemberCode())
+                .birthDay(member.getBirthDay())
+                .performanceReview(member.getPerformanceReview())
+                .teamCode(member.getTeam().getTeamCode())
+                .teamName(member.getTeam().getTeamName())
+                .address(member.getAddress())
+                .officeAddress(member.getOfficeAddress())
+                .extensionNumber(member.getExtensionNumber())
+                .phone(member.getPhone())
+                .name(member.getName())
+                .email(member.getEmail())
+                .build();
+    }
+
+    public TeamDto teamToTeamDto(Team team, List<SalesMemberTeamListResDto> list){
+        return TeamDto.builder()
+                .teamCode(team.getTeamCode())
+                .teamName(team.getTeamName())
+                .teamManagerCode(team.getTeamManagerCode())
+                .teamMemberList(list)
+                .build();
+    }
+
+    public Team teamCreateDtoToTeam(TeamCreateDto dto, String teamCode){
+        return Team.builder()
+                .teamCode(teamCode)
+                .teamName(dto.teamName())
+                .teamManagerCode(dto.teamManagerCode())
+                .build();
+    }
+
+
+
+
+
 
 
 }

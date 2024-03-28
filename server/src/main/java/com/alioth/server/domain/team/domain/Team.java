@@ -27,6 +27,9 @@ public class Team {
     private String teamCode;
     @Column(nullable = false)
     private Long teamManagerCode;
+    @Column
+    @Builder.Default
+    private String delYN = "N";
     @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
     @Builder.Default
     private List<SalesMembers> teamMembers = new ArrayList<>();
@@ -37,5 +40,8 @@ public class Team {
         this.teamManagerCode=dto.teamManagerCode();
     }
 
+    public void deleteTeam(){
+        this.delYN = "Y";
+    }
 
 }

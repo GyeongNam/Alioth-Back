@@ -1,6 +1,8 @@
 package com.alioth.server.domain.team.controller;
 
+import com.alioth.server.common.domain.TypeChange;
 import com.alioth.server.common.response.CommonResponse;
+import com.alioth.server.domain.member.domain.SalesMemberType;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
 import com.alioth.server.domain.member.service.SalesMemberService;
@@ -29,44 +31,37 @@ public class TeamController {
 
     private final TeamService teamService;
     private final SalesMemberService salesMemberService;
+    private final TypeChange typeChange;
 
     @PostMapping("/create")
     public ResponseEntity<CommonResponse> createTeam(@RequestBody TeamCreateDto dto) {
         SalesMembers teamManager = salesMemberService.findBySalesMemberCode(dto.teamManagerCode());
-        Team team = teamService.createTeam(dto,teamManager);
-        salesMemberService.updateTeam(teamManager.getId(),team);
-        TeamDto teamDto= TeamDto.builder()
-                .teamName(team.getTeamName())
-                .teamCode(team.getTeamCode())
-                .teamMemberList(team.getTeamMembers().stream()
-                        .map(a->
-                                SalesMemberTeamListResDto.builder()
-                                        .name(a.getName())
-                                        .email(a.getEmail())
-                                        .phone(a.getPhone())
-                                        .extensionNumber(a.getExtensionNumber())
-                                        .officeAddress(a.getOfficeAddress())
-                                        .rank(a.getRank())
-                                        .address(a.getAddress())
-                                        .salesMemberCode(a.getSalesMemberCode())
-                                        .profileImage(a.getProfileImage())
-                                        .build()
-                        ).collect(Collectors.toList()))
-                .build();
-        return CommonResponse.responseMessage(
-                HttpStatus.CREATED,
-                "successfully created",
-                teamDto
-        );
+        if (teamManager.getRank() == SalesMemberType.MANAGER) {
+            Team team = teamService.createTeam(dto, teamManager);
+            salesMemberService.updateTeam(teamManager.getId(), team);
+            List<SalesMemberTeamListResDto> list = team.getTeamMembers().stream().map(typeChange::salesMemberToSalesMemberTeamListResDto).toList();
+            return CommonResponse.responseMessage(
+                    HttpStatus.CREATED,
+                    "successfully created",
+                    typeChange.teamToTeamDto(team,list)
+            );
+        } else {
+            throw new IllegalArgumentException("직급을 확인해주세요");
+        }
     }
 
     @PatchMapping("/update/{teamId}")
     public ResponseEntity<CommonResponse> updateTeam(@RequestBody @Valid TeamUpdateDto dto,
                                         @PathVariable("teamId") Long id) {
-        teamService.updateTeam(dto,id);
-        return CommonResponse.responseMessage(
-                HttpStatus.CREATED, "successfully updated"
-        );
+        SalesMembers teamManager = salesMemberService.findBySalesMemberCode(dto.teamManagerCode());
+        if (teamManager.getRank() == SalesMemberType.MANAGER) {
+            teamService.updateTeam(dto, id);
+            return CommonResponse.responseMessage(
+                    HttpStatus.CREATED, "successfully updated"
+            );
+        } else {
+            throw new IllegalArgumentException("직급을 확인해주세요");
+        }
     }
 
     @DeleteMapping("/delete/{teamId}")
