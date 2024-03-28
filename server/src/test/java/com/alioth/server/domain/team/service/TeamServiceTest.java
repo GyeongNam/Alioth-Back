@@ -62,7 +62,7 @@ public class TeamServiceTest {
         assertEquals("Y", team.getDelYN());
     }
 
-    /*@Test
+    @Test
     @DisplayName("팀 정보 수정")
     public void updateTeamTest(){
         Long teamId = 3L;
@@ -70,8 +70,21 @@ public class TeamServiceTest {
                 .teamName("SALES102")
                 .teamManagerCode(202435L)
                 .build();
-
+        Team team = teamService.findById(teamId);
+        SalesMembers teamManager = salesMemberService.findBySalesMemberCode(dto.teamManagerCode());
+        if(teamManager.getRank()==SalesMemberType.MANAGER){
+            teamService.updateTeam(dto,teamId);
+            assertEquals("SALES102", team.getTeamName());
+            assertEquals(dto.teamManagerCode(), team.getTeamManagerCode());
+        }
+    }
+    @Test
+    @DisplayName("팀 상세정보 조회")
+    public void getTeamDetailTest(){
+        Long teamId = 2L;
+        Team team = teamService.findById(teamId);
+        team.deleteTeam();
         assertEquals("Y", team.getDelYN());
-    }*/
+    }
 }
 
