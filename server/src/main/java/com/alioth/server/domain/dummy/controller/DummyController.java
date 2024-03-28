@@ -2,10 +2,7 @@ package com.alioth.server.domain.dummy.controller;
 
 import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.dummy.service.DummyService;
-import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
