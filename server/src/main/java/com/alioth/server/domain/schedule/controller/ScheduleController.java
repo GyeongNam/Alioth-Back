@@ -23,44 +23,48 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping("/create")
-    public ResponseEntity<CommonResponse> createSchedule(@RequestBody @Valid ScheduleReqDto scheduleReqDto){
+    public ResponseEntity<CommonResponse> createSchedule(
+            @RequestBody @Valid ScheduleReqDto scheduleReqDto,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
         return CommonResponse.responseMessage(
                 HttpStatus.CREATED,
                 "일정이 추가되었습니다.",
-                scheduleService.save(scheduleReqDto)
+                scheduleService.save(scheduleReqDto,Long.parseLong(userDetails.getUsername()))
         );
     }
 
     @GetMapping("/list")
-    public ResponseEntity<CommonResponse> listSchedule(){
+    public ResponseEntity<CommonResponse> listSchedule(@AuthenticationPrincipal UserDetails userDetails){
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
                 "일정 리스트",
-                scheduleService.list()
+                scheduleService.list(Long.parseLong(userDetails.getUsername()))
         );
     }
 
     @PatchMapping("/update/{scheduleId}")
     public ResponseEntity<CommonResponse> updateSchedule(
             @RequestBody @Valid ScheduleReqDto scheduleReqDto,
-            @PathVariable Long scheduleId
-
+            @PathVariable Long scheduleId,
+            @AuthenticationPrincipal UserDetails userDetails
             ){
-
-        log.info("로그인 유저 확인: "+ SecurityContextHolder.getContext().getAuthentication().getName());
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
                 "일정이 수정되었습니다.",
-                scheduleService.update(scheduleReqDto,scheduleId)
+                scheduleService.update(scheduleReqDto,scheduleId,Long.parseLong(userDetails.getUsername()))
         );
     }
 
     @DeleteMapping("/delete/{scheduleId}")
-    public ResponseEntity<CommonResponse> deleteSchedule(@PathVariable Long scheduleId){
+    public ResponseEntity<CommonResponse> deleteSchedule(
+            @PathVariable Long scheduleId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
                 "일정이 삭제되었습니다.",
-                scheduleService.delete(scheduleId)
+                scheduleService.delete(scheduleId,Long.parseLong(userDetails.getUsername()))
         );
     }
 }
