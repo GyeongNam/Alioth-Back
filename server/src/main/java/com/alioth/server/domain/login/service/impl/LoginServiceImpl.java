@@ -1,5 +1,6 @@
 package com.alioth.server.domain.login.service.impl;
 
+import com.alioth.server.common.domain.TypeChange;
 import com.alioth.server.common.jwt.JwtTokenProvider;
 import com.alioth.server.common.redis.RedisService;
 import com.alioth.server.common.response.CommonResponse;
@@ -25,9 +26,10 @@ public class LoginServiceImpl implements LoginService {
     private final PasswordEncoder passwordEncoder;
     private final SalesMemberRepository salesMemberRepository;
     private final RedisService redisService;
+    private final TypeChange typeChange;
 
     @Override
-    public CommonResponse memberLogin(LoginReqDto dto) {
+    public LoginResDto memberLogin(LoginReqDto dto) {
         SalesMembers findMember = salesMemberRepository.findBySalesMemberCode(dto.memberCode())
                 .filter(it -> passwordEncoder.matches(dto.password(), it.getPassword()))
                 .orElseThrow(() -> new EntityNotFoundException("사원번호 혹은 비밀번호를 다시 확인해주세요."));
@@ -38,17 +40,8 @@ public class LoginServiceImpl implements LoginService {
 
         redisService.setValues(findMember.getSalesMemberCode() + ":RefreshToken", refreshToken);
 
-        LoginResDto resDto = LoginResDto.builder()
-                .memberCode(findMember.getSalesMemberCode())
-                .name(findMember.getName())
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        LoginResDto resDto = typeChange.memberToLoginResDto(findMember, accessToken, refreshToken);
 
-        return CommonResponse.builder()
-                .httpStatus(HttpStatus.OK)
-                .message("로그인이 완료되었습니다.")
-                .result(resDto)
-                .build();
+        return resDto;
     }
 }
