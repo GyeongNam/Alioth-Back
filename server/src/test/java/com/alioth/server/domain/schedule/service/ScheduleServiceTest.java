@@ -54,7 +54,6 @@ class ScheduleServiceTest {
 
     @BeforeEach
     void setUp() {
-
         ScheduleReqDto scheduleReqDto = ScheduleReqDto.builder()
                 .scheduleStartTime(LocalDateTime.now())
                 .scheduleEndTime(LocalDateTime.now().plusHours(1))
