@@ -9,7 +9,7 @@ import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
 import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
 import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
 import com.alioth.server.domain.schedule.domain.Schedule;
-import com.alioth.server.domain.schedule.dto.req.ScheduleCreateDto;
+import com.alioth.server.domain.schedule.dto.req.ScheduleReqDto;
 import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
 import com.alioth.server.domain.team.domain.Team;
 import com.alioth.server.domain.team.dto.TeamCreateDto;
@@ -21,13 +21,13 @@ import java.util.List;
 @Component
 public class TypeChange {
 
-    public Schedule ScheduleCreateDtoToSchedule(ScheduleCreateDto scheduleCreateDto, SalesMembers salesMembers){
+    public Schedule ScheduleCreateDtoToSchedule(ScheduleReqDto scheduleReqDto, SalesMembers salesMembers){
         return Schedule.builder()
-                .scheduleStartTime(scheduleCreateDto.scheduleStartTime())
-                .scheduleEndTime(scheduleCreateDto.scheduleEndTime())
-                .scheduleNote(scheduleCreateDto.scheduleNote())
-                .scheduleType(scheduleCreateDto.scheduleType())
-                .allDay(scheduleCreateDto.allDay())
+                .scheduleStartTime(scheduleReqDto.scheduleStartTime())
+                .scheduleEndTime(scheduleReqDto.scheduleEndTime())
+                .scheduleNote(scheduleReqDto.scheduleNote())
+                .scheduleType(scheduleReqDto.scheduleType())
+                .allDay(scheduleReqDto.allDay())
                 .salesMembers(salesMembers) // 사원
                 .build();
     }
