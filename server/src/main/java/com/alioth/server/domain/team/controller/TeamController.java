@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -99,8 +100,10 @@ public class TeamController {
         List<SalesMembers> teamMembers = new ArrayList<>();
         for(Long salesMemberCode: dto.salesMemberCodes()){
             SalesMembers teamMember=salesMemberService.findBySalesMemberCode(salesMemberCode);
-            salesMemberService.updateTeam(teamMember.getId(),teamService.findById(teamId));
-            teamMembers.add(teamMember);
+            if(Objects.equals(teamMember.getQuit(), "N")){
+                salesMemberService.updateTeam(teamMember.getId(),teamService.findById(teamId));
+                teamMembers.add(teamMember);
+            }
         }
         teamService.addMembersToTeam(teamId,teamMembers);
         return CommonResponse.responseMessage(

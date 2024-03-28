@@ -23,39 +23,40 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final TypeChange typeChange;
 
-    public Team getTeam(String teamCode){
+    public Team getTeam(String teamCode) {
         return teamRepository.findByTeamCode(teamCode);
     }
-    public Team findById(Long id){
+
+    public Team findById(Long id) {
         return teamRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    public String createTeamCode(){
+    public String createTeamCode() {
         Team findFirstTeam = teamRepository.findFirstByOrderByIdDesc();
         Long teamId;
-        if(findFirstTeam==null){
-            teamId=1L;
+        if (findFirstTeam == null) {
+            teamId = 1L;
         } else {
-            teamId = teamRepository.findFirstByOrderByIdDesc().getId()+1;
+            teamId = teamRepository.findFirstByOrderByIdDesc().getId() + 1;
         }
         String formattedTeamId = String.format("%03d", teamId);
-        return "SALES"+ formattedTeamId;
+        return "SALES" + formattedTeamId;
     }
 
-    public Team createTeam(TeamCreateDto dto, SalesMembers teamManager){
+    public Team createTeam(TeamCreateDto dto, SalesMembers teamManager) {
         String teamCode = this.createTeamCode();
-        Team team= typeChange.teamCreateDtoToTeam(dto,teamCode);
+        Team team = typeChange.teamCreateDtoToTeam(dto, teamCode);
         teamRepository.save(team);
         team.getTeamMembers().add(teamManager);
         return teamRepository.save(team);
     }
 
-    public void deleteTeam(Long id){
-        Team team= this.findById(id);
+    public void deleteTeam(Long id) {
+        Team team = this.findById(id);
         team.deleteTeam();
     }
 
-    public void updateTeam(TeamUpdateDto dto, Long teamId){
+    public void updateTeam(TeamUpdateDto dto, Long teamId) {
         Team team = this.findById(teamId);
         team.update(dto);
         teamRepository.save(team);
@@ -65,25 +66,31 @@ public class TeamService {
     public TeamDto findByTeamId(Long teamId) throws EntityNotFoundException {
         Team team = this.findById(teamId);
         List<SalesMemberTeamListResDto> list = this.findAllByTeamId(team.getId());
-        return typeChange.teamToTeamDto(team,list);
+        return typeChange.teamToTeamDto(team, list);
     }
 
     //팀원 추가
-    public void addMembersToTeam(Long teamId, List<SalesMembers> teamMembers){
+    public void addMembersToTeam(Long teamId, List<SalesMembers> teamMembers) {
         Team team = this.findById(teamId);
-        for(SalesMembers sm: teamMembers){
-            team.getTeamMembers().add(sm);
+        for (SalesMembers sm : teamMembers) {
+            if (sm.getQuit().equals("N")) {
+                team.getTeamMembers().add(sm);
+            }
         }
+        teamRepository.save(team);
     }
 
     //사원 리스트 생성
-    public List<SalesMemberTeamListResDto> findAllByTeamId(Long teamId){
-        List<SalesMembers> memberList= teamRepository.findSalesMembersByTeamId(teamId);
+    public List<SalesMemberTeamListResDto> findAllByTeamId (Long teamId){
+        List<SalesMembers> memberList = teamRepository.findSalesMembersByTeamId(teamId);
         List<SalesMemberTeamListResDto> list = new ArrayList<>();
-        for(SalesMembers sm: memberList){
-            SalesMemberTeamListResDto dto= typeChange.salesMemberToSalesMemberTeamListResDto(sm);
-            list.add(dto);
+        for (SalesMembers sm : memberList) {
+            if (sm.getQuit().equals("N")) {
+                SalesMemberTeamListResDto dto = typeChange.salesMemberToSalesMemberTeamListResDto(sm);
+                list.add(dto);
+            }
         }
         return list;
     }
 }
+

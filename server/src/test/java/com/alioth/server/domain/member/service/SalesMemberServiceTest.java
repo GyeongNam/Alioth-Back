@@ -94,7 +94,7 @@ class SalesMemberServiceTest {
 
     @Test
     @DisplayName("관리자 사원 정보(소속 변경, 직급) 수정")
-    public void adminMemberInfoUpdateTest(){
+    public void adminMemberUpdateTest(){
         SalesMemberAdminUpdateReqDto dto = SalesMemberAdminUpdateReqDto.builder()
                 .teamCode("SALES005")
                 .rank(SalesMemberType.FP)
@@ -108,7 +108,7 @@ class SalesMemberServiceTest {
 
     @Test
     @DisplayName("고과평가")
-    public void setPrTest(){
+    public void adminMemberPrTest(){
         SalesMemberUpdatePerformanceReview dto = SalesMemberUpdatePerformanceReview.builder()
                 .performanceReview("B")
                 .build();
@@ -122,7 +122,7 @@ class SalesMemberServiceTest {
 
     @Test
     @DisplayName("사원 정보 조회")
-    public void getMemberDetailTest(){
+    public void memberDetailTest(){
         Long id = 4L;
         SalesMemberResDto member = salesMemberService.memberDetail(id);
         assertEquals(202434,member.salesMemberCode());

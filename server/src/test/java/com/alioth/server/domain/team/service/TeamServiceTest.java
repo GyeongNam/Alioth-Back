@@ -9,7 +9,9 @@ import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
 import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
 import com.alioth.server.domain.member.service.SalesMemberService;
 import com.alioth.server.domain.team.domain.Team;
+import com.alioth.server.domain.team.dto.TeamAddMemberDto;
 import com.alioth.server.domain.team.dto.TeamCreateDto;
+import com.alioth.server.domain.team.dto.TeamDto;
 import com.alioth.server.domain.team.dto.TeamUpdateDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,7 +31,6 @@ public class TeamServiceTest {
 
     @Autowired
     private TypeChange typeChange;
-
 
     @Autowired
     private TeamService teamService;
@@ -65,26 +68,53 @@ public class TeamServiceTest {
     @Test
     @DisplayName("팀 정보 수정")
     public void updateTeamTest(){
-        Long teamId = 3L;
+        Long teamId = 1L;
         TeamUpdateDto dto = TeamUpdateDto.builder()
-                .teamName("SALES102")
+                .teamName("SALES1")
                 .teamManagerCode(202435L)
                 .build();
         Team team = teamService.findById(teamId);
         SalesMembers teamManager = salesMemberService.findBySalesMemberCode(dto.teamManagerCode());
-        if(teamManager.getRank()==SalesMemberType.MANAGER){
+        if(teamManager.getRank() == SalesMemberType.MANAGER){
             teamService.updateTeam(dto,teamId);
-            assertEquals("SALES102", team.getTeamName());
-            assertEquals(dto.teamManagerCode(), team.getTeamManagerCode());
         }
+        assertEquals("SALES1", team.getTeamName());
+        assertEquals(dto.teamManagerCode(), team.getTeamManagerCode());
     }
+
+
     @Test
     @DisplayName("팀 상세정보 조회")
-    public void getTeamDetailTest(){
+    public void findByTeamIdTest(){
         Long teamId = 2L;
+        TeamDto dto = teamService.findByTeamId(teamId);
         Team team = teamService.findById(teamId);
-        team.deleteTeam();
-        assertEquals("Y", team.getDelYN());
+        assertEquals(team.getTeamCode(),dto.teamCode());
     }
-}
+
+    @Test
+    @DisplayName("팀원 추가")
+    public void addMembersToTeamTest() {
+        Long teamId = 2L;
+        List<Long> salesMemberCodes = new ArrayList<>();
+        salesMemberCodes.add(202431L);
+        salesMemberCodes.add(202434L);
+        salesMemberCodes.add(202436L);
+        TeamAddMemberDto dto = TeamAddMemberDto.builder()
+                .salesMemberCodes(salesMemberCodes)
+                .build();
+        List<SalesMembers> list = new ArrayList<>();
+        for (Long l : dto.salesMemberCodes()) {
+            SalesMembers member = salesMemberService.findBySalesMemberCode(l);
+            if (member.getQuit().equals("N")) {
+                list.add(member);
+            }
+        }
+        teamService.addMembersToTeam(teamId, list);
+        Team team = teamService.findById(teamId);
+        assertEquals(salesMemberCodes.getFirst(),team.getTeamMembers().getFirst().getSalesMemberCode());
+        }
+    }
+
+
 

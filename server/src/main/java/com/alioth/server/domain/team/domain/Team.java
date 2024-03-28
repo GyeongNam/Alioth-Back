@@ -36,8 +36,8 @@ public class Team {
 
 
     public void update(TeamUpdateDto dto){
-        this.teamName= dto.teamName();
-        this.teamManagerCode=dto.teamManagerCode();
+        this.teamName = dto.teamName();
+        this.teamManagerCode = dto.teamManagerCode();
     }
 
     public void deleteTeam(){

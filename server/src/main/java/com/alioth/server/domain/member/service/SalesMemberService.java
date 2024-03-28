@@ -4,7 +4,6 @@ import com.alioth.server.common.domain.TypeChange;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.*;
 import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
-import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
 import com.alioth.server.domain.member.repository.SalesMemberRepository;
 import com.alioth.server.domain.team.domain.Team;
 import com.alioth.server.domain.team.service.TeamService;
