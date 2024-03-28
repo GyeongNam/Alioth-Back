@@ -28,7 +28,7 @@ public class DataInitialization implements CommandLineRunner {
         if(memberList.size() == 0) {
             SalesMemberCreateReqDto fpDto = SalesMemberCreateReqDto.builder()
                     .email("jangdg@naver.com") // 마스킹
-                    .phone("010-1234-1234") // 끝 4자리 마스킹
+                    .phone("010-1234-0001") // 끝 4자리 마스킹
                     .name("장동건")
                     .password("a1234567!")
                     .birthDay("990123") // 마스킹
@@ -38,7 +38,7 @@ public class DataInitialization implements CommandLineRunner {
 
             SalesMemberCreateReqDto managerDto = SalesMemberCreateReqDto.builder()
                     .email("wonb@naver.com") // 마스킹
-                    .phone("010-1234-1234") // 끝 4자리 마스킹
+                    .phone("010-1234-0002") // 끝 4자리 마스킹
                     .name("원빈")
                     .password("a1234567!")
                     .birthDay("990123") // 마스킹
@@ -48,7 +48,7 @@ public class DataInitialization implements CommandLineRunner {
 
             SalesMemberCreateReqDto hqDto = SalesMemberCreateReqDto.builder()
                     .email("gosoo@naver.com") // 마스킹
-                    .phone("010-1234-1234") // 끝 4자리 마스킹
+                    .phone("010-1234-0003") // 끝 4자리 마스킹
                     .name("고수")
                     .password("a1234567!")
                     .birthDay("990123") // 마스킹
