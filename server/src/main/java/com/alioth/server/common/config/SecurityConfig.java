@@ -38,9 +38,11 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .authorizeHttpRequests(
                         authorize -> authorize
-//                                .requestMatchers(LoginApiUrl).permitAll()
-//                                .requestMatchers(MemberApiUrl).permitAll()
-                                .requestMatchers("/**").permitAll()
+                                .requestMatchers(LoginApiUrl).permitAll()
+                                .requestMatchers(MemberApiUrl).permitAll()
+                                .requestMatchers(BoardApiUrl).permitAll()
+                                .requestMatchers(ScheduleApiUrl).permitAll()
+                                .requestMatchers(TeamApiUrl).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -84,17 +86,43 @@ public class SecurityConfig {
 
 
     private static final String[] MemberApiUrl = {
-            "/api/members",
-            "/ws/**"
+            "/api/members/create",
+            "/api/members/*/password",
+            "/api/members/*/info",
+            "/api/members/admin/update/*",
+            "/api/members/admin/pr/*",
+            "/api/members/details/*",
+            "/api/members/details/update/*",
     };
 
     private static final String[] LoginApiUrl = {
             "/api/login",
+            "/api/*/logout",
+            "/api/test",
+    };
+
+    private static final String[] ScheduleApiUrl = {
+            "/api/schedule/create",
+            "/api/schedule/list",
+            "/api/schedule/update",
+            "/api/schedule/delete/*",
     };
 
     private static final String[] BoardApiUrl = {
-            "/api/post/list",
-            "/PostDetail/**",
+            "/api/board/create",
+            "/api/board/list",
+            "/api/board/update",
+            "/api/board/delete/*",
+    };
+
+    private static final String[] TeamApiUrl = {
+            "/api/team/create",
+            "/api/team/update/*",
+            "/api/team/delete/*",
+
+            "/api/team/detail/*",
+            "/api/team/info/*",
+            "/api/team/addMembers/*",
     };
 
 
