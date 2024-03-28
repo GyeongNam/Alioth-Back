@@ -112,7 +112,7 @@ public class JwtTokenProvider {
     private Jws<Claims> validateAndParseToken(String refreshToken) {
         // validateTokenAndGetSubject에서 따로 분리
         return Jwts.parser()
-                .setSigningKey(refreshSecretKey.getBytes())
+                .setSigningKey(accessSecretKey.getBytes())
                 .parseClaimsJws(refreshToken);
     }
 

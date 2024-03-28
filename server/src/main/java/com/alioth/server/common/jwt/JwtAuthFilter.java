@@ -80,7 +80,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .orElse(null);
     }
 
-
     private User parseUserSpecification(String token) {
         String[] split = Optional.ofNullable(token)
                 .filter(subject -> subject.length() >= 1)
