@@ -13,7 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -39,12 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers(LoginApiUrl).permitAll()
-                                .requestMatchers(MemberApiUrl).permitAll()
-                                .requestMatchers(BoardApiUrl).permitAll()
-                                .requestMatchers(ScheduleApiUrl).permitAll()
-                                .requestMatchers(TeamApiUrl).permitAll()
-                                .requestMatchers(ContractApiUrl).permitAll()
-                                .requestMatchers("/dummy/add/CMSize/{CMSize}/ProductSize/{ProductSize}/CustomSize/{CustomSize}").permitAll()
+                                .requestMatchers(DummyApiUrl).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -84,53 +78,13 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-
-    private static final String[] MemberApiUrl = {
-            "/api/members/create",
-            "/api/members/*/password",
-            "/api/members/*/info",
-            "/api/members/admin/update/*",
-            "/api/members/admin/pr/*",
-            "/api/members/details/*",
-            "/api/members/details/update/*",
-    };
-
     private static final String[] LoginApiUrl = {
             "/api/login",
             "/api/*/logout",
             "/api/test",
     };
 
-    private static final String[] ScheduleApiUrl = {
-            "/api/schedule/create",
-            "/api/schedule/list",
-            "/api/schedule/update",
-            "/api/schedule/delete/*",
-    };
-
-    private static final String[] BoardApiUrl = {
-            "/api/board/create",
-            "/api/board/list",
-            "/api/board/update",
-            "/api/board/delete/*",
-    };
-
-    private static final String[] TeamApiUrl = {
-            "/api/team/create",
-            "/api/team/update/*",
-            "/api/team/delete/*",
-
-            "/api/team/detail/*",
-            "/api/team/info/*",
-            "/api/team/addMembers/*",
-    };
-
-    private static final String[] ContractApiUrl = {
-            "/api/contract/create",
-            "/api/contract/update/*",
-            "/api/contract/delete/*",
-            "/api/contract/list",
+    private static final String[] DummyApiUrl = {
+            "/dummy/**"
     };
 }

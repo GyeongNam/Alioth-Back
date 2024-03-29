@@ -16,9 +16,9 @@ public class DummyController {
 
     @GetMapping("/add/CMSize/{CMSize}/ProductSize/{ProductSize}/CustomSize/{CustomSize}")
     public ResponseEntity<CommonResponse> addDummy(
-            @PathVariable("CMSize") long CMSize,
-            @PathVariable("ProductSize") long ProductSize,
-            @PathVariable("CustomSize") long CustomSize
+            @PathVariable long CMSize,
+            @PathVariable long ProductSize,
+            @PathVariable long CustomSize
     ){
         dummyService.addData(CMSize,ProductSize,CustomSize);
         return CommonResponse.responseMessage(
