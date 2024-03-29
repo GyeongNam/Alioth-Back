@@ -3,6 +3,12 @@ package com.alioth.server.common.domain;
 import com.alioth.server.domain.board.domain.Board;
 import com.alioth.server.domain.board.dto.req.BoardCreateDto;
 import com.alioth.server.domain.board.dto.res.BoardResDto;
+import com.alioth.server.domain.contract.domain.Contract;
+import com.alioth.server.domain.contract.dto.req.ContractCreateDto;
+import com.alioth.server.domain.contract.dto.res.ContractResDto;
+import com.alioth.server.domain.dummy.domain.ContractMembers;
+import com.alioth.server.domain.dummy.domain.Custom;
+import com.alioth.server.domain.dummy.domain.InsuranceProduct;
 import com.alioth.server.domain.login.dto.res.LoginResDto;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
@@ -69,6 +75,48 @@ public class TypeChange {
                 .content(boardCreateDto.content())
                 .boardType(boardCreateDto.boardType())
                 .salesMembers(salesMembers)
+                .build();
+    }
+    public Contract ContractCreateDtoToContract(ContractCreateDto dto, ContractMembers contractMembers, Custom custom, InsuranceProduct insuranceProduct, SalesMembers salesMember) {
+        return Contract.builder()
+                .contractCode(dto.contractCode())
+                .contractDate(dto.contractDate())
+                .contractExpireDate(dto.contractExpireDate())
+                .contractPeriod(dto.contractPeriod())
+                .contractTotalPrice(dto.contractTotalPrice())
+                .contractPaymentAmount(dto.contractPaymentAmount())
+                .contractPaymentFrequency(dto.contractPaymentFrequency())
+                .contractPaymentMaturityInstallment(dto.contractPaymentMaturityInstallment())
+                .contractCount(dto.contractCount())
+                .contractPaymentMethod(dto.contractPaymentMethod())
+                .contractPayer(dto.contractPayer())
+                .contractConsultation(dto.contractConsultation())
+                .contractStatus(dto.contractStatus())
+                .contractMembers(contractMembers)
+                .custom(custom)
+                .insuranceProduct(insuranceProduct)
+                .salesMembers(salesMember)
+                .build();
+    }
+    public ContractResDto ContractToContractResDto(Contract contract) {
+        return ContractResDto.builder()
+                .contractId(contract.getContractId())
+                .contractCode(contract.getContractCode())
+                .contractDate(contract.getContractDate())
+                .contractExpireDate(contract.getContractExpireDate())
+                .contractPeriod(contract.getContractPeriod())
+                .contractTotalPrice(contract.getContractTotalPrice())
+                .contractPaymentAmount(contract.getContractPaymentAmount())
+                .contractPaymentFrequency(contract.getContractPaymentFrequency())
+                .contractPaymentMaturityInstallment(contract.getContractPaymentMaturityInstallment())
+                .contractCount(contract.getContractCount())
+                .contractPaymentMethod(contract.getContractPaymentMethod())
+                .contractPayer(contract.getContractPayer())
+                .contractConsultation(contract.getContractConsultation())
+                .contractStatus(contract.getContractStatus())
+                .insuranceProductName(contract.getInsuranceProduct() != null ? contract.getInsuranceProduct().getInsuranceName() : null)
+                .customName(contract.getCustom() != null ? contract.getCustom().getCustomerName() : null)
+                .contractMemberName(contract.getContractMembers() != null ? contract.getContractMembers().getCM_name() : null)
                 .build();
     }
 
