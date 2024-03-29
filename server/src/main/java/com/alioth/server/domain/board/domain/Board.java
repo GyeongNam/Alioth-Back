@@ -39,8 +39,14 @@ public class Board {
     public void delete(){
         this.boardDel_YN = "Y";
     }
+
+
     public void update(BoardUpdateDto boardUpdateDto) {
-        this.title = boardUpdateDto.title();
-        this.content = boardUpdateDto.content();
+        if(!boardUpdateDto.title().isEmpty()){
+            this.title = boardUpdateDto.title();
+        }
+        if(!boardUpdateDto.content().isEmpty()){
+            this.content = boardUpdateDto.content();
+        }
     }
 }

@@ -40,9 +40,6 @@ public class SecurityConfig {
                         authorize -> authorize
                                 .requestMatchers(LoginApiUrl).permitAll()
                                 .requestMatchers(MemberApiUrl).permitAll()
-                                .requestMatchers(BoardApiUrl).permitAll()
-                                .requestMatchers(ScheduleApiUrl).permitAll()
-                                .requestMatchers(TeamApiUrl).permitAll()
                                 .requestMatchers(SwaggerUrl).permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -102,28 +99,10 @@ public class SecurityConfig {
             "/api/test",
     };
 
-    private static final String[] ScheduleApiUrl = {
-            "/api/schedule/create",
-            "/api/schedule/list",
-            "/api/schedule/update",
-            "/api/schedule/delete/*",
-    };
 
-    private static final String[] BoardApiUrl = {
-            "/api/board/create",
-            "/api/board/list",
-            "/api/board/update",
-            "/api/board/delete/*",
-    };
 
-    private static final String[] TeamApiUrl = {
-            "/api/team/create",
-            "/api/team/update/*",
-            "/api/team/delete/*",
-            "/api/team/detail/*",
-            "/api/team/info/*",
-            "/api/team/addMembers/*",
-    };
+
+
 
     private static final String[] SwaggerUrl = {
             "/api/**",

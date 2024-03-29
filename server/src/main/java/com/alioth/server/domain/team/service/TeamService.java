@@ -2,12 +2,11 @@ package com.alioth.server.domain.team.service;
 
 import com.alioth.server.common.domain.TypeChange;
 import com.alioth.server.domain.member.domain.SalesMembers;
-import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
-import com.alioth.server.domain.team.dto.TeamDto;
-import com.alioth.server.domain.team.dto.TeamUpdateDto;
+import com.alioth.server.domain.member.dto.res.SMTeamListResDto;
+import com.alioth.server.domain.team.dto.TeamReqDto;
 import com.alioth.server.domain.team.repository.TeamRepository;
 import com.alioth.server.domain.team.domain.Team;
-import com.alioth.server.domain.team.dto.TeamCreateDto;
+import com.alioth.server.domain.team.dto.TeamResDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,7 @@ public class TeamService {
         return "SALES" + formattedTeamId;
     }
 
-    public Team createTeam(TeamCreateDto dto, SalesMembers teamManager) {
+    public Team createTeam(TeamReqDto dto, SalesMembers teamManager) {
         String teamCode = this.createTeamCode();
         Team team = typeChange.teamCreateDtoToTeam(dto, teamCode);
         teamRepository.save(team);
@@ -56,37 +55,32 @@ public class TeamService {
         team.deleteTeam();
     }
 
-    public void updateTeam(TeamUpdateDto dto, Long teamId) {
+    public void updateTeam(TeamReqDto dto, Long teamId) {
         Team team = this.findById(teamId);
         team.update(dto);
-        teamRepository.save(team);
     }
 
     //팀 상세 조회
-    public TeamDto findByTeamId(Long teamId) throws EntityNotFoundException {
+    public TeamResDto findByTeamId(Long teamId) throws EntityNotFoundException {
         Team team = this.findById(teamId);
-        List<SalesMemberTeamListResDto> list = this.findAllByTeamId(team.getId());
-        return typeChange.teamToTeamDto(team, list);
+        List<SMTeamListResDto> list = this.findAllByTeamId(team.getId());
+        return typeChange.teamToTeamReqDto(team, list);
     }
 
     //팀원 추가
     public void addMembersToTeam(Long teamId, List<SalesMembers> teamMembers) {
         Team team = this.findById(teamId);
-        for (SalesMembers sm : teamMembers) {
-            if (sm.getQuit().equals("N")) {
-                team.getTeamMembers().add(sm);
-            }
-        }
+        team.getTeamMembers().addAll(teamMembers);
         teamRepository.save(team);
     }
 
     //사원 리스트 생성
-    public List<SalesMemberTeamListResDto> findAllByTeamId (Long teamId){
+    public List<SMTeamListResDto> findAllByTeamId (Long teamId){
         List<SalesMembers> memberList = teamRepository.findSalesMembersByTeamId(teamId);
-        List<SalesMemberTeamListResDto> list = new ArrayList<>();
+        List<SMTeamListResDto> list = new ArrayList<>();
         for (SalesMembers sm : memberList) {
             if (sm.getQuit().equals("N")) {
-                SalesMemberTeamListResDto dto = typeChange.salesMemberToSalesMemberTeamListResDto(sm);
+                SMTeamListResDto dto = typeChange.smToSmTeamListResDto(sm);
                 list.add(dto);
             }
         }

@@ -73,22 +73,14 @@ public class SalesMemberService {
                                                             new EntityNotFoundException("존재하지 않는 사원입니다."));
     }
 
-    //관리자 사원 정보 수정(권한, 팀 소속)
+    //관리자 사원 정보 수정(권한, 팀 소속, 고과평가)
     @Transactional
-    public SalesMemberResDto adminMemberUpdate (Long memberId, SalesMemberAdminUpdateReqDto dto) {
+    public SalesMemberResDto adminMemberUpdate (Long memberId, SMAdminUpdateReqDto dto) {
         SalesMembers member = this.findById(memberId);
         Team team = teamService.getTeam(dto.teamCode());
         member.updateAdmin(dto, team);
         salesMemberRepository.save(member);
-        return typeChange.salesMembersToSalesMemberResDto(member);
-    }
-
-    //관리자 고과정보 수정
-    @Transactional
-    public void adminMemberPr (Long memberId, SalesMemberUpdatePerformanceReview dto){
-        SalesMembers member = this.findById(memberId);
-        member.updatePr(dto);
-        salesMemberRepository.save(member);
+        return typeChange.smToSmResDto(member);
     }
 
     //사원 정보 조회
@@ -96,14 +88,14 @@ public class SalesMemberService {
     public SalesMemberResDto memberDetail(Long memberId) {
         SalesMembers salesMembers = salesMemberRepository.findById(memberId).orElseThrow(()->
                                                             new EntityNotFoundException("존재하지 않는 사원입니다."));
-        return typeChange.salesMembersToSalesMemberResDto(salesMembers);
+        return typeChange.smToSmResDto(salesMembers);
     }
 
     @Transactional
     public SalesMemberResDto updateMyInfo(Long memberId, SalesMemberUpdateReqDto dto){
         SalesMembers member = this.findById(memberId);
         member.updateMyInfo(dto);
-        return typeChange.salesMembersToSalesMemberResDto(member);
+        return typeChange.smToSmResDto(member);
     }
 
     public void updateTeam(Long memberId,Team team){

@@ -7,13 +7,13 @@ import com.alioth.server.domain.login.dto.res.LoginResDto;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
 import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
-import com.alioth.server.domain.member.dto.res.SalesMemberTeamListResDto;
+import com.alioth.server.domain.member.dto.res.SMTeamListResDto;
 import com.alioth.server.domain.schedule.domain.Schedule;
 import com.alioth.server.domain.schedule.dto.req.ScheduleReqDto;
 import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
 import com.alioth.server.domain.team.domain.Team;
-import com.alioth.server.domain.team.dto.TeamCreateDto;
-import com.alioth.server.domain.team.dto.TeamDto;
+import com.alioth.server.domain.team.dto.TeamResDto;
+import com.alioth.server.domain.team.dto.TeamReqDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -89,8 +89,8 @@ public class TypeChange {
     }
 
 
-    public SalesMemberTeamListResDto salesMemberToSalesMemberTeamListResDto(SalesMembers member){
-        return SalesMemberTeamListResDto.builder()
+    public SMTeamListResDto smToSmTeamListResDto(SalesMembers member){
+        return SMTeamListResDto.builder()
                 .rank(member.getRank())
                 .name(member.getName())
                 .profileImage(member.getProfileImage())
@@ -100,7 +100,7 @@ public class TypeChange {
                 .build();
     }
 
-    public SalesMemberResDto salesMembersToSalesMemberResDto(SalesMembers member){
+    public SalesMemberResDto smToSmResDto(SalesMembers member){
         return SalesMemberResDto.builder()
                 .rank(member.getRank())
                 .salesMemberCode(member.getSalesMemberCode())
@@ -117,8 +117,8 @@ public class TypeChange {
                 .build();
     }
 
-    public TeamDto teamToTeamDto(Team team, List<SalesMemberTeamListResDto> list){
-        return TeamDto.builder()
+    public TeamResDto teamToTeamReqDto(Team team, List<SMTeamListResDto> list){
+        return TeamResDto.builder()
                 .teamCode(team.getTeamCode())
                 .teamName(team.getTeamName())
                 .teamManagerCode(team.getTeamManagerCode())
@@ -126,7 +126,7 @@ public class TypeChange {
                 .build();
     }
 
-    public Team teamCreateDtoToTeam(TeamCreateDto dto, String teamCode){
+    public Team teamCreateDtoToTeam(TeamReqDto dto, String teamCode){
         return Team.builder()
                 .teamCode(teamCode)
                 .teamName(dto.teamName())

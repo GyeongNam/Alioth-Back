@@ -1,6 +1,5 @@
 package com.alioth.server.domain.member.service;
 
-import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.login.dto.req.LoginReqDto;
 import com.alioth.server.domain.login.dto.res.LoginResDto;
 import com.alioth.server.domain.login.service.LoginService;
@@ -9,19 +8,20 @@ import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.*;
 import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
 import com.alioth.server.domain.member.repository.SalesMemberRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-
+@Rollback
+@Transactional
 @SpringBootTest
 class SalesMemberServiceTest {
 
@@ -93,32 +93,20 @@ class SalesMemberServiceTest {
     }
 
     @Test
-    @DisplayName("관리자 사원 정보(소속 변경, 직급) 수정")
+    @DisplayName("관리자 사원 정보(소속 변경, 직급, 고과평가) 수정")
     public void adminMemberUpdateTest(){
-        SalesMemberAdminUpdateReqDto dto = SalesMemberAdminUpdateReqDto.builder()
+        SMAdminUpdateReqDto dto = SMAdminUpdateReqDto.builder()
                 .teamCode("SALES005")
                 .rank(SalesMemberType.FP)
+                .performanceReview("A")
                 .build();
         Long id = 6L;
 
         SalesMemberResDto member = salesMemberService.adminMemberUpdate(id,dto);
         Assertions.assertThat(dto.rank()).isEqualTo(member.rank());
+        assertEquals("A", member.performanceReview());
     }
 
-
-    @Test
-    @DisplayName("고과평가")
-    public void adminMemberPrTest(){
-        SalesMemberUpdatePerformanceReview dto = SalesMemberUpdatePerformanceReview.builder()
-                .performanceReview("B")
-                .build();
-        Long id = 4L;
-
-        salesMemberService.adminMemberPr(id,dto);
-        SalesMembers member = salesMemberService.findById(id);
-
-        Assertions.assertThat(dto.performanceReview()).isEqualTo(member.getPerformanceReview());
-    }
 
     @Test
     @DisplayName("사원 정보 조회")
