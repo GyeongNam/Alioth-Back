@@ -28,10 +28,10 @@ public class SalesMembers extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 19)
     private String phone;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 18)
     private String name;
 
     @Column(nullable = false, length = 64)
@@ -40,7 +40,7 @@ public class SalesMembers extends BaseEntity {
     @Column(nullable = false)
     private String birthDay;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 200)
     private String address;
 
     @Column

@@ -1,9 +1,8 @@
 package com.alioth.server.domain.schedule.domain;
 
 import com.alioth.server.common.domain.BaseEntity;
-import com.alioth.server.domain.dummy.domain.InsuranceProduct;
 import com.alioth.server.domain.member.domain.SalesMembers;
-import com.alioth.server.domain.schedule.dto.req.ScheduleUpdateDto;
+import com.alioth.server.domain.schedule.dto.req.ScheduleReqDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,12 +47,22 @@ public class Schedule extends BaseEntity {
         this.scheduleDel_YN = "Y";
     }
 
-    public void update(ScheduleUpdateDto scheduleUpdateDto){
-        this.scheduleStartTime = scheduleUpdateDto.scheduleStartTime();
-        this.scheduleEndTime = scheduleUpdateDto.scheduleEndTime();
-        this.scheduleNote = scheduleUpdateDto.scheduleNote();
-        this.scheduleType = scheduleUpdateDto.scheduleType();
-        this.allDay = scheduleUpdateDto.allDay();
+    public void update(ScheduleReqDto scheduleUpdateDto){
+        if(scheduleUpdateDto.scheduleStartTime() != null){
+            this.scheduleStartTime = scheduleUpdateDto.scheduleStartTime();
+        }
+        if(scheduleUpdateDto.scheduleEndTime() != null){
+            this.scheduleEndTime = scheduleUpdateDto.scheduleEndTime();
+        }
+        if(scheduleUpdateDto.scheduleNote() != null){
+            this.scheduleNote = scheduleUpdateDto.scheduleNote();
+        }
+        if(scheduleUpdateDto.scheduleType() != null){
+            this.scheduleType = scheduleUpdateDto.scheduleType();
+        }
+        if(scheduleUpdateDto.allDay() != null){
+            this.allDay = scheduleUpdateDto.allDay();
+        }
     }
 }
 

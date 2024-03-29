@@ -87,4 +87,5 @@ public class SecurityConfig {
     private static final String[] DummyApiUrl = {
             "/dummy/**"
     };
+
 }
