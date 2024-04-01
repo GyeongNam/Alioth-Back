@@ -1,8 +1,8 @@
-package com.alioth.server.domain.board.domain;
+package com.alioth.server.domain.answer.domain;
 
 import com.alioth.server.common.domain.BaseEntity;
-import com.alioth.server.domain.answer.domain.Answer;
-import com.alioth.server.domain.board.dto.req.BoardUpdateDto;
+import com.alioth.server.domain.answer.dto.req.AnswerReqDto;
+import com.alioth.server.domain.board.domain.Board;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,11 +15,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Board extends BaseEntity {
-
+public class Answer extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long boardId;
+    private Long answerId;
 
     @Column(nullable = false)
     private String title;
@@ -27,27 +26,27 @@ public class Board extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private BoardType boardType;
-
     @Builder.Default
-    private String boardDel_YN = "N";
+    private String AnswerDel_YN = "N";
 
     @ManyToOne
     @JoinColumn(name = "SM_id")
     private SalesMembers salesMembers;
 
+    @OneToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
+
     public void delete(){
-        this.boardDel_YN = "Y";
+        this.AnswerDel_YN = "Y";
     }
 
-    public void update(BoardUpdateDto boardUpdateDto) {
-        if(!boardUpdateDto.title().isEmpty()){
-            this.title = boardUpdateDto.title();
+    public void update(AnswerReqDto answerReqDto){
+        if(!answerReqDto.title().isEmpty()){
+            this.title = answerReqDto.title();
         }
-        if(!boardUpdateDto.content().isEmpty()){
-            this.content = boardUpdateDto.content();
+        if(!answerReqDto.content().isEmpty()){
+            this.content = answerReqDto.content();
         }
     }
 }

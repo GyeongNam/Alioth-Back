@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,5 +80,13 @@ public class BoardService {
         return suggestions.stream()
                 .map(typeChange::BoardToBoardResDto)
                 .collect(Collectors.toList());
+    }
+
+    public BoardResDto detail(Long sm_code, Long boardId) {
+        Board board = this.findById(boardId);
+        if(!Objects.equals(board.getSalesMembers().getSalesMemberCode(), sm_code)){
+            throw new AccessDeniedException("게시글의 작성한 사원이 아닙니다.");
+        }
+        return typeChange.BoardToBoardResDto(board);
     }
 }
