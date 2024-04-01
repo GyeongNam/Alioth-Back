@@ -6,11 +6,13 @@ import jakarta.validation.Valid;
 import lombok.Builder;
 
 @Builder
-public record SalesMemberAdminUpdateReqDto(
+public record SMAdminUpdateReqDto(
     @Valid
     SalesMemberType rank,
     @Valid
-    String teamCode
+    String teamCode,
+
+    String performanceReview
 ) {
 
 }
