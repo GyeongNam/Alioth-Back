@@ -35,6 +35,10 @@ public class BoardService {
         return boardRepository.findById(BoardId).orElseThrow(()->new EntityNotFoundException("존재하지 않는 글입니다."));
     }
 
+    public Board findByBoardIdAndBoardDel_YN(Long boardId, String del_yn) {
+        return boardRepository.findByBoardIdAndBoardDel_YN(boardId, del_yn).orElseThrow(()->new EntityNotFoundException("삭제된 글입니다."));
+    }
+
     public void boardSM_id(Board board, SalesMembers salesMembers){
         if(!Objects.equals(board.getSalesMembers(), salesMembers)){
             throw new IllegalArgumentException("글의 작성자가 아닙니다.");
@@ -83,10 +87,12 @@ public class BoardService {
     }
 
     public BoardResDto detail(Long sm_code, Long boardId) {
-        Board board = this.findById(boardId);
+        Board board = this.findByBoardIdAndBoardDel_YN(boardId, "N");
         if(!Objects.equals(board.getSalesMembers().getSalesMemberCode(), sm_code)){
             throw new AccessDeniedException("게시글의 작성한 사원이 아닙니다.");
         }
         return typeChange.BoardToBoardResDto(board);
     }
+
+
 }
