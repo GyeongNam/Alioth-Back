@@ -40,6 +40,9 @@ dependencies {
 	// 더미 데이터 삽입을 위한 라이브러리
 	implementation 'net.datafaker:datafaker:2.1.0'
 
+	// aws sms
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-sns', version: '1.12.692'
+
 }
 
 tasks.named('test') {
