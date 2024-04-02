@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 
 @SpringBootTest
-public class AchievementRateTest {
+class AchievementRateTest {
 
     @Autowired private ContractRepository contractRepository;
 
@@ -97,17 +97,6 @@ public class AchievementRateTest {
 
 
 
-    @Test
-    @DisplayName("팀 달성율")
-    public void 팀달성율() {
 
-    }
-
-
-    @Test
-    @DisplayName("전체 달성율")
-    public void 전체달성율() {
-
-    }
 
 }
