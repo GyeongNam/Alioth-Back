@@ -3,16 +3,14 @@ package com.alioth.statistics.domain.member.domain;
 import com.alioth.statistics.common.domain.BaseEntity;
 import com.alioth.statistics.domain.team.domain.Team;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class SalesMembers extends BaseEntity {
 
     @Id
