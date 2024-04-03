@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,8 @@ public class TeamAchievementRateServiceImpl implements TeamAchievementRateServic
     private final TeamTargetRepository teamTargetRepository;
 
 
+
+    /* 개인별 달성률 */
     @Override
     public Map<Team, String> achievementRatePercent() {
         List<Team> teamList = teamRepository.findAll();
@@ -61,17 +65,21 @@ public class TeamAchievementRateServiceImpl implements TeamAchievementRateServic
             }
             /* ----개인 전체 금액 계산--- */
 
-            System.out.println("smContractSum = " + smContractSum);
-            BigInteger divide = smContractSum.divide(teamTargetSum);
+            BigDecimal decimalTeamTargetSum = new BigDecimal(teamTargetSum);
+            BigDecimal decimalSMContractSum = new BigDecimal(smContractSum);
 
-            result.put(team, divide.toString() + "%");
+            BigDecimal mulPercent = new BigDecimal("100");
+            BigDecimal divide = decimalSMContractSum.divide(decimalTeamTargetSum, 3, RoundingMode.HALF_EVEN);
+
+            BigDecimal temp = divide.multiply(mulPercent);
+            result.put(team, temp.toString() + "%");
         }
-
-        System.out.println("result = " + result);
 
         return result;
     }
 
+
+    /* 개인별 달성 건수 */
     @Override
     public Map<Team, String> achievementRateCount() {
 
@@ -79,7 +87,8 @@ public class TeamAchievementRateServiceImpl implements TeamAchievementRateServic
         Map<Team, String> result = new HashMap<>();
 
         for (var team : teamList) {
-            /* ----팀 목표 금액 계산--- */
+
+            /* ----팀 목표 건 계산--- */
             Team getTeam = teamRepository.findByTeamCode(team.getTeamCode());
             List<TeamTarget> teamTargetList = teamTargetRepository.findByTeam(getTeam);
             Long teamTargetCount = 0L;
@@ -87,16 +96,16 @@ public class TeamAchievementRateServiceImpl implements TeamAchievementRateServic
             for (var teamTarget : teamTargetList) {
                 teamTargetCount += teamTarget.getTargetCount();
             }
-            /* ----팀 목표 금액 계산--- */
+            /* ----팀 목표 건 계산--- */
 
 
-            /* ----개인 전체 금액 계산--- */
+            /* ----개인 전체 건 계산--- */
             int allContractSize = 0;
             for (var member : getTeam.getTeamMembers()) {
                 int size = contractRepository.findBySalesMembers(member).size();
                 allContractSize += size;
             }
-            /* ----개인 전체 금액 계산--- */
+            /* ----개인 전체 건 계산--- */
 
             double temp = ((double)allContractSize / (double)teamTargetCount) * 100;
             String strResult = String.format("%.3f", temp);
