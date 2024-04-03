@@ -1,4 +1,4 @@
-package com.alioth.statistics.domain.dummy.service.insuranceproduct;
+package com.alioth.statistics.service.insuranceproduct;
 
 import java.util.Map;
 

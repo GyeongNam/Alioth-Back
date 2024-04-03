@@ -1,20 +1,22 @@
-package com.alioth.statistics.domain.dummy.controller;
+package com.alioth.statistics.controller;
 
 
 import com.alioth.statistics.common.response.CommonResponse;
-import com.alioth.statistics.domain.dummy.service.achievementrate.CompanyAchievementRateService;
-import com.alioth.statistics.domain.dummy.service.achievementrate.SMAchievementRateService;
-import com.alioth.statistics.domain.dummy.service.achievementrate.TeamAchievementRateService;
+import com.alioth.statistics.service.achievementrate.CompanyAchievementRateService;
+import com.alioth.statistics.service.achievementrate.SMAchievementRateService;
+import com.alioth.statistics.service.achievementrate.TeamAchievementRateService;
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.team.domain.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+@RequestMapping("/stat")
 @RestController
 @RequiredArgsConstructor
 public class AchievementRateController {

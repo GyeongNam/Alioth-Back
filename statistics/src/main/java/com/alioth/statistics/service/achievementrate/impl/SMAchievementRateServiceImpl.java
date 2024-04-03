@@ -1,7 +1,7 @@
-package com.alioth.statistics.domain.dummy.service.achievementrate.impl;
+package com.alioth.statistics.service.achievementrate.impl;
 
 import com.alioth.statistics.domain.contract.repository.ContractRepository;
-import com.alioth.statistics.domain.dummy.service.achievementrate.SMAchievementRateService;
+import com.alioth.statistics.service.achievementrate.SMAchievementRateService;
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.member.repository.SalesMemberRepository;
 import com.alioth.statistics.domain.target.sm.domain.SMSalesTarget;
