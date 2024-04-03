@@ -1,7 +1,7 @@
-package com.alioth.statistics.domain.dummy.service.impl;
+package com.alioth.statistics.domain.dummy.service.achievementrate.impl;
 
 import com.alioth.statistics.domain.contract.repository.ContractRepository;
-import com.alioth.statistics.domain.dummy.service.TeamAchievementRateService;
+import com.alioth.statistics.domain.dummy.service.achievementrate.TeamAchievementRateService;
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.target.team.domain.TeamTarget;
 import com.alioth.statistics.domain.target.team.repository.TeamTargetRepository;
@@ -9,8 +9,6 @@ import com.alioth.statistics.domain.team.domain.Team;
 import com.alioth.statistics.domain.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

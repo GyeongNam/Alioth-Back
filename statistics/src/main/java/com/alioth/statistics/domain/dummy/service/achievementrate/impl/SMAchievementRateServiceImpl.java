@@ -1,20 +1,17 @@
-package com.alioth.statistics.domain.dummy.service.impl;
+package com.alioth.statistics.domain.dummy.service.achievementrate.impl;
 
-import com.alioth.statistics.domain.contract.domain.Contract;
 import com.alioth.statistics.domain.contract.repository.ContractRepository;
-import com.alioth.statistics.domain.dummy.service.SMAchievementRateService;
+import com.alioth.statistics.domain.dummy.service.achievementrate.SMAchievementRateService;
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.member.repository.SalesMemberRepository;
 import com.alioth.statistics.domain.target.sm.domain.SMSalesTarget;
 import com.alioth.statistics.domain.target.sm.repository.SMSalesTargetRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.LinkedHashMap;
 import java.util.List;

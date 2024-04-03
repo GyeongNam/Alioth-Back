@@ -1,14 +1,13 @@
-package com.alioth.statistics.domain.dummy.service.impl;
+package com.alioth.statistics.domain.dummy.service.achievementrate.impl;
 
 import com.alioth.statistics.domain.contract.repository.ContractRepository;
-import com.alioth.statistics.domain.dummy.service.CompanyAchievementRateService;
+import com.alioth.statistics.domain.dummy.service.achievementrate.CompanyAchievementRateService;
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.target.team.domain.TeamTarget;
 import com.alioth.statistics.domain.target.team.repository.TeamTargetRepository;
 import com.alioth.statistics.domain.team.domain.Team;
 import com.alioth.statistics.domain.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +26,7 @@ public class CompanyAchievementRateServiceImpl implements CompanyAchievementRate
     private final TeamRepository teamRepository;
     private final TeamTargetRepository teamTargetRepository;
 
+    /* 전체 달성률 */
     @Override
     public String achievementRatePercent() {
         List<Team> teamList = teamRepository.findAll();
@@ -68,6 +68,8 @@ public class CompanyAchievementRateServiceImpl implements CompanyAchievementRate
         return v * 100 + "%";
     }
 
+
+    /* 전체 달성 건 */
     @Override
     public String achievementRateCount() {
         List<Team> teamList = teamRepository.findAll();

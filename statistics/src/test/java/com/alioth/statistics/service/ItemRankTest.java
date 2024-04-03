@@ -24,12 +24,21 @@ public class ItemRankTest {
 
         //int allSize = insuranceProductRepository.findAll().size();
         List<InsuranceProductCategory> categoryList = Arrays.stream(InsuranceProductCategory.values()).toList();
+        Map<String, Integer> temp = new HashMap<>();
         Map<String, Integer> result = new LinkedHashMap<>();
 
         for (var category : categoryList) {
             List<InsuranceProduct> byInsuranceCategory = insuranceProductRepository.findByInsuranceCategory(category.getInsurance());
             //System.out.println(category.toString() + " = " + byInsuranceCategory.size());
-            result.put(category.toString(), byInsuranceCategory.size());
+            temp.put(category.toString(), byInsuranceCategory.size());
+        }
+
+        List<String> keySet = new ArrayList<>(temp.keySet());
+        keySet.sort((o1, o2) -> temp.get(o2).compareTo(temp.get(o1)));
+        for (String key : keySet) {
+            System.out.print("Key : " + key);
+            System.out.println(", Val : " + temp.get(key));
+            result.put(key, temp.get(key));
         }
 
         System.out.println("result = " + result);
@@ -43,7 +52,8 @@ public class ItemRankTest {
         List<InsuranceProduct> allList = insuranceProductRepository.findAll();
         int contractSize = contractRepository.findAll().size();
         //int insuranceProductSize = allList.size();
-        Map<String, String> result = new HashMap<>();
+        Map<String, String> temp = new HashMap<>();
+        Map<String, String> result = new LinkedHashMap<>();
 
         for (var InsuranceProduct: allList) {
             List<Contract> insuranceProductList = contractRepository.findByInsuranceProduct(InsuranceProduct);
@@ -52,8 +62,16 @@ public class ItemRankTest {
             }
 
             double v = ((double)insuranceProductList.size() / (double)contractSize) * 100;;
-            String temp = String.format("%.3f", v);
-            result.put(InsuranceProduct.getInsuranceCategory(), temp + "%");
+            String strTemp = String.format("%.3f", v);
+            temp.put(InsuranceProduct.getInsuranceCategory(), strTemp + "%");
+        }
+
+        List<String> keySet = new ArrayList<>(temp.keySet());
+        keySet.sort((o1, o2) -> temp.get(o2).compareTo(temp.get(o1)));
+        for (String key : keySet) {
+            System.out.print("Key : " + key);
+            System.out.println(", Val : " + temp.get(key));
+            result.put(key, temp.get(key));
         }
 
         System.out.println("insuranceProductList = " + result);
