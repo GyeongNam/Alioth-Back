@@ -78,7 +78,7 @@ public class ContractService {
 
     public List<ContractResDto> listAllContracts() {
         return contractRepository.findAll().stream()
-                .map(contract -> typeChange.ContractToContractResDto(contract))
+                .map(typeChange::ContractToContractResDto)
                 .collect(Collectors.toList());
     }
 }

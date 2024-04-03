@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +68,15 @@ public class SalesMemberService {
     public SalesMembers findById(Long memberId){
         return salesMemberRepository.findById(memberId).orElseThrow(()->
                                                             new EntityNotFoundException("존재하지 않는 사원입니다."));
+    }
+
+    public List<SalesMemberResDto> findAll(){
+        List<SalesMembers> list = salesMemberRepository.findAll();
+        List<SalesMemberResDto> newList = new ArrayList<>();
+        for(SalesMembers sm : list){
+            newList.add(typeChange.smToSmResDto(sm));
+        }
+        return  newList;
     }
 
     public SalesMembers findBySalesMemberCode(Long salesMemberCode){
