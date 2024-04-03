@@ -39,6 +39,7 @@ public class SecurityConfig {
                         authorize -> authorize
                                 .requestMatchers(LoginApiUrl).permitAll()
                                 .requestMatchers(DummyApiUrl).permitAll()
+                                .requestMatchers("/api/v1/fcm/send").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
