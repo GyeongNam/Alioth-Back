@@ -1,13 +1,12 @@
-package com.alioth.statistics.domain.dummy.service.insuranceproduct.impl;
+package com.alioth.statistics.service.insuranceproduct.impl;
 
 import com.alioth.statistics.domain.contract.domain.Contract;
 import com.alioth.statistics.domain.contract.repository.ContractRepository;
 import com.alioth.statistics.domain.dummy.domain.InsuranceProduct;
 import com.alioth.statistics.domain.dummy.domain.InsuranceProductCategory;
 import com.alioth.statistics.domain.dummy.repository.InsuranceProductRepository;
-import com.alioth.statistics.domain.dummy.service.insuranceproduct.InsuranceProductService;
+import com.alioth.statistics.service.insuranceproduct.InsuranceProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

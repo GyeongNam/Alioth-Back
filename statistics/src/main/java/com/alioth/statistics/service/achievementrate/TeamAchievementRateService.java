@@ -1,4 +1,4 @@
-package com.alioth.statistics.domain.dummy.service.achievementrate;
+package com.alioth.statistics.service.achievementrate;
 
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.team.domain.Team;
