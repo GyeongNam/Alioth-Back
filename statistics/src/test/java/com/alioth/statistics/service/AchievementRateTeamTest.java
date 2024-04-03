@@ -49,6 +49,7 @@ class AchievementRateTeamTest {
             }
             /* ----팀 목표 금액 계산--- */
 
+
             /* ----개인 전체 금액 계산--- */
             List<SalesMembers> teamMembers = getTeam.getTeamMembers();
             BigInteger smContractSum = BigInteger.ZERO;
@@ -93,6 +94,7 @@ class AchievementRateTeamTest {
             for (var teamTarget : teamTargetList) {
                 teamTargetCount += teamTarget.getTargetCount();
             }
+
             /* ----팀 목표 건 계산--- */
 
 

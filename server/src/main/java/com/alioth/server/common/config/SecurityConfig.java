@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers(LoginApiUrl).permitAll()
+                                .requestMatchers(SwaggerUrl).permitAll()
                                 .requestMatchers(DummyApiUrl).permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -78,6 +79,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+  
     private static final String[] LoginApiUrl = {
             "/api/login",
             "/api/*/logout",
@@ -88,4 +90,11 @@ public class SecurityConfig {
             "/dummy/**"
     };
 
+    private static final String[] SwaggerUrl = {
+            "/api/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml"
+    };
 }

@@ -32,6 +32,7 @@ public class TeamAchievementRateServiceImpl implements TeamAchievementRateServic
     private final TeamTargetRepository teamTargetRepository;
 
 
+
     /* 개인별 달성률 */
     @Override
     public Map<Team, String> achievementRatePercent() {
@@ -86,6 +87,7 @@ public class TeamAchievementRateServiceImpl implements TeamAchievementRateServic
         Map<Team, String> result = new HashMap<>();
 
         for (var team : teamList) {
+
             /* ----팀 목표 건 계산--- */
             Team getTeam = teamRepository.findByTeamCode(team.getTeamCode());
             List<TeamTarget> teamTargetList = teamTargetRepository.findByTeam(getTeam);

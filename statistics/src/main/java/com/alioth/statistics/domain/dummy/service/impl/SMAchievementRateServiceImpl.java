@@ -31,7 +31,6 @@ public class SMAchievementRateServiceImpl implements SMAchievementRateService {
     private final SalesMemberRepository salesMemberRepository;
     private final SMSalesTargetRepository smSalesTargetRepository;
 
-
     /* 팀 달성률 */
     @Override
     public Map<SalesMembers, String> achievementRatePercent() {
@@ -56,6 +55,7 @@ public class SMAchievementRateServiceImpl implements SMAchievementRateService {
 
         return result;
     }
+
 
 
     /* 팀 달성 건수 */

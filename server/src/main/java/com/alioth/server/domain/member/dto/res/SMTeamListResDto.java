@@ -5,7 +5,7 @@ import com.alioth.server.domain.member.domain.SalesMemberType;
 import lombok.Builder;
 
 @Builder
-public record SalesMemberTeamListResDto(
+public record SMTeamListResDto(
     String phone,
     String name,
     String email,
