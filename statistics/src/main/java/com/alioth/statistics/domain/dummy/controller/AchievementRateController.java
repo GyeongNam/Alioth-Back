@@ -2,10 +2,9 @@ package com.alioth.statistics.domain.dummy.controller;
 
 
 import com.alioth.statistics.common.response.CommonResponse;
-import com.alioth.statistics.domain.dummy.service.CompanyAchievementRateService;
-import com.alioth.statistics.domain.dummy.service.SMAchievementRateService;
-import com.alioth.statistics.domain.dummy.service.TeamAchievementRateService;
-import com.alioth.statistics.domain.dummy.service.impl.SMAchievementRateServiceImpl;
+import com.alioth.statistics.domain.dummy.service.achievementrate.CompanyAchievementRateService;
+import com.alioth.statistics.domain.dummy.service.achievementrate.SMAchievementRateService;
+import com.alioth.statistics.domain.dummy.service.achievementrate.TeamAchievementRateService;
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.team.domain.Team;
 import lombok.RequiredArgsConstructor;
