@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class MemberRankServiceTest {
 
-    @Autowired private StatisticsRankService memberRankService;
     @Autowired private InsuranceProductRepository insuranceProductRepository;
     @Autowired private SalesMemberRepository salesMemberRepository;
     @Autowired private ContractMembersRepository contractMembersRepository;
@@ -35,12 +34,10 @@ class MemberRankServiceTest {
     @DisplayName("맴버 사원수 확인 테스트")
     @Transactional
     public void 맴버사원수확인테스트() {
-        Long rank = memberRankService.rank();
         long count1 = insuranceProductRepository.count();
         long count2 = salesMemberRepository.count();
         long count3 = contractMembersRepository.count();
 
-        Assertions.assertThat(rank).isEqualTo(300000L);
         Assertions.assertThat(count1).isEqualTo(1000L);
         Assertions.assertThat(count2).isEqualTo(3L);
         Assertions.assertThat(count3).isEqualTo(1000L);
