@@ -16,7 +16,7 @@ import java.util.Map;
 @RequestMapping("/stat")
 @RestController
 @RequiredArgsConstructor
-public class SalesMemberController {
+public class SalesMemberRankController {
 
     private final AchieveRankService achieveRankService;
 
