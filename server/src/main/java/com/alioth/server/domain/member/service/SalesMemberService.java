@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +59,8 @@ public class SalesMemberService {
 
     @Transactional
     public SalesMembers updatePassword(SalesMemberUpdatePassword dto, Long id) {
-        SalesMembers findMember = salesMemberRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 계정을 찾을 수 없습니다."));
+        SalesMembers findMember = salesMemberRepository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException("해당 계정을 찾을 수 없습니다."));
         findMember.updatePassword(dto.password());
         salesMemberRepository.save(findMember);
 
@@ -82,6 +84,11 @@ public class SalesMemberService {
     public SalesMembers findBySalesMemberCode(Long salesMemberCode){
         return salesMemberRepository.findBySalesMemberCode(salesMemberCode).orElseThrow(()->
                                                             new EntityNotFoundException("존재하지 않는 사원입니다."));
+    }
+
+    public List<SalesMemberResDto> findAllMembersByTeamId(Long teamId){
+        return salesMemberRepository.findAllByTeamId(teamId).stream()
+                .map(typeChange::smToSmResDto).collect(Collectors.toList());
     }
 
     //관리자 사원 정보 수정(권한, 팀 소속, 고과평가)
