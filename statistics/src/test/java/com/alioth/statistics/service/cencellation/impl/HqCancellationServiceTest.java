@@ -6,10 +6,11 @@ import com.alioth.statistics.domain.dummy.domain.ContractStatus;
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.team.domain.Team;
 import com.alioth.statistics.domain.team.repository.TeamRepository;
-import com.alioth.statistics.service.cencellation.CancellationService;
-import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -17,15 +18,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
-@RequiredArgsConstructor
-public class HqCancellationService implements CancellationService {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private final ContractRepository contractRepository;
-    private final TeamRepository teamRepository;
+@SpringBootTest
+class HqCancellationServiceTest {
 
-    @Override
-    public Map<?, String> cancelMoneyPercent() {
+    @Autowired private ContractRepository contractRepository;
+    @Autowired private TeamRepository teamRepository;
+
+    @Test
+    @DisplayName("전사 금액 해약률")
+    @Transactional
+    public void 전사금액해약률() {
+
         Map<String, String> result = new LinkedHashMap<>();
         List<Team> teamList = teamRepository.findAll();
 
@@ -58,12 +63,14 @@ public class HqCancellationService implements CancellationService {
         BigDecimal divide = teamCancelPrice.divide(teamTotalPrice, 3, RoundingMode.HALF_EVEN);
         BigDecimal multiply = divide.multiply(percent);
         result.put("전사", multiply + "%");
-
-        return result;
+        System.out.println("result = " + result);
     }
 
-    @Override
-    public Map<?, String> cancelCountPercent() {
+
+    @Test
+    @DisplayName("전사 금액 해약률")
+    @Transactional
+    public void 전사금액해건률() {
         Map<String, String> result = new LinkedHashMap<>();
         List<Team> teamList = teamRepository.findAll();
 
@@ -89,8 +96,9 @@ public class HqCancellationService implements CancellationService {
 
         double v = ((double) teamCancelCount / (double) teamTotalCount) * 100;
         String strResult = String.format("%.3f", v);
-        result.put("전사", strResult + "%");
 
-        return result;
+        result.put("전사", strResult + "%");
+        System.out.println("result = " + result);
     }
+
 }

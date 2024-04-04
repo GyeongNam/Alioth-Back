@@ -3,6 +3,7 @@ package com.alioth.statistics.controller;
 
 import com.alioth.statistics.common.response.CommonResponse;
 import com.alioth.statistics.service.cencellation.CancellationService;
+import com.alioth.statistics.service.cencellation.impl.HqCancellationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class CancellationController {
 
     private final CancellationService smCancellationService;
     private final CancellationService teamCancellationService;
+    private final CancellationService hqCancellationService;
 
     @GetMapping("/cancel/sm/money")
     public ResponseEntity<CommonResponse> smCancelMoneyPercent() {
@@ -62,6 +64,29 @@ public class CancellationController {
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
                 "팀 해약건 % 입니다.",
+                result
+        );
+    }
+
+
+    @GetMapping("/cancel/hq/money")
+    public ResponseEntity<CommonResponse> hqCancelMoneyPercent() {
+        Map<?, String> result = hqCancellationService.cancelMoneyPercent();
+
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "전사 해약금액 % 입니다.",
+                result
+        );
+    }
+
+    @GetMapping("/cancel/hq/count")
+    public ResponseEntity<CommonResponse> hqCancelCountPercent() {
+        Map<?, String> result = hqCancellationService.cancelCountPercent();
+
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "전사 해약건 % 입니다.",
                 result
         );
     }
