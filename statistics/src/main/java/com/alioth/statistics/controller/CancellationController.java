@@ -2,8 +2,11 @@ package com.alioth.statistics.controller;
 
 
 import com.alioth.statistics.common.response.CommonResponse;
+import com.alioth.statistics.domain.member.domain.SalesMembers;
+import com.alioth.statistics.service.cencellation.CancellationRankService;
 import com.alioth.statistics.service.cencellation.CancellationService;
 import com.alioth.statistics.service.cencellation.impl.HqCancellationService;
+import com.alioth.statistics.service.cencellation.impl.SmCancellationRankService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,7 @@ public class CancellationController {
     private final CancellationService smCancellationService;
     private final CancellationService teamCancellationService;
     private final CancellationService hqCancellationService;
+    private final CancellationRankService smCancellationRankService;
 
     @GetMapping("/cancel/sm/money")
     public ResponseEntity<CommonResponse> smCancelMoneyPercent() {
@@ -44,6 +48,32 @@ public class CancellationController {
                 result
         );
     }
+
+
+
+    @GetMapping("/cancel/sm/rank/money")
+    public ResponseEntity<CommonResponse> smCancelMoney() {
+        Map<SalesMembers, String> result = smCancellationRankService.cancelMoney();
+
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "사원별 해약금액 순위 입니다.",
+                result
+        );
+    }
+
+    @GetMapping("/cancel/sm/rank/count")
+    public ResponseEntity<CommonResponse> smCancelCount() {
+        Map<SalesMembers, String> result = smCancellationRankService.cancelCount();
+
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "사원별 해약건 순위 입니다.",
+                result
+        );
+    }
+
+
 
 
     @GetMapping("/cancel/team/money")
@@ -90,6 +120,12 @@ public class CancellationController {
                 result
         );
     }
+
+
+
+
+
+
 
 
 
