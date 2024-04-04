@@ -44,5 +44,31 @@ public class CancellationController {
     }
 
 
+    @GetMapping("/cancel/team/money")
+    public ResponseEntity<CommonResponse> teamCancelMoneyPercent() {
+        Map<?, String> result = teamCancellationService.cancelMoneyPercent();
+
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "팀 해약금액 % 입니다.",
+                result
+        );
+    }
+
+    @GetMapping("/cancel/team/count")
+    public ResponseEntity<CommonResponse> teamCancelCountPercent() {
+        Map<?, String> result = teamCancellationService.cancelCountPercent();
+
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "팀 해약건 % 입니다.",
+                result
+        );
+    }
+
+
+
+
+
 
 }

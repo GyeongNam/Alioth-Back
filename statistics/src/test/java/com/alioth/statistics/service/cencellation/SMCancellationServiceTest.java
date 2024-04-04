@@ -87,7 +87,6 @@ class SMCancellationServiceTest {
 
             double v = ((double)cancelSize / (double)contractSize) * 100;
             String strResult = String.format("%.3f", v);
-            System.out.println("v = " + strResult + "%");
             result.put(member, strResult);
         }
 

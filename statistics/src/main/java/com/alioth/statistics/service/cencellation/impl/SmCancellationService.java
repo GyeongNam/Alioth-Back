@@ -8,6 +8,7 @@ import com.alioth.statistics.domain.member.repository.SalesMemberRepository;
 import com.alioth.statistics.service.cencellation.CancellationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SmCancellationService implements CancellationService {
 
     private final ContractRepository contractRepository;
