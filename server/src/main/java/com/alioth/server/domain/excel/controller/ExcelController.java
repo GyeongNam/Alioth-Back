@@ -31,10 +31,7 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -57,13 +54,17 @@ public class ExcelController {
         SalesMembers sm = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername()));
 //        SalesMembers sm = salesMemberService.findBySalesMemberCode(202437L);
         if(sm.getRank() == SalesMemberType.HQ) {
-            List<ContractResDto> contractList = contractService.listAllContracts();
-            if(!contractList.isEmpty()){
-                Workbook workbook = excelService.createExcel(contractList);
-                String fileName = "contracts.xlsx";
-                sendExcel(fileName,response,workbook);
+            if (memberId != null) {
+                SalesMembers member = salesMemberService.findBySalesMemberCode(memberId);
+                List<ContractResDto> memberContracts = contractService.contractsByMember(member.getId());
+                exportExcel(response, memberContracts);
             } else {
-                throw new NoSuchElementException("No contracts");
+                List<ContractResDto> contractList = contractService.listAllContracts();
+                if(!contractList.isEmpty()){
+                    exportExcel(response,contractList);
+                } else {
+                    throw new NoSuchElementException("No contracts");
+                }
             }
         }
 
@@ -71,19 +72,25 @@ public class ExcelController {
             if(sm.getTeam().getId() == null || sm.getTeam().getDelYN().equals("Y")){
                 throw new Exception("Illegal access");
             } else {
-            List<SalesMemberResDto> teamMembers = salesMemberService.findAllMembersByTeamId(sm.getTeam().getId());
-            try{
-                List<ContractResDto> allTeamContracts = new ArrayList<>();
-                for(SalesMemberResDto dto : teamMembers) {
-                    SalesMembers m = salesMemberService.findBySalesMemberCode(dto.salesMemberCode());
-                    List<ContractResDto> list = contractService.contractsByMember(m.getId());
-                    allTeamContracts.addAll(list);
-                }
-                Workbook workbook = excelService.createExcel(allTeamContracts);
-                String fileName = "teamContracts.xlsx";
-                sendExcel(fileName,response,workbook);
-            } catch (NoSuchElementException e){
-                log.error("error message" + e.getMessage());
+                // 사원 개개인 별(본인 포함) 엑셀 다운
+                if (memberId != null) {
+                    SalesMembers member = salesMemberService.findBySalesMemberCode(memberId);
+                    List<ContractResDto> memberContracts = contractService.contractsByMember(member.getId());
+                    exportExcel(response, memberContracts);
+                } else {
+                    // 팀 전체 계약 리스트
+                    List<SalesMemberResDto> teamMembers = salesMemberService.findAllMembersByTeamId(sm.getTeam().getId());
+                    try {
+                        List<ContractResDto> allTeamContracts = new ArrayList<>();
+                        for (SalesMemberResDto dto : teamMembers) {
+                            SalesMembers m = salesMemberService.findBySalesMemberCode(dto.salesMemberCode());
+                            List<ContractResDto> list = contractService.contractsByMember(m.getId());
+                            allTeamContracts.addAll(list);
+                        }
+                        exportExcel(response, allTeamContracts);
+                    } catch (NoSuchElementException e) {
+                        log.error("error message" + e.getMessage());
+                    }
                 }
             }
         }
@@ -91,9 +98,7 @@ public class ExcelController {
         if(sm.getRank() == SalesMemberType.FP){
             List<ContractResDto> contractsByMember = contractService.contractsByMember(sm.getId());
             if(!contractsByMember.isEmpty()){
-                Workbook workbook = excelService.createExcel(contractsByMember);
-                String fileName = "myContracts.xlsx";
-                sendExcel(fileName,response,workbook);
+                exportExcel(response,contractsByMember);
             } else {
                 throw new NoSuchElementException("No contracts");
             }
@@ -113,9 +118,7 @@ public class ExcelController {
         if(sm.getRank() == SalesMemberType.MANAGER){
             if(!sm.getTeam().getTeamMembers().isEmpty()){
                 List<SMTeamListResDto> memberList = teamService.findAllByTeamId(sm.getTeam().getId());
-                Workbook workbook = excelService.createExcel(memberList);
-                String fileName = "teamSalesMembers.xlsx";
-                sendExcel(fileName,response,workbook);
+                exportExcel(response,memberList);
             } else {
                 throw new NoSuchElementException("No data");
             }
@@ -123,9 +126,7 @@ public class ExcelController {
 // 코드 리뷰: 여기 예외처리 해야할까요?
         if(sm.getRank() == SalesMemberType.HQ){
             List<SalesMemberResDto> list = salesMemberService.findAll();
-            Workbook workbook = excelService.createExcel(list);
-            String fileName = "salesMembers.xlsx";
-            sendExcel(fileName,response,workbook);
+            exportExcel(response,list);
         }
     }
 
@@ -138,9 +139,7 @@ public class ExcelController {
         if(sm.getRank() == SalesMemberType.FP) {
             List<Custom> myCustomList = contractService.customList(sm.getId());
             try {
-                Workbook workbook = excelService.createExcel(myCustomList);
-                String fileName = "myCustomers.xlsx";
-                sendExcel(fileName, response, workbook);
+                exportExcel(response, myCustomList);
             } catch (NoSuchElementException e) {
                 log.error("error message: " + e.getMessage());
             }
@@ -156,9 +155,7 @@ public class ExcelController {
                 teamCustomList.addAll(temps);
             }
             try{
-                Workbook workbook = excelService.createExcel(teamCustomList);
-                String fileName = "teamCustomers.xlsx";
-                sendExcel(fileName,response,workbook);
+                exportExcel(response,teamCustomList);
             } catch (NoSuchElementException e){
                 log.error("error message: " + e.getMessage());
             }
@@ -167,9 +164,7 @@ public class ExcelController {
         if(sm.getRank() == SalesMemberType.HQ) {
             List<Custom> allCustoms = contractService.customTotalList();
             try{
-                Workbook workbook = excelService.createExcel(allCustoms);
-                String fileName = "allCustomers.xlsx";
-                sendExcel(fileName,response,workbook);
+                exportExcel(response,allCustoms);
             } catch (NoSuchElementException e){
                 log.error("error message: " +  e.getMessage());
             }
@@ -178,26 +173,19 @@ public class ExcelController {
 
     //매출
 
-
-    public void sendExcel(String fileName, HttpServletResponse response,Workbook workbook) throws IOException {
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition","attachment;filename="+fileName);
-        workbook.write(response.getOutputStream());
-        workbook.close();
-    }
-    @GetMapping("/test")
-    public List<Contract> test(){
-        SalesMembers sm = salesMemberService.findBySalesMemberCode(2024312L);
-        return contractRepository.findAllBySalesMembersId(sm.getId());
-    }
-
- /*   public <T> void exportExcel(String fileName, HttpServletResponse response, List<T> list) throws IOException, IllegalAccessException {
+// 공통화 메서드
+    public <T> void exportExcel(HttpServletResponse response, List<T> list) throws IOException, IllegalAccessException {
+        String shortUUID = UUID.randomUUID().toString().substring(0, 6);
         Workbook workbook = excelService.createExcel(list);
+        String fileName = "contracts_" + shortUUID + ".xlsx";
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition","attachment;filename=" + fileName);
         workbook.write(response.getOutputStream());
         workbook.close();
-    }*/
+    }
+
+
+
 }
 
 
