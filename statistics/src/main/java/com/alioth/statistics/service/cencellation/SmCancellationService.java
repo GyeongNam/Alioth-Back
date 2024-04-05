@@ -1,78 +1,84 @@
-package com.alioth.statistics.service.cencellation.impl;
+package com.alioth.statistics.service.cencellation;
 
 import com.alioth.statistics.domain.contract.domain.Contract;
 import com.alioth.statistics.domain.contract.repository.ContractRepository;
 import com.alioth.statistics.domain.dummy.domain.ContractStatus;
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.member.repository.SalesMemberRepository;
-import com.alioth.statistics.service.cencellation.CancellationRankService;
-import com.alioth.statistics.service.cencellation.CancellationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.*;
+import java.math.RoundingMode;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class SmCancellationRankService implements CancellationRankService {
+public class SmCancellationService implements CancellationService {
 
     private final ContractRepository contractRepository;
     private final SalesMemberRepository salesMemberRepository;
+    private final ContractStatus contractStatus = ContractStatus.Cancellation;
 
     @Override
-    public Map<SalesMembers, String> cancelMoney() {
-        Map<SalesMembers, String> temp = new HashMap<>();
+    public Map<SalesMembers, String> cancelMoneyPercent() {
+
         Map<SalesMembers, String> result = new LinkedHashMap<>();
         List<SalesMembers> memberList = salesMemberRepository.findAll();
 
         for (var member : memberList) {
 
             List<Contract> contractList = contractRepository.findBySalesMembers(member);
+            BigDecimal totalPrice = contractList.stream()
+                    .map(x -> new BigDecimal(x.getContractTotalPrice()))
+                    .reduce(BigDecimal::add)
+                    .orElse(BigDecimal.ONE);
+
             BigDecimal cancelPrice = contractList.stream()
                     .filter(x -> x.getContractStatus() == ContractStatus.Cancellation)
                     .map(x -> new BigDecimal(x.getContractTotalPrice()))
                     .reduce(BigDecimal::add)
-                    .orElse(BigDecimal.ZERO);
+                    .orElse(BigDecimal.ONE);
 
-            temp.put(member, cancelPrice.toString());
-        }
+            if(cancelPrice.equals(BigDecimal.ZERO)) {
+                result.put(member, "0%");
+            }
 
-        List<SalesMembers> keys = new ArrayList<>(temp.keySet());
-        Collections.sort(keys, (v1, v2) -> (temp.get(v2).compareTo(temp.get(v1))));
-        for (var key : keys) {
-            System.out.println(key.getName() + " : " + temp.get(key));
-            result.put(key, temp.get(key));
+            BigDecimal percent = new BigDecimal("100");
+            BigDecimal divide = cancelPrice.divide(totalPrice, 3, RoundingMode.HALF_EVEN);
+            BigDecimal multiply = divide.multiply(percent);
+
+            result.put(member, multiply+"%");
         }
 
         return result;
     }
 
     @Override
-    public Map<SalesMembers, String> cancelCount() {
-        Map<SalesMembers, String> temp = new HashMap<>();
+    public Map<SalesMembers, String> cancelCountPercent() {
         Map<SalesMembers, String> result = new LinkedHashMap<>();
         List<SalesMembers> memberList = salesMemberRepository.findAll();
 
         for (var member : memberList) {
-
             List<Contract> contractList = contractRepository.findBySalesMembers(member);
-            long count = contractList.stream()
+            long contractSize = contractList.stream()
+                    .count();
+
+            long cancelSize = contractList.stream()
                     .filter(x -> x.getContractStatus() == ContractStatus.Cancellation)
                     .count();
 
-            temp.put(member, String.valueOf(count));
-        }
+            if(cancelSize == 0L) {
+                result.put(member, "0%");
+            }
 
-        List<SalesMembers> keys = new ArrayList<>(temp.keySet());
-        Collections.sort(keys, (v1, v2) -> (temp.get(v2).compareTo(temp.get(v1))));
-        for (var key : keys) {
-            System.out.println(key.getName() + " : " + temp.get(key));
-            result.put(key, temp.get(key));
+            double v = ((double)cancelSize / (double)contractSize) * 100;
+            String strResult = String.format("%.3f", v);
+            result.put(member, strResult);
         }
 
         return result;

@@ -1,4 +1,4 @@
-package com.alioth.statistics.service.cencellation.impl;
+package com.alioth.statistics.service.cencellation.rank;
 
 import com.alioth.statistics.domain.contract.domain.Contract;
 import com.alioth.statistics.domain.contract.repository.ContractRepository;
@@ -17,8 +17,6 @@ import java.math.RoundingMode;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class HqCancellationServiceTest {

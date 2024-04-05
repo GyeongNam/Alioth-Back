@@ -1,4 +1,4 @@
-package com.alioth.statistics.service.cencellation.impl;
+package com.alioth.statistics.service.cencellation.rank;
 
 import com.alioth.statistics.domain.contract.domain.Contract;
 import com.alioth.statistics.domain.contract.repository.ContractRepository;
@@ -6,10 +6,10 @@ import com.alioth.statistics.domain.dummy.domain.ContractStatus;
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.team.domain.Team;
 import com.alioth.statistics.domain.team.repository.TeamRepository;
-import com.alioth.statistics.service.cencellation.CancellationService;
-import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -18,16 +18,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
-@RequiredArgsConstructor
-@Transactional
-public class TeamCancellationService implements CancellationService {
 
-    private final ContractRepository contractRepository;
-    private final TeamRepository teamRepository;
+@SpringBootTest
+class TeamCancellationServiceTest {
 
-    @Override
-    public Map<Team, String> cancelMoneyPercent() {
+    @Autowired private ContractRepository contractRepository;
+    @Autowired private TeamRepository teamRepository;
+    private ContractStatus contractStatus = ContractStatus.Cancellation;
+
+
+    @Test
+    @DisplayName("팀 해약률")
+    @Transactional
+    public void 팀해약률() {
+
         Map<Team, String> result = new LinkedHashMap<>();
         List<Team> teamList = teamRepository.findAll();
 
@@ -62,11 +66,15 @@ public class TeamCancellationService implements CancellationService {
             result.put(team, multiply + "%");
         }
 
-        return result;
+        System.out.println("result = " + result);
     }
 
-    @Override
-    public Map<Team, String> cancelCountPercent() {
+
+    @Test
+    @DisplayName("팀 해약건")
+    @Transactional
+    public void 팀해약건() {
+
         Map<Team, String> result = new LinkedHashMap<>();
         List<Team> teamList = teamRepository.findAll();
 
@@ -94,6 +102,7 @@ public class TeamCancellationService implements CancellationService {
             result.put(team, strResult + "%");
         }
 
-        return result;
+        System.out.println("result = " + result);
     }
+
 }
