@@ -96,7 +96,7 @@ public class ContractService {
                 .collect(Collectors.toList());
     }
 
-    public List<Custom> customList(Long memberId) {
+    public List<Custom> customListByMemberId(Long memberId) {
         SalesMembers sm = salesMemberService.findById(memberId);
         List<Contract> temp = contractRepository.findAllBySalesMembersId(sm.getId());
         log.info(String.valueOf(temp.size()));

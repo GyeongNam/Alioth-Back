@@ -91,11 +91,12 @@ public class SalesMemberService {
                 .map(typeChange::smToSmResDto).collect(Collectors.toList());
     }
 
+
     //관리자 사원 정보 수정(권한, 팀 소속, 고과평가)
     @Transactional
     public SalesMemberResDto adminMemberUpdate (Long memberId, SMAdminUpdateReqDto dto) {
         SalesMembers member = this.findById(memberId);
-        Team team = teamService.getTeam(dto.teamCode());
+        Team team = teamService.findByTeamCode(dto.teamCode());
         member.updateAdmin(dto, team);
         salesMemberRepository.save(member);
         return typeChange.smToSmResDto(member);

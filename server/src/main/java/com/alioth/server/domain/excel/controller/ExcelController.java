@@ -1,6 +1,5 @@
 package com.alioth.server.domain.excel.controller;
 
-import com.alioth.server.domain.contract.domain.Contract;
 import com.alioth.server.domain.contract.dto.res.ContractResDto;
 import com.alioth.server.domain.contract.repository.ContractRepository;
 import com.alioth.server.domain.contract.service.ContractService;
@@ -11,24 +10,20 @@ import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.res.SMTeamListResDto;
 import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
 import com.alioth.server.domain.member.service.SalesMemberService;
+import com.alioth.server.domain.team.domain.Team;
 import com.alioth.server.domain.team.service.TeamService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.*;
-import org.checkerframework.checker.units.qual.N;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.nio.file.NoSuchFileException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -45,148 +40,175 @@ public class ExcelController {
     private final ContractRepository contractRepository;
 
     //계약
-    @GetMapping("/contract")
+    @GetMapping(value = {"/contract", "/contract/{code}"})
     public void downloadContractInfo(HttpServletResponse response,
                                      @AuthenticationPrincipal UserDetails userDetails,
-                                     @RequestParam(value = "memberId", required = false) Long memberId
-    ) throws Exception {
-        //findBySalesMemberCode : EntityException | 표기?
-        SalesMembers sm = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername()));
-//        SalesMembers sm = salesMemberService.findBySalesMemberCode(202437L);
-        if(sm.getRank() == SalesMemberType.HQ) {
-            if (memberId != null) {
-                SalesMembers member = salesMemberService.findBySalesMemberCode(memberId);
-                List<ContractResDto> memberContracts = contractService.contractsByMember(member.getId());
-                exportExcel(response, memberContracts);
+                                     @PathVariable(required = false) String code
+    ) throws IOException, IllegalAccessException {
+        SalesMembers salesMember = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername()));
+        if (salesMember.getRank() == SalesMemberType.HQ) {
+            if (code == null || code.isEmpty()) {
+                List<ContractResDto> allContracts = contractService.listAllContracts();
+                exportExcel(response, allContracts);
             } else {
-                List<ContractResDto> contractList = contractService.listAllContracts();
-                if(!contractList.isEmpty()){
-                    exportExcel(response,contractList);
-                } else {
-                    throw new NoSuchElementException("No contracts");
-                }
-            }
-        }
-
-        if(sm.getRank() == SalesMemberType.MANAGER){
-            if(sm.getTeam().getId() == null || sm.getTeam().getDelYN().equals("Y")){
-                throw new Exception("Illegal access");
-            } else {
-                // 사원 개개인 별(본인 포함) 엑셀 다운
-                if (memberId != null) {
-                    SalesMembers member = salesMemberService.findBySalesMemberCode(memberId);
-                    List<ContractResDto> memberContracts = contractService.contractsByMember(member.getId());
-                    exportExcel(response, memberContracts);
-                } else {
-                    // 팀 전체 계약 리스트
-                    List<SalesMemberResDto> teamMembers = salesMemberService.findAllMembersByTeamId(sm.getTeam().getId());
-                    try {
-                        List<ContractResDto> allTeamContracts = new ArrayList<>();
-                        for (SalesMemberResDto dto : teamMembers) {
-                            SalesMembers m = salesMemberService.findBySalesMemberCode(dto.salesMemberCode());
-                            List<ContractResDto> list = contractService.contractsByMember(m.getId());
-                            allTeamContracts.addAll(list);
-                        }
-                        exportExcel(response, allTeamContracts);
-                    } catch (NoSuchElementException e) {
-                        log.error("error message" + e.getMessage());
+                if (code.matches("[a-zA-Z].*")) {
+                    if (teamService.findByTeamCode(code).getDelYN().equals("N")) {
+                        exportExcel(response, contractTeamList(code));
+                    } else {
+                        throw new EntityNotFoundException("잘못된 팀이거나 삭제된 팀입니다.");
                     }
+                } else {
+                    exportExcel(response, contractList(code));
                 }
             }
         }
-
-        if(sm.getRank() == SalesMemberType.FP){
-            List<ContractResDto> contractsByMember = contractService.contractsByMember(sm.getId());
-            if(!contractsByMember.isEmpty()){
-                exportExcel(response,contractsByMember);
-            } else {
-                throw new NoSuchElementException("No contracts");
+        if (salesMember.getRank() == SalesMemberType.MANAGER) {
+            if (salesMember.getTeam() == null || salesMember.getTeam().getDelYN().equals("Y")) {
+                throw new AccessDeniedException("Illegal access");
             }
+            if (code == null || code.isEmpty()) {
+                exportExcel(response, contractTeamList(salesMember.getTeam().getTeamCode()));
+            } else if (code.matches("^[0-9]+$")) {
+                if(salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getTeam().getId()
+                        .equals(salesMember.getTeam().getId())){
+                    exportExcel(response, contractList(code));
+                }
+            }
+        }
+        if (salesMember.getRank() == SalesMemberType.FP) {
+            exportExcel(response, contractList(userDetails.getUsername()));
+
+        }
+    }
+
+    //고객 리스트
+    @GetMapping(value = {"/customerList", "/customerList/{code}"})
+    public void downloadCustomerByMember(HttpServletResponse response,
+                                         @AuthenticationPrincipal UserDetails userDetails,
+                                         @PathVariable(required = false) String code
+    ) throws IOException, IllegalAccessException {
+        SalesMembers salesMember = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername()));
+        if (salesMember.getRank() == SalesMemberType.HQ) {
+            if (code == null || code.isEmpty()) {
+                List<Custom> allCustomers = contractService.customTotalList();
+                exportExcel(response, allCustomers);
+            } else {
+                if (code.matches("[a-zA-Z].*")) {
+                    if (teamService.findByTeamCode(code).getDelYN().equals("N")) {
+                        exportExcel(response, customTeamList(code));
+                    }
+                } else {
+                    exportExcel(response, customList(code));
+                }
+            }
+        }
+        if (salesMember.getRank() == SalesMemberType.MANAGER) {
+            if (salesMember.getTeam() == null || salesMember.getTeam().getDelYN().equals("Y")) {
+                throw new AccessDeniedException("Illegal access");
+            }
+            if (code == null || code.isEmpty()) {
+                exportExcel(response, customTeamList(salesMember.getTeam().getTeamCode()));
+            } else if (code.matches("^[0-9]+$")) {
+                if(salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getTeam().getId()
+                        .equals(salesMember.getTeam().getId())){
+                exportExcel(response, customList(code));
+                }
+            }
+        }
+        if (salesMember.getRank() == SalesMemberType.FP) {
+            exportExcel(response, customList(userDetails.getUsername()));
         }
     }
 
 
     //사원 리스트
-    @GetMapping("/salesmembers")
-    public void downloadSalesMembersInfo(HttpServletResponse response, @AuthenticationPrincipal UserDetails userDetails) throws IOException, IllegalAccessException {
-        SalesMembers sm = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername()));
-//        SalesMembers sm = salesMemberService.findBySalesMemberCode(202437L);
-        if(sm.getRank() == SalesMemberType.FP){
+    @GetMapping(value = {"/salesmembers","/salesmembers/{code}"})
+    public void downloadSalesMembersInfo(HttpServletResponse response,
+                                         @AuthenticationPrincipal UserDetails userDetails,
+                                         @PathVariable(required = false) String code
+    ) throws IOException, IllegalAccessException {
+        SalesMembers salesMember = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername()));
+        if (salesMember.getRank() == SalesMemberType.FP) {
             throw new AccessDeniedException("접근 권한이 없습니다.");
         }
-
-        if(sm.getRank() == SalesMemberType.MANAGER){
-            if(!sm.getTeam().getTeamMembers().isEmpty()){
-                List<SMTeamListResDto> memberList = teamService.findAllByTeamId(sm.getTeam().getId());
-                exportExcel(response,memberList);
-            } else {
-                throw new NoSuchElementException("No data");
+        if (salesMember.getRank() == SalesMemberType.HQ) {
+            if (code == null || code.isEmpty()) {
+                List<SalesMemberResDto> list = salesMemberService.findAll();
+                exportExcel(response, list);
+            } else if (code.matches("[a-zA-Z].*")) {
+                Team team = teamService.findByTeamCode(code);
+                if (team != null && team.getDelYN().equals("N")) {
+                    List<SMTeamListResDto> memberList = teamService.findAllByTeamId(team.getId());
+                    exportExcel(response, memberList);
+                }
             }
         }
-// 코드 리뷰: 여기 예외처리 해야할까요?
-        if(sm.getRank() == SalesMemberType.HQ){
-            List<SalesMemberResDto> list = salesMemberService.findAll();
-            exportExcel(response,list);
-        }
-    }
-
-
-    //고객 리스트
-    @GetMapping("/customerlist")
-    public void downloadCustomerByMember(HttpServletResponse response/*, @AuthenticationPrincipal UserDetails userDetails*/) throws IOException, IllegalAccessException {
-//        SalesMembers sm = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername()));
-        SalesMembers sm = salesMemberService.findBySalesMemberCode(2024314L);
-        if(sm.getRank() == SalesMemberType.FP) {
-            List<Custom> myCustomList = contractService.customList(sm.getId());
-            try {
-                exportExcel(response, myCustomList);
-            } catch (NoSuchElementException e) {
-                log.error("error message: " + e.getMessage());
+        if (salesMember.getRank() == SalesMemberType.MANAGER) {
+            if (salesMember.getTeam() == null || salesMember.getTeam().getDelYN().equals("Y")) {
+                throw new AccessDeniedException("Illegal access");
             }
-        }
-
-        if(sm.getRank() == SalesMemberType.MANAGER) {
-            List<SalesMemberResDto> teamMembers = salesMemberService.findAllMembersByTeamId(sm.getTeam().getId());
-            List<Custom> teamCustomList = new ArrayList<>();
-            for(SalesMemberResDto dto : teamMembers){
-//                SalesMembers member = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername()));
-                SalesMembers member = salesMemberService.findBySalesMemberCode(dto.salesMemberCode());
-                List<Custom> temps = contractService.customList(member.getId());
-                teamCustomList.addAll(temps);
-            }
-            try{
-                exportExcel(response,teamCustomList);
-            } catch (NoSuchElementException e){
-                log.error("error message: " + e.getMessage());
-            }
-        }
-
-        if(sm.getRank() == SalesMemberType.HQ) {
-            List<Custom> allCustoms = contractService.customTotalList();
-            try{
-                exportExcel(response,allCustoms);
-            } catch (NoSuchElementException e){
-                log.error("error message: " +  e.getMessage());
-            }
+            List<SMTeamListResDto> memberList = teamService.findAllByTeamId(salesMember.getTeam().getId());
+            exportExcel(response, memberList);
         }
     }
 
-    //매출
+   //매출
 
-// 공통화 메서드
+    // 공통화 메서드
     public <T> void exportExcel(HttpServletResponse response, List<T> list) throws IOException, IllegalAccessException {
-        String shortUUID = UUID.randomUUID().toString().substring(0, 6);
+        if (list.isEmpty()) {
+            throw new NoSuchFileException("No data");
+        }
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String date = now.format(format);
+        String fileDate = date.replaceAll("[-:\\s]", "");
         Workbook workbook = excelService.createExcel(list);
-        String fileName = "contracts_" + shortUUID + ".xlsx";
+        String fileName = "alioth_" + fileDate + ".xlsx";
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition","attachment;filename=" + fileName);
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
         workbook.write(response.getOutputStream());
         workbook.close();
     }
 
 
+    //계약 관련 공통화 메서드
+    public List<ContractResDto> contractList(String code) {
+        SalesMembers member = salesMemberService.findBySalesMemberCode(Long.parseLong(code));
+        return contractService.contractsByMember(member.getId());
+    }
 
+    public List<ContractResDto> contractTeamList(String code) {
+        Team team = teamService.findByTeamCode(code);
+        List<SalesMemberResDto> teamMembers = salesMemberService.findAllMembersByTeamId(team.getId());
+        List<ContractResDto> allTeamContracts = new ArrayList<>();
+        for (SalesMemberResDto dto : teamMembers) {
+            SalesMembers m = salesMemberService.findBySalesMemberCode(dto.salesMemberCode());
+            List<ContractResDto> list = contractService.contractsByMember(m.getId());
+            allTeamContracts.addAll(list);
+        }
+        return allTeamContracts;
+    }
+
+    //고객 리스트 관련 공통화 메서드
+    public List<Custom> customList(String code) {
+        SalesMembers salesMembers = salesMemberService.findBySalesMemberCode(Long.parseLong(code));
+        return contractService.customListByMemberId(salesMembers.getId());
+    }
+
+    public List<Custom> customTeamList(String code) {
+        Team team = teamService.findByTeamCode(code);
+        List<SalesMemberResDto> teamMembers = salesMemberService.findAllMembersByTeamId(team.getId());
+        List<Custom> teamCustomList = new ArrayList<>();
+        for (SalesMemberResDto dto : teamMembers) {
+            SalesMembers member = salesMemberService.findBySalesMemberCode(dto.salesMemberCode());
+            List<Custom> temps = contractService.customListByMemberId(member.getId());
+            teamCustomList.addAll(temps);
+        }
+        return teamCustomList;
+    }
 }
+
 
 
 

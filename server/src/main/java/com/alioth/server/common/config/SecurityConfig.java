@@ -92,7 +92,7 @@ public class SecurityConfig {
     };
 
     private static final String[] SwaggerUrl = {
-            "/api/**",
+//            "/api/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/v3/api-docs/**",

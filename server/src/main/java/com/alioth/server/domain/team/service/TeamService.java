@@ -22,8 +22,8 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final TypeChange typeChange;
 
-    public Team getTeam(String teamCode) {
-        return teamRepository.findByTeamCode(teamCode);
+    public Team findByTeamCode(String teamCode) {
+        return teamRepository.findByTeamCode(teamCode).orElseThrow(EntityNotFoundException::new);
     }
 
     public Team findById(Long id) {
