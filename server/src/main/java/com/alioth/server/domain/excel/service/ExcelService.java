@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Slf4j
@@ -62,7 +61,8 @@ public class ExcelService {
         return workbook;
     }
 
-    public void contractExcel(SalesMembers salesMember, String code, HttpServletResponse response) throws IOException, IllegalAccessException {
+    public void contractExcel(SalesMembers salesMember, String code, HttpServletResponse response
+    ) throws IOException, IllegalAccessException {
         switch (salesMember.getRank()){
             case HQ:
                 contractExcelHq(code, response);
@@ -77,7 +77,8 @@ public class ExcelService {
     }
 
     // 계약 HQ 경우 code = null, 팀 코드 , 사원 코드
-    private void contractExcelHq(String code, HttpServletResponse response) throws IOException, IllegalAccessException {
+    private void contractExcelHq(String code, HttpServletResponse response
+    ) throws IOException, IllegalAccessException {
         if (code == null || code.isEmpty()) {
             List<ContractResDto> allContracts = contractService.listAllContracts();
             exportExcel(response, allContracts);
@@ -95,7 +96,8 @@ public class ExcelService {
     }
 
     // 계약 Manager 로그인한 사용자가 팀이있는경우, code = null, 사원 코드
-    private void contractExcelManager(SalesMembers salesMember, String code, HttpServletResponse response) throws IOException, IllegalAccessException {
+    private void contractExcelManager(SalesMembers salesMember, String code, HttpServletResponse response
+    ) throws IOException, IllegalAccessException {
         teamExist(salesMember);
         if (code == null || code.isEmpty()) {
             exportExcel(response, contractTeamList(salesMember.getTeam().getTeamCode()));
@@ -155,7 +157,8 @@ public class ExcelService {
     }
 
     // 고객 Manager 일 경우 code = null, 사원코드
-    private void customerListExcelManager(SalesMembers salesMember, String code, HttpServletResponse response) throws IOException, IllegalAccessException {
+    private void customerListExcelManager(SalesMembers salesMember, String code, HttpServletResponse response
+    ) throws IOException, IllegalAccessException {
         teamExist(salesMember);
         if (code == null || code.isEmpty()) {
             exportExcel(response, customTeamList(salesMember.getTeam().getTeamCode()));
@@ -174,13 +177,10 @@ public class ExcelService {
     }
 
     public List<Custom> customTeamList(String code) {
-        Team team = teamService.findByTeamCode(code);
-        List<Custom> teamCustomList = new ArrayList<>();
-        for(SalesMembers salesMembers : team.getTeamMembers()){
-            List<Custom> temps = contractService.customListByMemberId(salesMembers.getId());
-            teamCustomList.addAll(temps);
-        }
-        return teamCustomList;
+        return teamService.findByTeamCode(code).getTeamMembers()
+                .stream()
+                .map(salesMembers -> contractService.customListByMemberId(salesMembers.getId()) )
+                .flatMap(List::stream).toList();
     }
 
     public void salesMembersExcel(SalesMembers salesMember, String code, HttpServletResponse response) throws IOException, IllegalAccessException {
@@ -203,11 +203,10 @@ public class ExcelService {
             exportExcel(response, list);
         } else if (Character.isLetter(code.charAt(0))) {
             Team team = teamService.findByTeamCode(code);
-            if (team.getDelYN().equals("N")) {      // null 이 나올수가 없음
+            if (team.getDelYN().equals("N")) {
                 List<SMTeamListResDto> memberList = teamService.findAllByTeamId(team.getId());
                 exportExcel(response, memberList);
             }
-            // 이부분 빠진듯
             else{
                 throw new EntityNotFoundException("해체된 팀입니다.");
             }
@@ -225,11 +224,9 @@ public class ExcelService {
             throw new NoSuchFileException("No data");
         }
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String date = now.format(format);
-        String fileDate = date.replaceAll("[-:\\s]", "");
+        String dateFormat = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
         Workbook workbook = this.createExcel(list);
-        String fileName = "alioth_" + fileDate + ".xlsx";
+        String fileName = "alioth_" + dateFormat + ".xlsx";
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
         workbook.write(response.getOutputStream());

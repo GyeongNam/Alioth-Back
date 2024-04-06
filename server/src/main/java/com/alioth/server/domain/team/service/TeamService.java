@@ -23,16 +23,16 @@ public class TeamService {
     private final TypeChange typeChange;
 
     public Team findByTeamCode(String teamCode) {
-        return teamRepository.findByTeamCode(teamCode).orElseThrow(EntityNotFoundException::new);
+        return teamRepository.findByTeamCode(teamCode).orElseThrow(() -> new EntityNotFoundException("팀을 찾을 수 없습니다."));
     }
 
     public Team findById(Long id) {
-        return teamRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return teamRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("팀을 찾을 수 없습니다."));
     }
 
     public String createTeamCode() {
         Team findFirstTeam = teamRepository.findFirstByOrderByIdDesc();
-        Long teamId;
+        long teamId;
         if (findFirstTeam == null) {
             teamId = 1L;
         } else {

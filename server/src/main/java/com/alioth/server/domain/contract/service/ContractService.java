@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -98,29 +97,15 @@ public class ContractService {
 
     public List<Custom> customListByMemberId(Long memberId) {
         SalesMembers sm = salesMemberService.findById(memberId);
-        List<Contract> temp = contractRepository.findAllBySalesMembersId(sm.getId());
-        log.info(String.valueOf(temp.size()));
-        List<Custom> customList = new ArrayList<>();
-        for(Contract c : temp){
-            Custom custom = c.getCustom();
-            customList.add(custom);
-        }
-        return customList;
+        return contractRepository.findAllBySalesMembersId(sm.getId()).stream().map(Contract::getCustom).toList();
     }
 
     public List<Custom> customTotalList() {
-        List<Contract> temp = contractRepository.findAll();
-        List<Custom> customList = new ArrayList<>();
-        for(Contract c : temp){
-            Custom custom = c.getCustom();
-            customList.add(custom);
-        }
-        return customList;
+        return contractRepository.findAll().stream().map(Contract::getCustom).toList();
     }
 
     public String createContractCode(){
-        LocalDateTime date = LocalDateTime.now();
-        String date1 = date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        return date1+String.valueOf(UUID.randomUUID());
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        return date + UUID.randomUUID();
     }
 }
