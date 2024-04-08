@@ -67,6 +67,7 @@ public class BoardService {
                         .body("새로운 건의사항이 등록되었습니다: " + board.getTitle())
                         .url("/BoardList")
                         .build();
+
                 fcmService.sendMessageTo(fcmSendDto);
             } else {
                 log.error("유효한 FCM 토큰이 없습니다.");
