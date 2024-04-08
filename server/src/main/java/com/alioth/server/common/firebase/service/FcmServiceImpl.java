@@ -9,13 +9,16 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -61,18 +64,20 @@ public class FcmServiceImpl implements FcmService {
 
     private String makeMessage(FcmSendDto fcmSendDto) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> data = new HashMap<>();
+        data.put("url", fcmSendDto.url());
         FcmMessageDto fcmMessageDto = FcmMessageDto.builder()
                 .message(FcmMessageDto.Message.builder()
-                        .token(fcmSendDto.getToken())
+                        .token(fcmSendDto.token())
                         .notification(FcmMessageDto.Notification.builder()
-                                .title(fcmSendDto.getTitle())
-                                .body(fcmSendDto.getBody())
+                                .title(fcmSendDto.title())
+                                .body(fcmSendDto.body())
                                 .image(null)
                                 .build())
+                        .data(data)
                         .build())
                 .validateOnly(false)
                 .build();
-
 
         return objectMapper.writeValueAsString(fcmMessageDto);
     }

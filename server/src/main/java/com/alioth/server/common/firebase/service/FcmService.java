@@ -7,5 +7,4 @@ import java.io.IOException;
 @Service
 public interface FcmService {
     int sendMessageTo(FcmSendDto fcmSendDto) throws IOException;
-
 }

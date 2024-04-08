@@ -1,21 +1,9 @@
 package com.alioth.server.common.firebase.domain;
 
-import lombok.*;
+import lombok.Builder;
 
-@Getter
-@ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FcmSendDto {
-    private String token;
+public record FcmSendDto(String token, String title, String body, String url) {
 
-    private String title;
-
-    private String body;
-
-    @Builder(toBuilder = true)
-    public FcmSendDto(String token, String title, String body) {
-        this.token = token;
-        this.title = title;
-        this.body = body;
-    }
+    @Builder
+    public FcmSendDto {}
 }

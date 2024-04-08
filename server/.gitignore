@@ -38,4 +38,4 @@ out/
 .vscode/
 
 ### firebase ###
-**/resources/firebase
+**/resources/firebase/
