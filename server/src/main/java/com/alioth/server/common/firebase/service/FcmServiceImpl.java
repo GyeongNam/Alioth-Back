@@ -1,5 +1,7 @@
-package com.alioth.server.common.firebase;
+package com.alioth.server.common.firebase.service;
 
+import com.alioth.server.common.firebase.domain.FcmMessageDto;
+import com.alioth.server.common.firebase.domain.FcmSendDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;

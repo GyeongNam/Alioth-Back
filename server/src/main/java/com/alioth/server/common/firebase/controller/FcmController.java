@@ -1,5 +1,7 @@
-package com.alioth.server.common.firebase;
+package com.alioth.server.common.firebase.controller;
 
+import com.alioth.server.common.firebase.domain.FcmSendDto;
+import com.alioth.server.common.firebase.service.FcmService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

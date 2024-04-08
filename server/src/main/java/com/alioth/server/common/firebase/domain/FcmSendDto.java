@@ -1,4 +1,4 @@
-package com.alioth.server.common.firebase;
+package com.alioth.server.common.firebase.domain;
 
 import lombok.*;
 
