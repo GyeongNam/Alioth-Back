@@ -14,13 +14,19 @@ import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.service.SalesMemberService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class ContractService {
@@ -38,9 +44,10 @@ public class ContractService {
         ContractMembers contractMembers = dummyService.contractManagerFindById(dto.contractMemberId());
         Custom custom = dummyService.customFindById(dto.customId());
         InsuranceProduct insuranceProduct = dummyService.insuranceProductFindById(dto.insuranceProductId());
+        String contractCode = this.createContractCode();
 
         // Contract 객체 생성 및 저장
-        Contract contract = typeChange.ContractCreateDtoToContract(dto, contractMembers, custom, insuranceProduct, salesMember);
+        Contract contract = typeChange.ContractCreateDtoToContract(contractCode, dto, contractMembers, custom, insuranceProduct, salesMember);
         contract = contractRepository.save(contract);
 
         // 결과 변환 및 반환
@@ -78,7 +85,27 @@ public class ContractService {
 
     public List<ContractResDto> listAllContracts() {
         return contractRepository.findAll().stream()
-                .map(contract -> typeChange.ContractToContractResDto(contract))
+                .map(typeChange::ContractToContractResDto)
                 .collect(Collectors.toList());
+    }
+    public List<ContractResDto> contractsByMember(Long memberId) {
+        SalesMembers sm = salesMemberService.findById(memberId);
+        return contractRepository.findAllBySalesMembersId(sm.getId()).stream()
+                .map(typeChange::ContractToContractResDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<Custom> customListByMemberId(Long memberId) {
+        SalesMembers sm = salesMemberService.findById(memberId);
+        return contractRepository.findAllBySalesMembersId(sm.getId()).stream().map(Contract::getCustom).toList();
+    }
+
+    public List<Custom> customTotalList() {
+        return contractRepository.findAll().stream().map(Contract::getCustom).toList();
+    }
+
+    public String createContractCode(){
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        return date + UUID.randomUUID();
     }
 }

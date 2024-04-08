@@ -81,32 +81,34 @@ public class SalesMemberController {
         }
     }
 
-    //사원 상세 조회 (본인, 지점장, 지역장)
-//    @GetMapping("/details/{memberId}")
-//    public ResponseEntity<CommonResponse> getMemberInfoAdmin(
-//            @PathVariable("memberId") Long memberId,
-//            @AuthenticationPrincipal UserDetails userDetails
-//    ) {
-//        log.info("123123 : " + userDetails.getPassword());
-//        if (salesMemberService.findBySalesMemberCode(
-//                Long.parseLong(userDetails.getUsername())).getRank() != SalesMemberType.FP) {
-//            return CommonResponse.responseMessage(
-//                    HttpStatus.OK,
-//                    "success",
-//                    salesMemberService.memberDetail(memberId)
-//            );
-//        }
-//    }
+//    사원 상세 조회 (지점장, 지역장)
+    @GetMapping("/details/{memberId}")
+    public ResponseEntity<CommonResponse> getMemberInfoAdmin(
+            @PathVariable("memberId") Long memberId,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) throws AccessDeniedException {
+        if (salesMemberService.findBySalesMemberCode(
+                Long.parseLong(userDetails.getUsername())).getRank() != SalesMemberType.FP) {
+            return CommonResponse.responseMessage(
+                    HttpStatus.OK,
+                    "success",
+                    salesMemberService.memberDetail(memberId)
+            );
+        } else {
+            throw new AccessDeniedException("권한이 없습니다.");
+        }
+    }
 
-//
-//    //사원 정보 수정 (사원 본인만)
-//    @PatchMapping("/details/update/{memberId}")
-//    public ResponseEntity<CommonResponse> updateMyInfo(@PathVariable("memberId") Long memberId,
-//                                                       @RequestBody @Valid SalesMemberUpdateReqDto dto) {
-//        return CommonResponse.responseMessage(
-//                HttpStatus.OK,
-//                "success",
-//                salesMemberService.updateMyInfo(memberId,dto)
-//        );
-
+    //사원 정보 수정 (사원 본인만)
+    @PatchMapping("/details/update")
+    public ResponseEntity<CommonResponse> updateMyInfo(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody @Valid SalesMemberUpdateReqDto dto) {
+        Long memberId = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername())).getId();
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "success",
+                salesMemberService.updateMyInfo(memberId, dto)
+        );
+    }
 }
