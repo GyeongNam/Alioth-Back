@@ -1,11 +1,10 @@
-package com.alioth.statistics.service.cencellation.impl;
+package com.alioth.statistics.service.cencellation.rank;
 
 import com.alioth.statistics.domain.contract.domain.Contract;
 import com.alioth.statistics.domain.contract.repository.ContractRepository;
 import com.alioth.statistics.domain.dummy.domain.ContractStatus;
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 import com.alioth.statistics.domain.member.repository.SalesMemberRepository;
-import com.alioth.statistics.domain.team.domain.Team;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
