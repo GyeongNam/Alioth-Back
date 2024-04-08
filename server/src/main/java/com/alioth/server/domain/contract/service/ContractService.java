@@ -10,6 +10,7 @@ import com.alioth.server.domain.dummy.domain.ContractMembers;
 import com.alioth.server.domain.dummy.domain.Custom;
 import com.alioth.server.domain.dummy.domain.InsuranceProduct;
 import com.alioth.server.domain.dummy.service.DummyService;
+import com.alioth.server.domain.excel.dto.ExcelReqDto;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.service.SalesMemberService;
 import jakarta.persistence.EntityNotFoundException;
@@ -85,24 +86,56 @@ public class ContractService {
 
     public List<ContractResDto> listAllContracts() {
         return contractRepository.findAll().stream()
-                .map(typeChange::ContractToContractResDto)
-                .collect(Collectors.toList());
+                    .map(typeChange::ContractToContractResDto)
+                    .collect(Collectors.toList());
     }
-    public List<ContractResDto> contractsByMember(Long memberId) {
+
+    public List<ContractResDto> allContractsByMember(Long memberId) {
         SalesMembers sm = salesMemberService.findById(memberId);
         return contractRepository.findAllBySalesMembersId(sm.getId()).stream()
                 .map(typeChange::ContractToContractResDto)
                 .collect(Collectors.toList());
     }
 
-    public List<Custom> customListByMemberId(Long memberId) {
-        SalesMembers sm = salesMemberService.findById(memberId);
-        return contractRepository.findAllBySalesMembersId(sm.getId()).stream().map(Contract::getCustom).toList();
+    public List<ContractResDto> allContractsByMember(Long memberId, ExcelReqDto dto){
+        List<Contract> allContracts = contractRepository.findAllByPeriodAndSalesMembersId(
+                                                        memberId, dto.startDate(), dto.endDate()
+        );
+        for ( Contract c: allContracts){
+
+        }
     }
 
-    public List<Custom> customTotalList() {
-        return contractRepository.findAll().stream().map(Contract::getCustom).toList();
+
+    public List<Custom> customListByMemberId(Long memberId, ExcelReqDto dto) {
+        SalesMembers sm = salesMemberService.findById(memberId);
+        if(dto.startDate() == null && dto.endDate() == null){
+          return contractRepository.findAllBySalesMembersId(sm.getId()).stream().map(Contract::getCustom).toList();
+        } else {
+            return contractRepository.findAllBySalesMembersId(sm.getId()).stream()
+                    .filter(contract -> contract.getContractDate().isAfter(dto.startDate().minusDays(1))
+                                        && contract.getContractDate().isBefore(dto.endDate().plusDays(1)))
+                    .map(Contract::getCustom)
+                    .toList();
+        }
     }
+
+    public List<Custom> customTotalList(ExcelReqDto dto) {
+        if(dto.startDate() == null && dto.endDate() == null){
+            return contractRepository.findAll().stream().map(Contract::getCustom).toList();
+        } else {
+            return contractRepository.findAll().stream()
+                    .filter(contract -> contract.getContractDate().isAfter(dto.startDate().minusDays(1))
+                                        && contract.getContractDate().isBefore(dto.endDate().plusDays(1)))
+                    .map(Contract::getCustom)
+                    .toList();
+        }
+    }
+
+    public List<Contract> findAllByPeriod(ExcelReqDto dto){
+        return contractRepository.findAllByPeriod(dto.startDate(), dto.endDate());
+    }
+
 
     public String createContractCode(){
         String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
