@@ -19,7 +19,7 @@ public class RankProductStep {
     @Bean(name = "stepRankProduct")
     public Step stepRankProduct(JobRepository jobRepository, @Qualifier("taskletRankProduct") Tasklet taskletRankProduct, PlatformTransactionManager platformTransactionManager){
         return new StepBuilder("stepRankProduct", jobRepository)
-                .allowStartIfComplete(true)     // test 를 위해 Step이 항상 재실행되도록 설정
+                // .allowStartIfComplete(true)     // test 를 위해 Step이 항상 재실행되도록 설정
                 .tasklet(taskletRankProduct, platformTransactionManager).build();
     }
 }

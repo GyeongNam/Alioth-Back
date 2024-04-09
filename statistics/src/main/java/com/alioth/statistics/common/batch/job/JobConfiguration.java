@@ -28,15 +28,15 @@ public class JobConfiguration {
         return new JobExecutionListener() {
             @Override
             public void beforeJob(JobExecution jobExecution) {
-                log.info("[JobExecutionListener#beforeJob] jobExecution is " + jobExecution.getStatus());
+                log.info("[JobExecutionListener BeforeJob] jobExecution is " + jobExecution.getStatus());
             }
 
             @Override
             public void afterJob(JobExecution jobExecution) {
                 if (jobExecution.getStatus() == BatchStatus.FAILED) {
-                    log.error("[JobExecutionListener#afterJob] jobExecution is " + jobExecution.getStatus());
+                    log.error("[JobExecutionListener AfterJob] jobExecution is " + jobExecution.getStatus());
                 }
-                log.info("[JobExecutionListener#afterJob] jobExecution is " + jobExecution.getStatus());
+                log.info("[JobExecutionListener AfterJob] jobExecution is " + jobExecution.getStatus());
             }
         };
     }

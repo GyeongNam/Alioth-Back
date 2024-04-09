@@ -19,7 +19,7 @@ public class MemberSalesStep {
     @Bean(name = "stepMemberSales")
     public Step stepMemberSales(JobRepository jobRepository, @Qualifier("taskletMemberSales") Tasklet taskletMemberSales, PlatformTransactionManager platformTransactionManager){
         return new StepBuilder("stepMemberSales", jobRepository)
-                .allowStartIfComplete(true)     // test 를 위해 Step이 항상 재실행되도록 설정
+                // .allowStartIfComplete(true)     // test 를 위해 Step이 항상 재실행되도록 설정
                 .tasklet(taskletMemberSales, platformTransactionManager).build();
     }
 }
