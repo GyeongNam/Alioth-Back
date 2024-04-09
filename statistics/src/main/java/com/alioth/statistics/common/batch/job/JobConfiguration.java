@@ -1,4 +1,4 @@
-package com.alioth.statistics.common.config.job;
+package com.alioth.statistics.common.batch.job;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -12,21 +12,32 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.util.Map;
+import java.util.Set;
+
 @Slf4j
 @Configuration
-public class SimpleJobConfiguration {
-    @Bean
-    public Job simpleJob1(JobRepository jobRepository, Step simpleStep1) {
-        return new JobBuilder("simpleJob", jobRepository)
-                .start(simpleStep1)
+public class JobConfiguration {
+
+    @Bean(name = "batchJob")
+    public Job batchJob(JobRepository jobRepository, Map<String, Step> stepMap) {
+        return new JobBuilder("batchJob", jobRepository)
+                .start(stepMap.get("simpleStep1"))
+                .next(stepMap.get("stepMemberSales"))
+                .next(stepMap.get("stepTeamSales"))
+                .next(stepMap.get("stepHqSales"))
+                .next(stepMap.get("stepRankProduct"))
+                .next(stepMap.get("stepRankMember"))
                 .build();
     }
-    @Bean
+
+    @Bean(name = "simpleStep1")
     public Step simpleStep1(JobRepository jobRepository, Tasklet testTasklet, PlatformTransactionManager platformTransactionManager){
         return new StepBuilder("simpleStep1", jobRepository)
                 .tasklet(testTasklet, platformTransactionManager).build();
     }
-    @Bean
+
+    @Bean(name = "testTasklet")
     public Tasklet testTasklet(){
         return ((contribution, chunkContext) -> {
             log.info(">>>>> This is Step1");
