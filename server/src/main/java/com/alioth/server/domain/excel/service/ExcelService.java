@@ -1,6 +1,7 @@
 package com.alioth.server.domain.excel.service;
 
 import com.alioth.server.common.domain.TypeChange;
+import com.alioth.server.domain.contract.domain.Contract;
 import com.alioth.server.domain.contract.dto.res.ContractResDto;
 import com.alioth.server.domain.contract.service.ContractService;
 import com.alioth.server.domain.dummy.domain.Custom;
@@ -84,14 +85,7 @@ public class ExcelService {
     private void contractExcelHq(String code, HttpServletResponse response, ExcelReqDto dto
     ) throws IOException, IllegalAccessException {
         if (code == null || code.isEmpty()) {
-            if(dto.startDate() == null && dto.endDate() == null){
-                exportExcel(response, contractService.listAllContracts().stream().toList());
-            } else {
-                List<ContractResDto> allContracts = contractService.findAllByPeriod(dto).stream()
-                        .map(typeChange::ContractToContractResDto)
-                        .toList();
-                exportExcel(response, allContracts);
-            }
+                exportExcel(response, contractService.findAllContractsByPeriod(dto).stream().toList());
         } else {
             if (Character.isLetter(code.charAt(0))){
                 if (teamService.findByTeamCode(code).getDelYN().equals("N")) {
@@ -121,32 +115,17 @@ public class ExcelService {
     }
 
     public List<ContractResDto> contractList(String code, ExcelReqDto dto) {
-        if (dto.startDate() == null && dto.endDate() == null) {
-            return contractService.allContractsByMember(
-                    salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getId());
-        } else {
-            return contractService.allContractsByMember(
-                    salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getId()).stream()
-                    .filter(contractResDto -> contractResDto.contractDate().isAfter(dto.startDate().minusDays(1))
-                                            && contractResDto.contractDate().isBefore(dto.endDate().plusDays(1)))
-                    .collect(Collectors.toList());
-        }
+        Long memberId = salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getId();
+            return contractService.allContractsByMemberAndPeriod(memberId, dto);
     }
 
     public List<ContractResDto> contractTeamList(String code, ExcelReqDto dto) {
-        if (dto.startDate() == null && dto.endDate() == null) {
-            return teamService.findByTeamCode(code).getTeamMembers().stream()
-                    .map(salesMembers -> contractService.allContractsByMember(salesMembers.getId()))
-                    .flatMap(List::stream)
-                    .collect(Collectors.toList());
-        } else {
-            return teamService.findByTeamCode(code).getTeamMembers().stream()
-                    .map(salesMembers -> contractService.allContractsByMember(salesMembers.getId()))
-                    .flatMap(List::stream)
-                    .filter(contractResDto -> contractResDto.contractDate().isAfter(dto.startDate().minusDays(1))
-                                            && contractResDto.contractDate().isBefore(dto.endDate().plusDays(1)))
-                    .collect(Collectors.toList());
+        List<ContractResDto> teamContracts = new ArrayList<>();
+        List<SalesMembers> teamMembers = teamService.findByTeamCode(code).getTeamMembers();
+        for(SalesMembers member : teamMembers) {
+            teamContracts.addAll(contractService.allContractsByMemberAndPeriod(member.getId(), dto));
         }
+        return teamContracts;
     }
 
     public void customerListExcel(SalesMembers salesMember, String code, HttpServletResponse response, ExcelReqDto dto
@@ -197,8 +176,8 @@ public class ExcelService {
 
     public List<Custom> customList(String code, ExcelReqDto dto) {
         return contractService.customListByMemberId(
-                salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getId()
-                ,dto
+                salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getId() ,
+                dto
         );
     }
 
@@ -245,7 +224,8 @@ public class ExcelService {
     }
 
     // 사원 Manager 일 경우
-    private void salesMembersExcelManager(SalesMembers salesMember, HttpServletResponse response) throws IOException, IllegalAccessException {
+    private void salesMembersExcelManager(SalesMembers salesMember, HttpServletResponse response
+    ) throws IOException, IllegalAccessException {
         teamExist(salesMember);
         exportExcel(response, teamService.findAllByTeamId(salesMember.getTeam().getId()));
     }

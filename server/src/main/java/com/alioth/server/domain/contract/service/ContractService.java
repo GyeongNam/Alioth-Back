@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -84,39 +85,57 @@ public class ContractService {
         contractRepository.deleteById(contractId);
     }
 
+
+
     public List<ContractResDto> listAllContracts() {
         return contractRepository.findAll().stream()
                     .map(typeChange::ContractToContractResDto)
                     .collect(Collectors.toList());
     }
+  /*  public List<Contract> findAllByPeriod(ExcelReqDto dto){
+        return contractRepository.findAllByPeriod(dto.startDate(), dto.endDate());
+    }*/
 
-    public List<ContractResDto> allContractsByMember(Long memberId) {
+    public List<ContractResDto> findAllContractsByPeriod(ExcelReqDto dto) {
+        if(dto.startDate() == null && dto.endDate() == null){
+            return this.listAllContracts();
+        } else {
+            return contractRepository.findAllByPeriod(dto.startDate(), dto.endDate()).stream()
+                    .map(typeChange::ContractToContractResDto).toList();
+        }
+    }
+
+    /*public List<ContractResDto> allContractsByMember(Long memberId) {
         SalesMembers sm = salesMemberService.findById(memberId);
         return contractRepository.findAllBySalesMembersId(sm.getId()).stream()
                 .map(typeChange::ContractToContractResDto)
                 .collect(Collectors.toList());
-    }
+    }*/
 
-    public List<ContractResDto> allContractsByMember(Long memberId, ExcelReqDto dto){
-        List<Contract> allContracts = contractRepository.findAllByPeriodAndSalesMembersId(
-                                                        memberId, dto.startDate(), dto.endDate()
-        );
-        for ( Contract c: allContracts){
-
+    public List<ContractResDto> allContractsByMemberAndPeriod(Long memberId, ExcelReqDto dto){
+        List<ContractResDto> contractResDtoList = new ArrayList<>();
+        List<Contract> allContracts;
+        if(dto.startDate() == null && dto.endDate() == null){
+            allContracts = contractRepository.findAllBySalesMembersId(memberId);
+            for (Contract c: allContracts){
+                contractResDtoList.add(typeChange.ContractToContractResDto(c));
+            }
+        } else {
+            allContracts = contractRepository.findAllByPeriodAndSalesMembersId(memberId, dto.startDate(), dto.endDate());
+            for (Contract c: allContracts){
+                contractResDtoList.add(typeChange.ContractToContractResDto(c));
+            }
         }
+        return contractResDtoList;
     }
 
 
     public List<Custom> customListByMemberId(Long memberId, ExcelReqDto dto) {
-        SalesMembers sm = salesMemberService.findById(memberId);
         if(dto.startDate() == null && dto.endDate() == null){
-          return contractRepository.findAllBySalesMembersId(sm.getId()).stream().map(Contract::getCustom).toList();
+          return contractRepository.findAllBySalesMembersId(memberId).stream().map(Contract::getCustom).toList();
         } else {
-            return contractRepository.findAllBySalesMembersId(sm.getId()).stream()
-                    .filter(contract -> contract.getContractDate().isAfter(dto.startDate().minusDays(1))
-                                        && contract.getContractDate().isBefore(dto.endDate().plusDays(1)))
-                    .map(Contract::getCustom)
-                    .toList();
+            return contractRepository.findAllByPeriodAndSalesMembersId(memberId,dto.startDate(),dto.endDate())
+                    .stream().map(Contract::getCustom).toList();
         }
     }
 
@@ -124,19 +143,10 @@ public class ContractService {
         if(dto.startDate() == null && dto.endDate() == null){
             return contractRepository.findAll().stream().map(Contract::getCustom).toList();
         } else {
-            return contractRepository.findAll().stream()
-                    .filter(contract -> contract.getContractDate().isAfter(dto.startDate().minusDays(1))
-                                        && contract.getContractDate().isBefore(dto.endDate().plusDays(1)))
-                    .map(Contract::getCustom)
-                    .toList();
+            return contractRepository.findAllByPeriod(dto.startDate(),dto.endDate()).stream()
+                    .map(Contract::getCustom).toList();
         }
     }
-
-    public List<Contract> findAllByPeriod(ExcelReqDto dto){
-        return contractRepository.findAllByPeriod(dto.startDate(), dto.endDate());
-    }
-
-
     public String createContractCode(){
         String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         return date + UUID.randomUUID();
