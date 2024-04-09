@@ -1,13 +1,16 @@
 package com.alioth.statistics.common.batch.job;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
+import org.springframework.batch.core.*;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -19,31 +22,36 @@ import java.util.Set;
 @Configuration
 public class JobConfiguration {
 
+    @Bean
+    @JobScope
+    public JobExecutionListener jobExecutionListener() {
+        return new JobExecutionListener() {
+            @Override
+            public void beforeJob(JobExecution jobExecution) {
+                log.info("[JobExecutionListener#beforeJob] jobExecution is " + jobExecution.getStatus());
+            }
+
+            @Override
+            public void afterJob(JobExecution jobExecution) {
+                if (jobExecution.getStatus() == BatchStatus.FAILED) {
+                    log.error("[JobExecutionListener#afterJob] jobExecution is " + jobExecution.getStatus());
+                }
+                log.info("[JobExecutionListener#afterJob] jobExecution is " + jobExecution.getStatus());
+            }
+        };
+    }
+
+
     @Bean(name = "batchJob")
     public Job batchJob(JobRepository jobRepository, Map<String, Step> stepMap) {
+
         return new JobBuilder("batchJob", jobRepository)
-                .start(stepMap.get("simpleStep1"))
-                .next(stepMap.get("stepMemberSales"))
+                .start(stepMap.get("stepMemberSales"))
                 .next(stepMap.get("stepTeamSales"))
                 .next(stepMap.get("stepHqSales"))
                 .next(stepMap.get("stepRankProduct"))
                 .next(stepMap.get("stepRankMember"))
+                .listener(jobExecutionListener())
                 .build();
     }
-
-    @Bean(name = "simpleStep1")
-    public Step simpleStep1(JobRepository jobRepository, Tasklet testTasklet, PlatformTransactionManager platformTransactionManager){
-        return new StepBuilder("simpleStep1", jobRepository)
-                .tasklet(testTasklet, platformTransactionManager).build();
-    }
-
-    @Bean(name = "testTasklet")
-    public Tasklet testTasklet(){
-        return ((contribution, chunkContext) -> {
-            log.info(">>>>> This is Step1");
-            return RepeatStatus.FINISHED;
-        });
-    }
-
-
 }

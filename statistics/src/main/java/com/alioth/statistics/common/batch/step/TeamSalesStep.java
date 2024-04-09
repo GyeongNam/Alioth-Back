@@ -19,6 +19,7 @@ public class TeamSalesStep {
     @Bean(name = "stepTeamSales")
     public Step stepTeamSales(JobRepository jobRepository, @Qualifier("taskletTeamSales") Tasklet taskletTeamSales, PlatformTransactionManager platformTransactionManager){
         return new StepBuilder("stepTeamSales", jobRepository)
+                .allowStartIfComplete(true)     // test 를 위해 Step이 항상 재실행되도록 설정
                 .tasklet(taskletTeamSales, platformTransactionManager).build();
     }
 }
