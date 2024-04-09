@@ -92,9 +92,6 @@ public class ContractService {
                     .map(typeChange::ContractToContractResDto)
                     .collect(Collectors.toList());
     }
-  /*  public List<Contract> findAllByPeriod(ExcelReqDto dto){
-        return contractRepository.findAllByPeriod(dto.startDate(), dto.endDate());
-    }*/
 
     public List<ContractResDto> findAllContractsByPeriod(ExcelReqDto dto) {
         if(dto.startDate() == null && dto.endDate() == null){
@@ -104,13 +101,6 @@ public class ContractService {
                     .map(typeChange::ContractToContractResDto).toList();
         }
     }
-
-    /*public List<ContractResDto> allContractsByMember(Long memberId) {
-        SalesMembers sm = salesMemberService.findById(memberId);
-        return contractRepository.findAllBySalesMembersId(sm.getId()).stream()
-                .map(typeChange::ContractToContractResDto)
-                .collect(Collectors.toList());
-    }*/
 
     public List<ContractResDto> allContractsByMemberAndPeriod(Long memberId, ExcelReqDto dto){
         List<ContractResDto> contractResDtoList = new ArrayList<>();
@@ -147,6 +137,20 @@ public class ContractService {
                     .map(Contract::getCustom).toList();
         }
     }
+    public String createContractCode(){
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        return date + UUID.randomUUID();
+    }
+
+    public List<Custom> customListByMemberId(Long memberId) {
+        SalesMembers sm = salesMemberService.findById(memberId);
+        return contractRepository.findAllBySalesMembersId(sm.getId()).stream().map(Contract::getCustom).toList();
+    }
+
+    public List<Custom> customTotalList() {
+        return contractRepository.findAll().stream().map(Contract::getCustom).toList();
+    }
+
     public String createContractCode(){
         String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         return date + UUID.randomUUID();

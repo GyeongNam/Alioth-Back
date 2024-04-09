@@ -1,8 +1,7 @@
-package com.alioth.statistics.service.cencellation;
+package com.alioth.statistics.service.cencellation.rank;
 
 import com.alioth.statistics.domain.member.domain.SalesMembers;
 
-import java.math.BigInteger;
 import java.util.Map;
 
 public interface CancellationRankService {

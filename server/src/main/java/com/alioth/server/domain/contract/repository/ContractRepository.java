@@ -15,14 +15,10 @@ import java.util.List;
 @Repository
 public interface ContractRepository extends JpaRepository<Contract, Long> {
     List<Contract> findAllBySalesMembersId(Long memberId);
-
+  
     @Query("SELECT c FROM Contract c WHERE c.contractDate BETWEEN :startDate AND :endDate")
     List<Contract> findAllByPeriod(LocalDateTime startDate, LocalDateTime endDate);
 
     @Query("SELECT c FROM Contract c WHERE c.salesMembers.Id = :id AND c.contractDate BETWEEN :startDate AND :endDate")
     List<Contract> findAllByPeriodAndSalesMembersId(@Param("id") Long id, LocalDateTime startDate, LocalDateTime endDate);
-
-//    @Query("SELECT c FROM Contract c WHERE c.salesMembers.Id = :memberId AND c.contractDate BETWEEN :startDate AND :endDate")
-//    List<Contract> findAllByPeriodAndSalesMembersId(@Param("memberId") Long memberId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
-
 }

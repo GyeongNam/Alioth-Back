@@ -6,6 +6,9 @@ import com.alioth.server.domain.contract.dto.res.ContractResDto;
 import com.alioth.server.domain.contract.service.ContractService;
 import com.alioth.server.domain.dummy.domain.Custom;
 import com.alioth.server.domain.excel.dto.ExcelReqDto;
+import com.alioth.server.domain.contract.dto.res.ContractResDto;
+import com.alioth.server.domain.contract.service.ContractService;
+import com.alioth.server.domain.dummy.domain.Custom;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.res.SMTeamListResDto;
 import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
@@ -90,6 +93,7 @@ public class ExcelService {
             if (Character.isLetter(code.charAt(0))){
                 if (teamService.findByTeamCode(code).getDelYN().equals("N")) {
                     exportExcel(response, contractTeamList(code, dto));
+
                 } else {
                     throw new EntityNotFoundException("잘못된 팀이거나 삭제된 팀입니다.");
                 }
@@ -105,6 +109,7 @@ public class ExcelService {
         teamExist(salesMember);
         if (code == null || code.isEmpty()) {
             exportExcel(response, contractTeamList(salesMember.getTeam().getTeamCode(),dto));
+
         } else if (code.matches("\\d+")) {
             if(salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getTeam().getId()
                     .equals(salesMember.getTeam().getId())
@@ -156,6 +161,7 @@ public class ExcelService {
                 }
             } else {
                 exportExcel(response, customList(code, dto));
+
             }
         }
     }
@@ -191,6 +197,7 @@ public class ExcelService {
 
     public void salesMembersExcel(SalesMembers salesMember, String code, HttpServletResponse response
     ) throws IOException, IllegalAccessException {
+
         switch (salesMember.getRank()){
             case HQ:
                 salesMembersExcelHq(code, response);
@@ -206,6 +213,7 @@ public class ExcelService {
     // 사원 HQ 일 경우  code = null , 팀 코드
     private void salesMembersExcelHq(String code, HttpServletResponse response
     ) throws IOException, IllegalAccessException {
+
         if (code == null || code.isEmpty()) {
             List<SalesMemberResDto> list = salesMemberService.findAll();
             exportExcel(response, list);

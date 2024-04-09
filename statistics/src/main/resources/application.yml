@@ -17,6 +17,5 @@ spring:
       ddl-auto: none
     show-sql: true
 
-
 server:
   port: 8081
