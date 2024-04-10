@@ -24,7 +24,7 @@ public class BatchRankProduct {
 
     private Long productCode; // 상품 코드
 
-    private Long productCategory; // 상품 카테고리
+    private String productCategory; // 상품 카테고리
 
     private LocalDateTime createdDate; // 날짜
 

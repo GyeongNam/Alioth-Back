@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Table(name = "batch_hq_sales")
 @Entity
 @Builder
 @Getter

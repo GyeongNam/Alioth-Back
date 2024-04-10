@@ -28,10 +28,9 @@ public class BatchRankMember {
 
     private Long memberRank; // 사원 랭킹
 
-    private LocalDateTime createdDate; // 날짜
+    private LocalDateTime createdDate; // 날짜 (배치돌아가는 시간)
 
     private String contractPrice; // 계약 총금액
 
-    private String contractCount; // 계약 건수
-
+    private String contractCount; // 계약 건수 
 }
