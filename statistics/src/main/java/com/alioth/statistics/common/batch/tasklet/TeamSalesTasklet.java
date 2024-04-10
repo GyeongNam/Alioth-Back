@@ -97,7 +97,6 @@ public class TeamSalesTasklet {
             log.info("===========This is taskletTeamSales===========");
             log.info("==============================================");
 
-
             return RepeatStatus.FINISHED;
         });
     }

@@ -23,7 +23,7 @@ public class BatchHQSales {
     private String totalPrice;
 
     @Column(nullable = false)
-    private Long totalCount;
+    private String totalCount;
 
     @Column(nullable = false)
     private String cancelPrice;
