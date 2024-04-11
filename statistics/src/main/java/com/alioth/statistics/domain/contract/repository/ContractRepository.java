@@ -20,4 +20,6 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
     List<Contract> findBySalesMembersAndContractStatus(SalesMembers salesMembers, ContractStatus contractStatus);
 
     List<Contract> findBySalesMembersAndContractDateBetween(SalesMembers salesMembers, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    List<Contract> findByContractDateBetween(LocalDateTime startDate, LocalDateTime endDateTime);
 }
