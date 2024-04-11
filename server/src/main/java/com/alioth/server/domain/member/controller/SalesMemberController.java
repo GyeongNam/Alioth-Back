@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -110,5 +111,11 @@ public class SalesMemberController {
                 "success",
                 salesMemberService.updateMyInfo(memberId, dto)
         );
+    }
+
+    @GetMapping("/details-by-code/{salesMemberCode}")
+    public ResponseEntity<?> findMemberIdBySalesMemberCode(@PathVariable Long salesMemberCode) {
+        Long memberId = salesMemberService.findIdBySalesMemberCode(salesMemberCode);
+        return ResponseEntity.ok().body(Map.of("id", memberId));
     }
 }

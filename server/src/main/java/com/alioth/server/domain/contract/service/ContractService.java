@@ -151,8 +151,5 @@ public class ContractService {
         return contractRepository.findAll().stream().map(Contract::getCustom).toList();
     }
 
-    public String createContractCode(){
-        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        return date + UUID.randomUUID();
-    }
+
 }

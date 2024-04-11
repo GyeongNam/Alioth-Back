@@ -59,13 +59,17 @@ public class SalesMemberService {
 
     @Transactional
     public SalesMembers updatePassword(SalesMemberUpdatePassword dto, Long id) {
-        SalesMembers findMember = salesMemberRepository.findById(id).orElseThrow(()
-                -> new EntityNotFoundException("해당 계정을 찾을 수 없습니다."));
-        findMember.updatePassword(dto.password());
+        SalesMembers findMember = salesMemberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 계정을 찾을 수 없습니다."));
+        // 새로운 비밀번호를 암호화함요
+        String encodedPassword = passwordEncoder.encode(dto.password());
+        // 암호화된 비밀번호로 업데이트함요
+        findMember.updatePassword(encodedPassword);
         salesMemberRepository.save(findMember);
 
         return findMember;
     }
+
 
     public SalesMembers findById(Long memberId){
         return salesMemberRepository.findById(memberId).orElseThrow(()->
@@ -122,5 +126,16 @@ public class SalesMemberService {
         member.updateTeam(team);
         salesMemberRepository.save(member);
     }
+
+    // SalesMemberService.java
+
+    public Long findIdBySalesMemberCode(Long salesMemberCode) {
+        SalesMembers member = salesMemberRepository.findBySalesMemberCode(salesMemberCode)
+                .orElseThrow(() -> new EntityNotFoundException("사원번호가 존재하지 않습니다."));
+        return member.getId();
+    }
+
+
+
 
 }
