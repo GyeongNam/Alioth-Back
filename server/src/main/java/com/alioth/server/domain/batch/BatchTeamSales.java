@@ -2,10 +2,7 @@ package com.alioth.server.domain.batch;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class BatchTeamSales {
 
     @Id
@@ -21,7 +19,10 @@ public class BatchTeamSales {
     private Long Id;
 
     @Column(nullable = false)
-    private Long TeamCode;
+    private String teamCode;
+
+    @Column(nullable = false)
+    private String teamName ;
 
     @Column(nullable = false)
     private String contractPrice;

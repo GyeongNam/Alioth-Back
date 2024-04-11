@@ -5,10 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class BatchRankMember {
 
     /* 월 단위 */
@@ -26,6 +24,8 @@ public class BatchRankMember {
 
     private Long memberCode; // 사원 코드
 
+    private String memberName; // 사원 이름
+
     private Long memberRank; // 사원 랭킹
 
     private LocalDateTime createdDate; // 날짜
@@ -34,4 +34,8 @@ public class BatchRankMember {
 
     private String contractCount; // 계약 건수
 
+
+    public void updateMemberRank(Long rank) {
+        this.memberRank = rank;
+    }
 }

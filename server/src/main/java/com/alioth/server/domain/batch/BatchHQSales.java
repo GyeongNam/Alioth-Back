@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Table(name = "batch_hq_sales")
 @Entity
 @Builder
 @Getter
@@ -22,7 +23,7 @@ public class BatchHQSales {
     private String totalPrice;
 
     @Column(nullable = false)
-    private Long totalCount;
+    private String totalCount;
 
     @Column(nullable = false)
     private String cancelPrice;

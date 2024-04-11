@@ -22,7 +22,9 @@ public class BatchRankProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    private Long productCode; // 상품 코드
+    private String productName; // 상품 이름
+
+    private String productCode; // 상품 코드
 
     private String productCategory; // 상품 카테고리
 
