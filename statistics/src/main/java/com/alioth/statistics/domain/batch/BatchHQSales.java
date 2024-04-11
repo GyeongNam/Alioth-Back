@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Table(name = "batch_hq_sales")
 @Entity
 @Builder
@@ -30,6 +32,9 @@ public class BatchHQSales {
 
     @Column(nullable = false)
     private String cancelCount;
+
+    @Column(nullable = false)
+    private LocalDateTime createdDate; // 날짜
 
 
 

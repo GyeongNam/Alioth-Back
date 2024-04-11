@@ -40,7 +40,7 @@ public class TeamSalesTasklet {
         int day = now.getDayOfMonth();
         int hour = now.getHour();
         int minute = now.getMinute();
-        LocalDateTime time = LocalDateTime.of(year, month, day, hour, minute);
+        LocalDateTime time = LocalDateTime.of(year, month, day, hour, minute, 0, 0);
 
         return ((contribution, chunkContext) -> {
 

@@ -36,7 +36,7 @@ public class HqSalesTasklet {
         int day = now.getDayOfMonth();
         int hour = now.getHour();
         int minute = now.getMinute();
-        LocalDateTime time = LocalDateTime.of(year, month, day, hour, minute);
+        LocalDateTime time = LocalDateTime.of(year, month, day, hour, minute, 0, 0);
 
         return ((contribution, chunkContext) -> {
             log.info("============================================");
@@ -73,6 +73,7 @@ public class HqSalesTasklet {
                     .totalCount(String.valueOf(totalCount))
                     .cancelPrice(cancellationTotalPrice.toPlainString())
                     .cancelCount(String.valueOf(cancellationCount))
+                    .createdDate(time)
                     .build();
 
             batchHQSalesRepository.save(hqSales);
