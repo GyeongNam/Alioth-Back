@@ -14,7 +14,7 @@ public class FireBaseConfig {
     @PostConstruct
     public void init(){
         try{
-            FileInputStream serviceAccount = new FileInputStream(System.getProperty("user.dir")+"/server/src/main/resources/firebase/aliothfcm-firebase-adminsdk-fye6y-a496184283.json");
+            FileInputStream serviceAccount = new FileInputStream(System.getProperty("user.dir")+"/server/src/main/resources/firebase/alioth-fcm-firebase-adminsdk-tforn-c7ffd79e05.json");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();

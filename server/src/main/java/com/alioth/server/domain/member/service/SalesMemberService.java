@@ -57,15 +57,19 @@ public class SalesMemberService {
         return MemberCode;
     }
 
+    // Use salesMemberCode instead of the ID to find the member
     @Transactional
-    public SalesMembers updatePassword(SalesMemberUpdatePassword dto, Long id) {
-        SalesMembers findMember = salesMemberRepository.findById(id).orElseThrow(()
-                -> new EntityNotFoundException("해당 계정을 찾을 수 없습니다."));
-        findMember.updatePassword(dto.password());
+    public SalesMembers updatePassword(SalesMemberUpdatePassword dto, Long salesMemberCode) {
+        SalesMembers findMember = salesMemberRepository.findBySalesMemberCode(salesMemberCode)
+                .orElseThrow(() -> new EntityNotFoundException("해당 계정을 찾을 수 없습니다."));
+        String encodedPassword = passwordEncoder.encode(dto.password());
+        findMember.updatePassword(encodedPassword);
         salesMemberRepository.save(findMember);
 
         return findMember;
     }
+
+
 
     public SalesMembers findById(Long memberId){
         return salesMemberRepository.findById(memberId).orElseThrow(()->
@@ -122,5 +126,6 @@ public class SalesMemberService {
         member.updateTeam(team);
         salesMemberRepository.save(member);
     }
+
 
 }
