@@ -55,17 +55,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException e) {
             log.info("ExpiredJwtException 메시지" + e.getMessage());
             String accessToken = parseBearerToken(request);
-//            String name = jwtTokenProvider.decodeJwtPayloadSubject(accessToken).split(":")[0];
-//            String reqRefreshToken = parseBearerTokenRefresh(request);
-//            String refreshToken = redisService.getValues(name + ":RefreshToken");
-//
-//            //if(reqRefreshToken == refreshToken) {
             String newAccessToken = jwtTokenProvider.recreateAccessToken(accessToken);
             String newRefreshToken = jwtTokenProvider.createRefreshToken();
-//            User user = parseUserSpecification(newAccessToken);
-//            AbstractAuthenticationToken authenticated = UsernamePasswordAuthenticationToken.authenticated(user, newAccessToken, user.getAuthorities());
-//            authenticated.setDetails(new WebAuthenticationDetails(request));
-//            SecurityContextHolder.getContext().setAuthentication(authenticated);
+
             response.setHeader("access-Token", newAccessToken);
             response.setHeader("fresh-Token", newRefreshToken);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
