@@ -11,12 +11,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -49,36 +45,20 @@ public class LoginController {
         );
     }
 
-    @GetMapping("/api/test")
-    public String testUrl() {
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        smsService.sendSMS("+8201086253122","spring 에서 테스트");
-        return name;
-    }
-
-
     @PostMapping("/api/send-verification")
     public ResponseEntity<?> sendVerificationCode(@RequestBody Map<String, String> payload) {
         String phoneNumber = payload.get("phone");
-        String verificationCode = generateVerificationCode(6); // 6자리 인증번호 생성
+        String verificationCode = loginService.generateVerificationCode(6);
 
         ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
         ops.set(phoneNumber, verificationCode, 5, TimeUnit.MINUTES); // Redis에 5분간 저장
 
-        smsService.sendSMS(phoneNumber, "alioth 비밀번호찾기 인증번호 : " + verificationCode);
+        smsService.sendSMS(phoneNumber, "[alioth] 본인확인 인증번호는 " + verificationCode + "입니다");
+
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
                 "인증번호가 발송되었습니다."
         );
-    }
-
-    private String generateVerificationCode(int length) {
-        Random random = new Random();
-        StringBuilder builder = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            builder.append(random.nextInt(10)); // 0-9 사이의 숫자 추가
-        }
-        return builder.toString();
     }
 
 
@@ -91,7 +71,7 @@ public class LoginController {
 
         boolean isVerified = storedCode != null && storedCode.equals(code);
         if(isVerified) {
-            stringRedisTemplate.delete(phoneNumber); // 인증 후 코드 삭제
+            stringRedisTemplate.delete(phoneNumber);
         }
 
         return CommonResponse.responseMessage(
