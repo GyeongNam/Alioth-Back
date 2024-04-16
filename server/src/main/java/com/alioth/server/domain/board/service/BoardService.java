@@ -111,9 +111,11 @@ public class BoardService {
 
     public BoardResDto detail(Long sm_code, Long boardId) {
         Board board = this.findByBoardIdAndBoardDel_YN(boardId, "N");
-        if(!Objects.equals(board.getSalesMembers().getSalesMemberCode(), sm_code)){
-            throw new AccessDeniedException("게시글의 작성한 사원이 아닙니다.");
+
+        if (BoardType.SUGGESTION.equals(board.getBoardType()) && !Objects.equals(board.getSalesMembers().getSalesMemberCode(), sm_code)) {
+            throw new AccessDeniedException("게시글을 작성한 사원만 접근할 수 있습니다.");
         }
+
         return typeChange.BoardToBoardResDto(board);
     }
 }

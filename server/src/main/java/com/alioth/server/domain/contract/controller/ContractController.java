@@ -1,5 +1,6 @@
 package com.alioth.server.domain.contract.controller;
 
+import com.alioth.server.common.jwt.JwtTokenProvider;
 import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.contract.dto.req.ContractCreateDto;
 import com.alioth.server.domain.contract.dto.req.ContractUpdateDto;
@@ -23,6 +24,7 @@ import java.util.List;
 public class ContractController {
 
     private final ContractService contractService;
+    private final JwtTokenProvider  jwtTokenProvider;
 
 
     @PostMapping("/create")
