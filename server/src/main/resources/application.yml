@@ -16,5 +16,5 @@ spring:
       host: localhost
       port: 6379
 firebase:
-  api-url: "https://fcm.googleapis.com/v1/projects/aliothfcm/messages:send"
-  config-path: "/firebase/aliothfcm-firebase-adminsdk-fye6y-a496184283.json"
+  api-url: "https://fcm.googleapis.com/v1/projects/alioth-fcm/messages:send"
+  config-path: "/firebase/alioth-fcm-firebase-adminsdk-tforn-c7ffd79e05.json"

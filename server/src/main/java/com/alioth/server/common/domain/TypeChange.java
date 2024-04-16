@@ -145,8 +145,11 @@ public class TypeChange {
                 .insuranceProductName(contract.getInsuranceProduct() != null ? contract.getInsuranceProduct().getInsuranceName() : null)
                 .customName(contract.getCustom() != null ? contract.getCustom().getCustomerName() : null)
                 .contractMemberName(contract.getContractMembers() != null ? contract.getContractMembers().getCM_name() : null)
+                .salesMemberName(contract.getSalesMembers() != null ? contract.getSalesMembers().getName() : null)  // 영업 사원 이름 추가
+                .salesMemberId(contract.getSalesMembers() != null ? contract.getSalesMembers().getId() : null)    // 영업 사원 ID 추가
                 .build();
     }
+
 
 
     // 일정
@@ -183,6 +186,8 @@ public class TypeChange {
                 .content(board.getContent())
                 .boardType(board.getBoardType())
                 .memberId(board.getSalesMembers().getId())
+                .created_at(board.getCreated_at())  // 날짜 필드 추가
+                .updated_at(board.getUpdated_at())
                 .build();
     }
 

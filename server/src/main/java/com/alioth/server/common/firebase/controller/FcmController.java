@@ -22,7 +22,6 @@ import java.io.IOException;
 public class FcmController {
 
     private final FcmService fcmService;
-
     @PostMapping("/send")
     public ResponseEntity<CommonResponse> pushMessage(@RequestBody @Validated FcmSendDto fcmSendDto) throws IOException {
         log.debug("메시지를 전송합니다.");

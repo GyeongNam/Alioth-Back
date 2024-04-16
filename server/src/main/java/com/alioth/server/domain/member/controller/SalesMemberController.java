@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -39,20 +40,22 @@ public class SalesMemberController {
                 .body(commonResponse);
     }
 
-    @PatchMapping("/{id}/password")
+    // Change the path variable from {id} to {salesMemberCode}
+    @PatchMapping("/{salesMemberCode}/password")
     public ResponseEntity<?> updateMemberPassword(@RequestBody @Valid SalesMemberUpdatePassword dto,
-                                                  @PathVariable("id")Long id) {
-        SalesMembers member = salesMemberService.updatePassword(dto, id);
+                                                  @PathVariable("salesMemberCode") Long salesMemberCode) {
+        SalesMembers member = salesMemberService.updatePassword(dto, salesMemberCode);
 
         CommonResponse commonResponse = CommonResponse.builder()
                 .httpStatus(HttpStatus.OK)
-                .message(member.getName() + "님 비밀번호 변경되었습니다.")
+                .message(member.getName() + "님의 비밀번호가 변경되었습니다.")
                 .result(member.getSalesMemberCode())
                 .build();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(commonResponse);
     }
+
 
     @PatchMapping("/{id}/info")
     public ResponseEntity<?> updateMemberInfo(@PathVariable("id")Long id) {
