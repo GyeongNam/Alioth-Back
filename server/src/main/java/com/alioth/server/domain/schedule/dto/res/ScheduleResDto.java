@@ -10,6 +10,7 @@ public record ScheduleResDto(
          Long scheduleId,
          LocalDateTime scheduleStartTime,
          LocalDateTime scheduleEndTime,
+         String scheduleTitle,
          String scheduleNote,
          ScheduleType scheduleType,
          String allDay,

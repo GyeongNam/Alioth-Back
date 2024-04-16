@@ -153,6 +153,7 @@ public class TypeChange {
     public Schedule ScheduleCreateDtoToSchedule(ScheduleReqDto scheduleReqDto, SalesMembers salesMembers){
         return Schedule.builder()
                 .scheduleStartTime(scheduleReqDto.scheduleStartTime())
+                .scheduleTitle(scheduleReqDto.scheduleTitle())
                 .scheduleEndTime(scheduleReqDto.scheduleEndTime())
                 .scheduleNote(scheduleReqDto.scheduleNote())
                 .scheduleType(scheduleReqDto.scheduleType())
@@ -164,6 +165,7 @@ public class TypeChange {
     public ScheduleResDto ScheduleToScheduleResDto(Schedule schedule){
         return ScheduleResDto.builder()
                 .scheduleId(schedule.getScheduleId())
+                .scheduleTitle(schedule.getScheduleTitle())
                 .scheduleStartTime(schedule.getScheduleStartTime())
                 .scheduleEndTime(schedule.getScheduleEndTime())
                 .scheduleNote(schedule.getScheduleNote())
