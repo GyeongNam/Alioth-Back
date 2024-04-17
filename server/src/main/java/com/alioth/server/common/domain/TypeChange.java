@@ -157,6 +157,7 @@ public class TypeChange {
                 .scheduleEndTime(scheduleReqDto.scheduleEndTime())
                 .scheduleNote(scheduleReqDto.scheduleNote())
                 .scheduleType(scheduleReqDto.scheduleType())
+                .color(scheduleReqDto.color())
                 .allDay(scheduleReqDto.allDay())
                 .salesMembers(salesMembers) // 사원
                 .build();
@@ -170,9 +171,10 @@ public class TypeChange {
                 .scheduleEndTime(schedule.getScheduleEndTime())
                 .scheduleNote(schedule.getScheduleNote())
                 .scheduleType(schedule.getScheduleType())
+                .color(schedule.getColor())
                 .allDay(schedule.getAllDay())
                 .del_yn(schedule.getScheduleDel_YN())
-                .memberId(schedule.getSalesMembers().getId())
+                .memberId(schedule.getSalesMembers().getSalesMemberCode())
                 .build();
     }
 

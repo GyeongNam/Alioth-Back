@@ -33,6 +33,9 @@ public class Schedule extends BaseEntity {
     private String scheduleNote;
 
     @Column(nullable = false)
+    private String color;
+
+    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private ScheduleType scheduleType;
 
