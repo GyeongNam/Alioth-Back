@@ -63,11 +63,17 @@ public class Schedule extends BaseEntity {
         if(scheduleUpdateDto.scheduleNote() != null){
             this.scheduleNote = scheduleUpdateDto.scheduleNote();
         }
+        if(scheduleUpdateDto.scheduleTitle() != null){
+            this.scheduleTitle = scheduleUpdateDto.scheduleTitle();
+        }
         if(scheduleUpdateDto.scheduleType() != null){
             this.scheduleType = scheduleUpdateDto.scheduleType();
         }
         if(scheduleUpdateDto.allDay() != null){
             this.allDay = scheduleUpdateDto.allDay();
+        }
+        if(scheduleUpdateDto.color() != null){
+            this.color = scheduleUpdateDto.color();
         }
     }
 }
