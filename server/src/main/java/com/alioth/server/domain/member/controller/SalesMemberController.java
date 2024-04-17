@@ -66,9 +66,9 @@ public class SalesMemberController {
 
     //HJ
     //관리자 사원 부서, 권한, 고과평가 수정
-    @PatchMapping("/admin/update/{memberId}")
+    @PatchMapping("/admin/update/{salesMemberCode}")
     public ResponseEntity<CommonResponse> updateMemberAdminInfo(
-            @PathVariable("memberId") Long memberId,
+            @PathVariable("salesMemberCode") Long salesMemberCode,
             @RequestBody @Valid SMAdminUpdateReqDto dto,
             @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
@@ -77,7 +77,7 @@ public class SalesMemberController {
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
                     "successfully updated",
-                    salesMemberService.adminMemberUpdate(memberId,dto)
+                    salesMemberService.adminMemberUpdate(salesMemberCode,dto)
             );
         } else {
             throw new AccessDeniedException("권한이 없습니다.");
@@ -85,17 +85,18 @@ public class SalesMemberController {
     }
 
 //    사원 상세 조회 (지점장, 지역장)
-    @GetMapping("/details/{memberId}")
+    @GetMapping("/details/{salesMemberCode}")
     public ResponseEntity<CommonResponse> getMemberInfoAdmin(
-            @PathVariable("memberId") Long memberId,
+            @PathVariable("salesMemberCode") Long salesMemberCode,
             @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
         if (salesMemberService.findBySalesMemberCode(
-                Long.parseLong(userDetails.getUsername())).getRank() != SalesMemberType.FP) {
+                Long.parseLong(userDetails.getUsername())).getRank() != SalesMemberType.FP ||
+                Long.parseLong(userDetails.getUsername()) == salesMemberService.findBySalesMemberCode(salesMemberCode).getSalesMemberCode()) {
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
                     "success",
-                    salesMemberService.memberDetail(memberId)
+                    salesMemberService.memberDetail(salesMemberCode)
             );
         } else {
             throw new AccessDeniedException("권한이 없습니다.");
@@ -107,11 +108,10 @@ public class SalesMemberController {
     public ResponseEntity<CommonResponse> updateMyInfo(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody @Valid SalesMemberUpdateReqDto dto) {
-        Long memberId = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername())).getId();
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
                 "success",
-                salesMemberService.updateMyInfo(memberId, dto)
+                salesMemberService.updateMyInfo(Long.parseLong(userDetails.getUsername()), dto)
         );
     }
 }
