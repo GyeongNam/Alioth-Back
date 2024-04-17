@@ -91,7 +91,8 @@ public class SalesMemberController {
             @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
         if (salesMemberService.findBySalesMemberCode(
-                Long.parseLong(userDetails.getUsername())).getRank() != SalesMemberType.FP) {
+                Long.parseLong(userDetails.getUsername())).getRank() != SalesMemberType.FP ||
+                Long.parseLong(userDetails.getUsername()) == salesMemberService.findById(memberId).getSalesMemberCode()) {
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
                     "success",
