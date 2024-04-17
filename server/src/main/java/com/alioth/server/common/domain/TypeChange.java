@@ -159,7 +159,7 @@ public class TypeChange {
                 .scheduleType(scheduleReqDto.scheduleType())
                 .color(scheduleReqDto.color())
                 .allDay(scheduleReqDto.allDay())
-                .salesMembers(salesMembers) // 사원
+                .salesMembers(salesMembers)
                 .build();
     }
 
@@ -186,7 +186,7 @@ public class TypeChange {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .boardType(board.getBoardType())
-                .memberId(board.getSalesMembers().getId())
+                .memberId(board.getSalesMembers().getSalesMemberCode())
                 .build();
     }
 
