@@ -3,7 +3,6 @@ package com.alioth.server.domain.board.service;
 import com.alioth.server.common.domain.TypeChange;
 import com.alioth.server.common.firebase.domain.FcmSendDto;
 import com.alioth.server.common.firebase.service.FcmService;
-import com.alioth.server.common.firebase.service.FcmServiceImpl;
 import com.alioth.server.common.redis.RedisService;
 import com.alioth.server.domain.board.domain.Board;
 import com.alioth.server.domain.board.domain.BoardType;
@@ -12,8 +11,11 @@ import com.alioth.server.domain.board.dto.req.BoardUpdateDto;
 import com.alioth.server.domain.board.dto.res.BoardResDto;
 import com.alioth.server.domain.board.repository.BoardRepository;
 import com.alioth.server.domain.member.domain.SalesMembers;
-import com.alioth.server.domain.member.repository.SalesMemberRepository;
 import com.alioth.server.domain.member.service.SalesMemberService;
+import com.alioth.server.domain.notification.domain.Notification;
+import com.alioth.server.domain.notification.domain.ReadStatus;
+import com.alioth.server.domain.notification.repository.NotificationRepository;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,6 +40,7 @@ public class BoardService {
     private final SalesMemberService salesMemberService;
     private final FcmService fcmService;
     private final RedisService redisService;
+    private final NotificationRepository notificationRepository;
 
 
     public Board findById(Long BoardId){
@@ -54,24 +58,35 @@ public class BoardService {
     }
 
     public BoardResDto save(BoardCreateDto boardCreateDto, Long sm_code) throws IOException {
-        SalesMembers salesMembers = salesMemberService.findBySalesMemberCode(sm_code);
-        Board board = typeChange.BoardCreateDtoToBoard(boardCreateDto, salesMembers);
+        SalesMembers author = salesMemberService.findBySalesMemberCode(sm_code);
+        Board board = typeChange.BoardCreateDtoToBoard(boardCreateDto, author);
         boardRepository.save(board);
 
         if (board.getBoardType() == BoardType.SUGGESTION) {
-            String fcmToken = redisService.getFcmToken(sm_code);
-            if (fcmToken != null) {
-                FcmSendDto fcmSendDto = FcmSendDto.builder()
-                        .token(fcmToken)
+            List<SalesMembers> teamMembers = salesMemberService.getAllMembersByTeam(author.getTeam().getId());
+            // 각 팀 멤버에 대해 알림을 생성합니다.
+            for (SalesMembers member : teamMembers) {
+                String uniqueId = UUID.randomUUID().toString(); // 고유 식별자 생성
+                Notification notification = Notification.builder()
+                        .salesMember(member)
                         .title("새 건의사항")
-                        .body("새로운 건의사항이 등록되었습니다: " + board.getTitle())
-                        .url("/BoardList")
+                        .message("새로운 건의사항이 등록되었습니다: " + board.getTitle())
+                        .readStatus(ReadStatus.Unread)
+                        .messageId(uniqueId)
                         .build();
+                notificationRepository.save(notification);
 
-                fcmService.sendMessageTo(fcmSendDto);
-            } else {
-                log.error("유효한 FCM 토큰이 없습니다.");
-                throw new IllegalArgumentException("유효한 토큰이 없습니다.");
+                // FCM 토큰이 있는 경우에만 FCM 메시지를 보냅니다.
+                String fcmToken = redisService.getFcmToken(member.getSalesMemberCode());
+                if (fcmToken != null) {
+                    FcmSendDto fcmSendDto = FcmSendDto.builder()
+                            .token(fcmToken)
+                            .title("새 건의사항")
+                            .body("새로운 건의사항이 등록되었습니다: " + board.getTitle())
+                            .url("/BoardList")
+                            .build();
+                    fcmService.sendMessageTo(fcmSendDto);
+                }
             }
         }
         return typeChange.BoardToBoardResDto(board);

@@ -97,15 +97,14 @@ public class ContractService {
         }
         return contracts.stream()
                 .map(typeChange::ContractToContractResDto)
-                .collect(Collectors.toList());
-
+                .toList();
     }
 
 
     public List<ContractResDto> listAllContracts() {
         return contractRepository.findAll().stream()
                     .map(typeChange::ContractToContractResDto)
-                    .collect(Collectors.toList());
+                    .toList();
     }
 
     public List<ContractResDto> findAllContractsByPeriod(ExcelReqDto dto) {
