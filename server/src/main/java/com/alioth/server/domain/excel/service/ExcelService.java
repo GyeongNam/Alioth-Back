@@ -220,7 +220,7 @@ public class ExcelService {
         } else if (Character.isLetter(code.charAt(0))) {
             Team team = teamService.findByTeamCode(code);
             if (team.getDelYN().equals("N")) {
-                List<SMTeamListResDto> memberList = teamService.findAllByTeamId(team.getId());
+                List<SMTeamListResDto> memberList = teamService.findAllByTeamCode(code);
                 exportExcel(response, memberList);
             }
             else{
@@ -235,7 +235,7 @@ public class ExcelService {
     private void salesMembersExcelManager(SalesMembers salesMember, HttpServletResponse response
     ) throws IOException, IllegalAccessException {
         teamExist(salesMember);
-        exportExcel(response, teamService.findAllByTeamId(salesMember.getTeam().getId()));
+        exportExcel(response, teamService.findAllByTeamCode(salesMember.getTeam().getTeamCode()));
     }
 
     public <T> void exportExcel(HttpServletResponse response, List<T> list) throws IOException, IllegalAccessException {

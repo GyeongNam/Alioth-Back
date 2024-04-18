@@ -101,12 +101,12 @@ public class ContractService {
 
     }
 
-    public List<ContractResDto> listAllActiveContracts() {
+/*    public List<ContractResDto> listAllActiveContracts() {
         List<Contract> activeContracts = contractRepository.findAllByStatusNot(ContractStatus.Cancellation);
         return activeContracts.stream()
                 .map(typeChange::ContractToContractResDto)
                 .collect(Collectors.toList());
-    }
+    }*/
 
 
     public List<ContractResDto> listAllContracts() {

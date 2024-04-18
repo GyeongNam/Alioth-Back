@@ -114,4 +114,22 @@ public class SalesMemberController {
                 salesMemberService.updateMyInfo(Long.parseLong(userDetails.getUsername()), dto)
         );
     }
+
+    //전체 사원 목록
+    @GetMapping("/list")
+    public ResponseEntity<CommonResponse> memberList(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) throws AccessDeniedException {
+        if (salesMemberService.findBySalesMemberCode(
+                Long.parseLong(userDetails.getUsername())).getRank() == SalesMemberType.HQ) {
+            return CommonResponse.responseMessage(
+                    HttpStatus.OK,
+                    "success",
+                    salesMemberService.getAllMembers()
+            );
+        } else {
+            throw new AccessDeniedException("권한이 없습니다.");
+        }
+
+    }
 }

@@ -8,6 +8,7 @@ import com.alioth.server.domain.member.dto.res.SMTeamListResDto;
 import com.alioth.server.domain.member.service.SalesMemberService;
 import com.alioth.server.domain.team.domain.Team;
 import com.alioth.server.domain.team.dto.TeamReqDto;
+import com.alioth.server.domain.team.dto.TeamResDto;
 import com.alioth.server.domain.team.service.TeamService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +47,7 @@ public class TeamController {
                 List<SMTeamListResDto> list = team.getTeamMembers().stream().map(typeChange::smToSmTeamListResDto).toList();
                 return CommonResponse.responseMessage(
                         HttpStatus.CREATED,
-                        "successfully created",
-                        typeChange.teamToTeamReqDto(team,list)
+                        "successfully created"
                 );
                 //팀장에 MANAGER 직급 아닌 경우
             } else {
@@ -59,14 +59,35 @@ public class TeamController {
         }
     }
 
+    //팀 목록
+    @GetMapping("/list")
+    public ResponseEntity<CommonResponse> getTeamList( @AuthenticationPrincipal UserDetails userDetails
+    ) throws AccessDeniedException {
+        log.info("1231231_"+userDetails.getUsername());
+        if (this.loginUser(userDetails).getRank() == SalesMemberType.HQ) {
+            List<TeamResDto> list = new ArrayList<>();
+            for(Team t : teamService.findAll()) {
+                String teamManagerName = salesMemberService.findBySalesMemberCode(t.getTeamManagerCode()).getName();
+                list.add(typeChange.teamToTeamResDto(t,teamManagerName));
+            }
+            return CommonResponse.responseMessage(
+                    HttpStatus.CREATED,
+                    "successfully loaded",
+                    list
+            );
+        } else {
+            throw new AccessDeniedException("권한이 없습니다.");
+        }
+    }
+
     //팀 정보 수정
-    @PatchMapping("/update/{teamId}")
+    @PatchMapping("/update/{teamCode}")
     public ResponseEntity<CommonResponse> updateTeam(@RequestBody @Valid TeamReqDto dto,
-                                                     @PathVariable("teamId") Long id,
+                                                     @PathVariable("teamCode") String teamCode,
                                                      @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
         if (this.loginUser(userDetails).getRank() != SalesMemberType.FP) {
-            teamService.updateTeam(dto, id);
+            teamService.updateTeam(dto, teamCode);
             return CommonResponse.responseMessage(
                     HttpStatus.CREATED, "successfully updated"
             );
@@ -75,12 +96,12 @@ public class TeamController {
         }
     }
 
-    @DeleteMapping("/delete/{teamId}")
-    public ResponseEntity<CommonResponse> deleteTeam(@PathVariable("teamId") Long id,
+    @DeleteMapping("/delete/{teamCode}")
+    public ResponseEntity<CommonResponse> deleteTeam(@PathVariable("teamCode") String teamCode,
                                                      @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
         if(this.loginUser(userDetails).getRank()==SalesMemberType.HQ){
-            teamService.deleteTeam(id);
+            teamService.deleteTeam(teamCode);
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
                     "successfully deleted"
@@ -90,15 +111,18 @@ public class TeamController {
         }
     }
 
-    @GetMapping("/detail/{teamId}")
-    public ResponseEntity<CommonResponse> teamDetail(@PathVariable("teamId") Long id,
+    @GetMapping("/detail/{teamCode}")
+    public ResponseEntity<CommonResponse> teamDetail(@PathVariable("teamCode") String teamCode,
                                                      @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
         if(this.loginUser(userDetails).getRank()!=SalesMemberType.FP){
+            Team team = teamService.findByCode(teamCode);
+            String teamManagerName = salesMemberService.findBySalesMemberCode(team.getTeamManagerCode()).getName();
+            List<SMTeamListResDto> list = teamService.findAllByTeamCode(teamCode);
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
                     "successfully loaded",
-                    teamService.findByTeamId(id)
+                    typeChange.teamToTeamResDto(team,teamManagerName,list)
             );
         } else {
             throw new AccessDeniedException("권한이 없습니다");
@@ -106,9 +130,9 @@ public class TeamController {
     }
 
     //팀원 추가
-    @PostMapping("/addMembers/{teamId}")
+    @PostMapping("/addMembers/{teamCode}")
     public ResponseEntity<CommonResponse> addMembers(@RequestBody List<Long> salesMemeberList,
-                                                     @PathVariable("teamId") Long teamId,
+                                                     @PathVariable("teamCode") String teamCode,
                                                      @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
         if(this.loginUser(userDetails).getRank()!=SalesMemberType.FP) {
@@ -116,11 +140,11 @@ public class TeamController {
             for (Long salesMemberCode : salesMemeberList) {
                 SalesMembers member = salesMemberService.findBySalesMemberCode(salesMemberCode);
                 if (member.getQuit().equals("N")) {
-                    salesMemberService.updateTeam(member.getId(), teamService.findById(teamId));
+                    salesMemberService.updateTeam(member.getId(), teamService.findByTeamCode(teamCode));
                     teamMembers.add(member);
                 }
             }
-            teamService.addMembersToTeam(teamId, teamMembers);
+            teamService.addMembersToTeam(teamCode, teamMembers);
             return CommonResponse.responseMessage(
                     HttpStatus.CREATED,
                     "successfully added"

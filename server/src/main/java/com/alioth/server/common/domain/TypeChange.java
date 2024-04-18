@@ -86,11 +86,18 @@ public class TypeChange {
 
 
     // 팀
-    public TeamResDto teamToTeamReqDto(Team team, List<SMTeamListResDto> list){
+    public TeamResDto teamToTeamResDto(Team team,String teamManagerName){
         return TeamResDto.builder()
                 .teamCode(team.getTeamCode())
                 .teamName(team.getTeamName())
-                .teamManagerCode(team.getTeamManagerCode())
+                .teamManagerName(teamManagerName)
+                .build();
+    }
+    public TeamResDto teamToTeamResDto(Team team, String teamManagerName, List<SMTeamListResDto> list){
+        return TeamResDto.builder()
+                .teamCode(team.getTeamCode())
+                .teamName(team.getTeamName())
+                .teamManagerName(teamManagerName)
                 .teamMemberList(list)
                 .build();
     }

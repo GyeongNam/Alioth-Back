@@ -119,6 +119,13 @@ public class SalesMemberService {
         return typeChange.smToSmResDto(member);
     }
 
+    @Transactional
+    public List<SalesMemberResDto> getAllMembers(){
+        return salesMemberRepository.findAll().stream().
+            map(typeChange::smToSmResDto).toList();
+    }
+
+
     public void updateTeam(Long memberId,Team team){
         SalesMembers member = this.findById(memberId);
         member.updateTeam(team);
