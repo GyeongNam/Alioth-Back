@@ -78,6 +78,9 @@ public class Schedule extends BaseEntity {
         if(scheduleUpdateDto.color() != null){
             this.color = scheduleUpdateDto.color();
         }
+        if(scheduleUpdateDto.share() != null){
+            this.share = scheduleUpdateDto.share();
+        }
     }
 }
 
