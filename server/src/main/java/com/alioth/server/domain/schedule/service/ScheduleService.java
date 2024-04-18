@@ -63,18 +63,23 @@ public class ScheduleService {
     public List<ScheduleResDto> list(Long sm_code) {
         SalesMembers salesMembers = salesMemberService.findBySalesMemberCode(sm_code);
 
-
         if(salesMembers.getRank() == SalesMemberType.HQ){
-//            return
+            return scheduleRepository.findAllByScheduleDel_YN("N").stream()
+                    .map(typeChange::ScheduleToScheduleResDto).toList();
         }
 
         if(salesMembers.getRank() == SalesMemberType.MANAGER){
-//            return
+            return scheduleRepository.findAllTeamSchedule(
+                    salesMembers.getTeam().getTeamManagerCode()
+            )
+                    .stream()
+                    .map(typeChange::ScheduleToScheduleResDto)
+                    .toList();
         }
 
-        return scheduleRepository.findAllBySalesMembersAndScheduleDel_YN(salesMembers , "N")
+        return scheduleRepository.findAllFPSchedule(salesMembers , salesMembers.getTeam().getTeamManagerCode())
                 .stream()
                 .map(typeChange::ScheduleToScheduleResDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
