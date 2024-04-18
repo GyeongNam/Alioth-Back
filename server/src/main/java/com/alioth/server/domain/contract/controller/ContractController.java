@@ -58,7 +58,6 @@ public class ContractController {
     }
 
 
-
     @GetMapping("/detail/{contractId}")
     public ResponseEntity<CommonResponse> getContractDetail(@PathVariable Long contractId) {
         ContractResDto contractDetail = contractService.getContractDetails(contractId);

@@ -25,5 +25,4 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
 
     List<Contract> findAllByContractStatus(ContractStatus status);
 
-
 }
