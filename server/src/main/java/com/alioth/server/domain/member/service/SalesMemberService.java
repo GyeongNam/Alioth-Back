@@ -124,4 +124,8 @@ public class SalesMemberService {
         member.updateTeam(team);
         salesMemberRepository.save(member);
     }
+
+    public List<SalesMembers> getAllMembersByTeam(Long teamId) {
+        return salesMemberRepository.findAllByTeamId(teamId);
+    }
 }
