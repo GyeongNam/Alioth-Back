@@ -7,6 +7,7 @@ import com.alioth.server.domain.contract.dto.req.ContractCreateDto;
 import com.alioth.server.domain.contract.dto.req.ContractUpdateDto;
 import com.alioth.server.domain.contract.dto.res.ContractResDto;
 import com.alioth.server.domain.contract.service.ContractService;
+import com.alioth.server.domain.dummy.domain.ContractStatus;
 import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -51,10 +52,11 @@ public class ContractController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<CommonResponse> listAllContracts() {
-        List<ContractResDto> contracts = contractService.listAllActiveContracts(); // 수정된 메소드 호출
-        return CommonResponse.responseMessage(HttpStatus.OK, "활성 계약 목록을 성공적으로 조회했습니다.", contracts);
+    public ResponseEntity<CommonResponse> listContractsByStatus(@RequestParam(required = false) ContractStatus status) {
+        List<ContractResDto> contracts = contractService.findAllContractsByStatus(status);
+        return CommonResponse.responseMessage(HttpStatus.OK, "계약 목록을 성공적으로 조회했습니다.", contracts);
     }
+
 
     @GetMapping("/detail/{contractId}")
     public ResponseEntity<CommonResponse> getContractDetail(@PathVariable Long contractId) {

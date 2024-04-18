@@ -88,6 +88,19 @@ public class ContractService {
         contractRepository.save(contract);  // 변경된 상태를 저장
     }
 
+    public List<ContractResDto> findAllContractsByStatus(ContractStatus status) {
+        List<Contract> contracts;
+        if (status == null) {
+            contracts = contractRepository.findAll();
+        } else {
+            contracts = contractRepository.findAllByContractStatus(status);
+        }
+        return contracts.stream()
+                .map(typeChange::ContractToContractResDto)
+                .collect(Collectors.toList());
+
+    }
+
     public List<ContractResDto> listAllActiveContracts() {
         List<Contract> activeContracts = contractRepository.findAllByStatusNot(ContractStatus.Cancellation);
         return activeContracts.stream()
