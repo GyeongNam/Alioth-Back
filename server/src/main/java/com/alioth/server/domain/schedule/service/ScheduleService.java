@@ -1,6 +1,7 @@
 package com.alioth.server.domain.schedule.service;
 
 import com.alioth.server.common.domain.TypeChange;
+import com.alioth.server.domain.member.domain.SalesMemberType;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.service.SalesMemberService;
 import com.alioth.server.domain.schedule.domain.Schedule;
@@ -61,7 +62,17 @@ public class ScheduleService {
 
     public List<ScheduleResDto> list(Long sm_code) {
         SalesMembers salesMembers = salesMemberService.findBySalesMemberCode(sm_code);
-        return scheduleRepository.findAllBySalesMembers(salesMembers)
+
+
+        if(salesMembers.getRank() == SalesMemberType.HQ){
+//            return
+        }
+
+        if(salesMembers.getRank() == SalesMemberType.MANAGER){
+//            return
+        }
+
+        return scheduleRepository.findAllBySalesMembersAndScheduleDel_YN(salesMembers , "N")
                 .stream()
                 .map(typeChange::ScheduleToScheduleResDto)
                 .collect(Collectors.toList());

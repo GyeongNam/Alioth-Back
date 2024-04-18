@@ -13,6 +13,7 @@ public record ScheduleResDto(
          String scheduleTitle,
          String scheduleNote,
          ScheduleType scheduleType,
+         String share,
          String allDay,
          String del_yn,
          Long memberId,

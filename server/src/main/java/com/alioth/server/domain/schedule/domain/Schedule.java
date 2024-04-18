@@ -45,6 +45,9 @@ public class Schedule extends BaseEntity {
     @Builder.Default
     private String scheduleDel_YN = "N";
 
+    @Builder.Default
+    private String share = "N";
+
     @ManyToOne
     @JoinColumn(name = "SM_id")
     private SalesMembers salesMembers;
