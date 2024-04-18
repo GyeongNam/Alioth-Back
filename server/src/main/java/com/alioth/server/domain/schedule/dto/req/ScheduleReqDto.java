@@ -18,6 +18,7 @@ public record ScheduleReqDto(
         String scheduleTitle,
         @Valid
         ScheduleType scheduleType,
+        String share,
         String allDay,
         String color
 ){}

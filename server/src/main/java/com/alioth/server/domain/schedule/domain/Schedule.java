@@ -45,6 +45,9 @@ public class Schedule extends BaseEntity {
     @Builder.Default
     private String scheduleDel_YN = "N";
 
+    @Builder.Default
+    private String share = "false";
+
     @ManyToOne
     @JoinColumn(name = "SM_id")
     private SalesMembers salesMembers;
@@ -74,6 +77,9 @@ public class Schedule extends BaseEntity {
         }
         if(scheduleUpdateDto.color() != null){
             this.color = scheduleUpdateDto.color();
+        }
+        if(scheduleUpdateDto.share() != null){
+            this.share = scheduleUpdateDto.share();
         }
     }
 }
