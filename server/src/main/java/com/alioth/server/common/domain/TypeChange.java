@@ -190,12 +190,13 @@ public class TypeChange {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .boardType(board.getBoardType())
-                .memberId(board.getSalesMembers().getId())
+                .salesMemberCode(board.getSalesMembers().getSalesMemberCode())
                 .created_at(board.getCreated_at())  // 날짜 필드 추가
                 .updated_at(board.getUpdated_at())
-                .memberId(board.getSalesMembers().getSalesMemberCode())
                 .build();
     }
+
+
 
     public Board BoardCreateDtoToBoard(BoardCreateDto boardCreateDto, SalesMembers salesMembers){
         return Board.builder()
