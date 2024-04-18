@@ -156,24 +156,28 @@ public class TypeChange {
     public Schedule ScheduleCreateDtoToSchedule(ScheduleReqDto scheduleReqDto, SalesMembers salesMembers){
         return Schedule.builder()
                 .scheduleStartTime(scheduleReqDto.scheduleStartTime())
+                .scheduleTitle(scheduleReqDto.scheduleTitle())
                 .scheduleEndTime(scheduleReqDto.scheduleEndTime())
                 .scheduleNote(scheduleReqDto.scheduleNote())
                 .scheduleType(scheduleReqDto.scheduleType())
+                .color(scheduleReqDto.color())
                 .allDay(scheduleReqDto.allDay())
-                .salesMembers(salesMembers) // 사원
+                .salesMembers(salesMembers)
                 .build();
     }
 
     public ScheduleResDto ScheduleToScheduleResDto(Schedule schedule){
         return ScheduleResDto.builder()
                 .scheduleId(schedule.getScheduleId())
+                .scheduleTitle(schedule.getScheduleTitle())
                 .scheduleStartTime(schedule.getScheduleStartTime())
                 .scheduleEndTime(schedule.getScheduleEndTime())
                 .scheduleNote(schedule.getScheduleNote())
                 .scheduleType(schedule.getScheduleType())
+                .color(schedule.getColor())
                 .allDay(schedule.getAllDay())
                 .del_yn(schedule.getScheduleDel_YN())
-                .memberId(schedule.getSalesMembers().getId())
+                .memberId(schedule.getSalesMembers().getSalesMemberCode())
                 .build();
     }
 
@@ -188,6 +192,7 @@ public class TypeChange {
                 .memberId(board.getSalesMembers().getId())
                 .created_at(board.getCreated_at())  // 날짜 필드 추가
                 .updated_at(board.getUpdated_at())
+                .memberId(board.getSalesMembers().getSalesMemberCode())
                 .build();
     }
 

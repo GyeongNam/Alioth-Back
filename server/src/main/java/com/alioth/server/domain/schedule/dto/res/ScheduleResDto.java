@@ -10,11 +10,13 @@ public record ScheduleResDto(
          Long scheduleId,
          LocalDateTime scheduleStartTime,
          LocalDateTime scheduleEndTime,
+         String scheduleTitle,
          String scheduleNote,
          ScheduleType scheduleType,
          String allDay,
          String del_yn,
-         Long memberId
+         Long memberId,
+         String color
 ){}
 
 
