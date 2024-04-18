@@ -98,8 +98,8 @@ public class SalesMemberService {
 
     //관리자 사원 정보 수정(권한, 팀 소속, 고과평가)
     @Transactional
-    public SalesMemberResDto adminMemberUpdate (Long memberId, SMAdminUpdateReqDto dto) {
-        SalesMembers member = this.findById(memberId);
+    public SalesMemberResDto adminMemberUpdate (Long salesMemberCode, SMAdminUpdateReqDto dto) {
+        SalesMembers member = this.findBySalesMemberCode(salesMemberCode);
         Team team = teamService.findByTeamCode(dto.teamCode());
         member.updateAdmin(dto, team);
         salesMemberRepository.save(member);
@@ -108,15 +108,13 @@ public class SalesMemberService {
 
     //사원 정보 조회
     @Transactional
-    public SalesMemberResDto memberDetail(Long memberId) {
-        SalesMembers salesMembers = salesMemberRepository.findById(memberId).orElseThrow(()->
-                                                            new EntityNotFoundException("존재하지 않는 사원입니다."));
-        return typeChange.smToSmResDto(salesMembers);
+    public SalesMemberResDto memberDetail(Long salesMemberCode) {
+        return typeChange.smToSmResDto(this.findBySalesMemberCode(salesMemberCode));
     }
 
     @Transactional
-    public SalesMemberResDto updateMyInfo(Long memberId, SalesMemberUpdateReqDto dto){
-        SalesMembers member = this.findById(memberId);
+    public SalesMemberResDto updateMyInfo(Long salesMemberCode, SalesMemberUpdateReqDto dto){
+        SalesMembers member = this.findBySalesMemberCode(salesMemberCode);
         member.updateMyInfo(dto);
         return typeChange.smToSmResDto(member);
     }
@@ -126,6 +124,4 @@ public class SalesMemberService {
         member.updateTeam(team);
         salesMemberRepository.save(member);
     }
-
-
 }
