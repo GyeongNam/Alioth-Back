@@ -168,6 +168,7 @@ public class TypeChange {
                 .scheduleEndTime(scheduleReqDto.scheduleEndTime())
                 .scheduleNote(scheduleReqDto.scheduleNote())
                 .scheduleType(scheduleReqDto.scheduleType())
+                .share(scheduleReqDto.share())
                 .color(scheduleReqDto.color())
                 .allDay(scheduleReqDto.allDay())
                 .salesMembers(salesMembers)
@@ -182,6 +183,7 @@ public class TypeChange {
                 .scheduleEndTime(schedule.getScheduleEndTime())
                 .scheduleNote(schedule.getScheduleNote())
                 .scheduleType(schedule.getScheduleType())
+                .share(schedule.getShare())
                 .color(schedule.getColor())
                 .allDay(schedule.getAllDay())
                 .del_yn(schedule.getScheduleDel_YN())
@@ -197,12 +199,13 @@ public class TypeChange {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .boardType(board.getBoardType())
-                .memberId(board.getSalesMembers().getId())
+                .salesMemberCode(board.getSalesMembers().getSalesMemberCode())
                 .created_at(board.getCreated_at())  // 날짜 필드 추가
                 .updated_at(board.getUpdated_at())
-                .memberId(board.getSalesMembers().getSalesMemberCode())
                 .build();
     }
+
+
 
     public Board BoardCreateDtoToBoard(BoardCreateDto boardCreateDto, SalesMembers salesMembers){
         return Board.builder()
