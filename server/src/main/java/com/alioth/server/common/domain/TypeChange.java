@@ -34,6 +34,7 @@ public class TypeChange {
     public LoginResDto memberToLoginResDto(SalesMembers findMember, String accessToken, String refreshToken) {
         return LoginResDto.builder()
                 .memberCode(findMember.getSalesMemberCode())
+                .memberRank(findMember.getRank().toString())
                 .name(findMember.getName())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -85,11 +86,18 @@ public class TypeChange {
 
 
     // 팀
-    public TeamResDto teamToTeamReqDto(Team team, List<SMTeamListResDto> list){
+    public TeamResDto teamToTeamResDto(Team team,String teamManagerName){
         return TeamResDto.builder()
                 .teamCode(team.getTeamCode())
                 .teamName(team.getTeamName())
-                .teamManagerCode(team.getTeamManagerCode())
+                .teamManagerName(teamManagerName)
+                .build();
+    }
+    public TeamResDto teamToTeamResDto(Team team, String teamManagerName, List<SMTeamListResDto> list){
+        return TeamResDto.builder()
+                .teamCode(team.getTeamCode())
+                .teamName(team.getTeamName())
+                .teamManagerName(teamManagerName)
                 .teamMemberList(list)
                 .build();
     }
@@ -156,24 +164,30 @@ public class TypeChange {
     public Schedule ScheduleCreateDtoToSchedule(ScheduleReqDto scheduleReqDto, SalesMembers salesMembers){
         return Schedule.builder()
                 .scheduleStartTime(scheduleReqDto.scheduleStartTime())
+                .scheduleTitle(scheduleReqDto.scheduleTitle())
                 .scheduleEndTime(scheduleReqDto.scheduleEndTime())
                 .scheduleNote(scheduleReqDto.scheduleNote())
                 .scheduleType(scheduleReqDto.scheduleType())
+                .share(scheduleReqDto.share())
+                .color(scheduleReqDto.color())
                 .allDay(scheduleReqDto.allDay())
-                .salesMembers(salesMembers) // 사원
+                .salesMembers(salesMembers)
                 .build();
     }
 
     public ScheduleResDto ScheduleToScheduleResDto(Schedule schedule){
         return ScheduleResDto.builder()
                 .scheduleId(schedule.getScheduleId())
+                .scheduleTitle(schedule.getScheduleTitle())
                 .scheduleStartTime(schedule.getScheduleStartTime())
                 .scheduleEndTime(schedule.getScheduleEndTime())
                 .scheduleNote(schedule.getScheduleNote())
                 .scheduleType(schedule.getScheduleType())
+                .share(schedule.getShare())
+                .color(schedule.getColor())
                 .allDay(schedule.getAllDay())
                 .del_yn(schedule.getScheduleDel_YN())
-                .memberId(schedule.getSalesMembers().getId())
+                .memberId(schedule.getSalesMembers().getSalesMemberCode())
                 .build();
     }
 
@@ -185,11 +199,13 @@ public class TypeChange {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .boardType(board.getBoardType())
-                .memberId(board.getSalesMembers().getId())
+                .salesMemberCode(board.getSalesMembers().getSalesMemberCode())
                 .created_at(board.getCreated_at())  // 날짜 필드 추가
                 .updated_at(board.getUpdated_at())
                 .build();
     }
+
+
 
     public Board BoardCreateDtoToBoard(BoardCreateDto boardCreateDto, SalesMembers salesMembers){
         return Board.builder()

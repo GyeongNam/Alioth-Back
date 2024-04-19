@@ -1,6 +1,7 @@
 package com.alioth.server.domain.member.service;
 
 import com.alioth.server.common.domain.TypeChange;
+import com.alioth.server.domain.member.domain.SalesMemberType;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.*;
 import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
@@ -124,4 +125,20 @@ public class SalesMemberService {
         member.updateTeam(team);
         salesMemberRepository.save(member);
     }
+
+    @Transactional
+    public List<SalesMemberResDto> getAllMembers(){
+        return salesMemberRepository.findAll().stream().
+            map(typeChange::smToSmResDto).toList();
+    }
+
+    @Transactional
+    public List<SalesMemberResDto> getAllFPMembers(){
+        return salesMemberRepository.findAll().stream()
+                        .filter(salesMembers -> salesMembers.getRank()== SalesMemberType.FP)
+                        .map(typeChange::smToSmResDto).toList();
+    }
+
+
+
 }
