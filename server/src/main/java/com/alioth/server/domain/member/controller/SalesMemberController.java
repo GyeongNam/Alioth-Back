@@ -117,7 +117,7 @@ public class SalesMemberController {
 
     //전체 사원 목록
     @GetMapping("/list")
-    public ResponseEntity<CommonResponse> memberList(
+    public ResponseEntity<CommonResponse> getAllMemberList(
             @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
         if (salesMemberService.findBySalesMemberCode(
@@ -130,6 +130,21 @@ public class SalesMemberController {
         } else {
             throw new AccessDeniedException("권한이 없습니다.");
         }
+    }
 
+    //FP 목록만 불러오기 (team 추가 멤버)
+    @GetMapping("/list/FP")
+    public ResponseEntity<CommonResponse> FPMemberList(@AuthenticationPrincipal UserDetails userDetails
+    ) throws AccessDeniedException {
+        if (salesMemberService.findBySalesMemberCode(
+                Long.parseLong(userDetails.getUsername())).getRank() != SalesMemberType.FP) {
+            return CommonResponse.responseMessage(
+                    HttpStatus.OK,
+                    "success",
+                    salesMemberService.getAllFPMembers()
+            );
+        } else {
+            throw new AccessDeniedException("권한이 없습니다.");
+        }
     }
 }
