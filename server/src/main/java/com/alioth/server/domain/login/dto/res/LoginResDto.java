@@ -6,6 +6,7 @@ import lombok.Builder;
 public record LoginResDto(
     Long memberCode,
     String memberRank,
+    String memberTeam,
     String name,
     String accessToken,
     String refreshToken
