@@ -35,6 +35,7 @@ public class TypeChange {
         return LoginResDto.builder()
                 .memberCode(findMember.getSalesMemberCode())
                 .memberRank(findMember.getRank().toString())
+                .memberTeam(findMember.getTeam().getTeamCode())
                 .name(findMember.getName())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
