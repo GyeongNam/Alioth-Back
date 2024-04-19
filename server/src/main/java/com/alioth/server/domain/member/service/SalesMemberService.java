@@ -96,6 +96,11 @@ public class SalesMemberService {
                 .map(typeChange::smToSmResDto).collect(Collectors.toList());
     }
 
+    public List<SalesMembers> getAllMembersByTeam(Long teamId) {
+        return salesMemberRepository.findAllByTeamId(teamId);
+    }
+
+
 
     //관리자 사원 정보 수정(권한, 팀 소속, 고과평가)
     @Transactional
