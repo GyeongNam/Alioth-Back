@@ -139,6 +139,15 @@ public class SalesMemberService {
                         .map(typeChange::smToSmResDto).toList();
     }
 
+    @Transactional
+    public List<SalesMemberResDto> getAllManagerMembers(){
+        return salesMemberRepository.findAll().stream()
+                .filter(salesMembers -> salesMembers.getRank()== SalesMemberType.MANAGER)
+                .map(typeChange::smToSmResDto).toList();
+    }
 
+    public List<SalesMembers> getAllMembersByTeam(Long teamId) {
+        return salesMemberRepository.findAllByTeamId(teamId);
+    }
 
 }

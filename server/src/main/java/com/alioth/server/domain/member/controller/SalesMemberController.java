@@ -147,4 +147,21 @@ public class SalesMemberController {
             throw new AccessDeniedException("권한이 없습니다.");
         }
     }
+
+    //Manager 목록만 불러오기 (팀장)
+    @GetMapping("/list/manager")
+    public ResponseEntity<CommonResponse> ManagerMemberList(@AuthenticationPrincipal UserDetails userDetails
+    ) throws AccessDeniedException {
+        if (salesMemberService.findBySalesMemberCode(
+                Long.parseLong(userDetails.getUsername())).getRank() == SalesMemberType.HQ) {
+            return CommonResponse.responseMessage(
+                    HttpStatus.OK,
+                    "success",
+                    salesMemberService.getAllManagerMembers()
+            );
+        } else {
+            throw new AccessDeniedException("권한이 없습니다.");
+        }
+    }
 }
+
