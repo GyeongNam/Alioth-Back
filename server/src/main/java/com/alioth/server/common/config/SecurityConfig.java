@@ -86,7 +86,8 @@ public class SecurityConfig {
             "/api/*/logout",
             "/api/members/create",
             "/api/send-verification",
-            "/api/verify-code"
+            "/api/verify-code",
+            "/api/members/*/password"
     };
 
     private static final String[] DummyApiUrl = {
