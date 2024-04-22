@@ -4,6 +4,7 @@ import com.alioth.server.common.domain.TypeChange;
 import com.alioth.server.domain.contract.domain.Contract;
 import com.alioth.server.domain.contract.dto.res.ContractResDto;
 import com.alioth.server.domain.contract.service.ContractService;
+import com.alioth.server.domain.dummy.domain.ContractStatus;
 import com.alioth.server.domain.dummy.domain.Custom;
 import com.alioth.server.domain.excel.dto.ExcelReqDto;
 import com.alioth.server.domain.contract.dto.res.ContractResDto;
@@ -85,22 +86,57 @@ public class ExcelService {
     }
 
     // 계약 HQ 경우 code = null, 팀 코드 , 사원 코드
-    private void contractExcelHq(String code, HttpServletResponse response, ExcelReqDto dto
+    private void contractExcelHq(String code, String status, HttpServletResponse response, ExcelReqDto dto
     ) throws IOException, IllegalAccessException {
-        if (code == null || code.isEmpty()) {
-                exportExcel(response, contractService.findAllContractsByPeriod(dto).stream().toList());
-        } else {
-            if (Character.isLetter(code.charAt(0))){
-                if (teamService.findByTeamCode(code).getDelYN().equals("N")) {
-                    exportExcel(response, contractTeamList(code, dto));
-
+        switch (status){
+            case null:
+                if (code == null || code.isEmpty()) {
+                    exportExcel(response, contractService.findAllContractsByPeriod(dto).stream().toList());
                 } else {
-                    throw new EntityNotFoundException("잘못된 팀이거나 삭제된 팀입니다.");
+                    if (Character.isLetter(code.charAt(0))){
+                        if (teamService.findByTeamCode(code).getDelYN().equals("N")) {
+                            exportExcel(response, contractTeamList(code, dto));
+
+                        } else {
+                            throw new EntityNotFoundException("잘못된 팀이거나 삭제된 팀입니다.");
+                        }
+                    } else {
+                        exportExcel(response, contractList(code, dto));
+                    }
                 }
-            } else {
-                exportExcel(response, contractList(code, dto));
-            }
+                break;
+            case "New":
+                if (code == null || code.isEmpty()) {
+                    exportExcel(response, contractService.findAllContractsByPeriod(dto).stream()
+                            .filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.New))
+                            .toList());
+                } else {
+                    if (Character.isLetter(code.charAt(0))){
+                        if (teamService.findByTeamCode(code).getDelYN().equals("N")) {
+                            exportExcel(response, contractTeamList(code, dto,status));
+
+                        } else {
+                            throw new EntityNotFoundException("잘못된 팀이거나 삭제된 팀입니다.");
+                        }
+                    } else {
+                        exportExcel(response, contractList(code, dto));
+                    }
+                }
+
+
+                break;
+            case "Renewals":
+                this.salesMembersExcel(salesMember, code, status, response);
+                break;
+            case "Cancellation":
+                this.salesMembersExcel(salesMember, code, status, response);
+                break;
         }
+
+
+
+
+
     }
 
     // 계약 Manager 로그인한 사용자가 팀이있는경우, code = null, 사원 코드
@@ -132,6 +168,30 @@ public class ExcelService {
         }
         return teamContracts;
     }
+
+    public List<ContractResDto> contractTeamList(String code, ExcelReqDto dto, String status) {
+        List<ContractResDto> teamContracts = new ArrayList<>();
+        List<SalesMembers> teamMembers = teamService.findByTeamCode(code).getTeamMembers();
+        switch (status){
+            case "New" :
+                for(SalesMembers member : teamMembers) {
+                    teamContracts.addAll(contractService.allContractsByMemberAndPeriod(member.getId(), dto)
+                            .stream().filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.New)).toList());}
+                break;
+            case "Renewals":
+                for(SalesMembers member : teamMembers) {
+                    teamContracts.addAll(contractService.allContractsByMemberAndPeriod(member.getId(), dto)
+                            .stream().filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.Renewals)).toList());}
+                break;
+            case "Cancellation":
+                for(SalesMembers member : teamMembers) {
+                    teamContracts.addAll(contractService.allContractsByMemberAndPeriod(member.getId(), dto)
+                            .stream().filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.Cancellation)).toList());}
+                break;
+        }
+        return teamContracts;
+    }
+
 
     public void customerListExcel(SalesMembers salesMember, String code, HttpServletResponse response, ExcelReqDto dto
     ) throws IOException, IllegalAccessException {

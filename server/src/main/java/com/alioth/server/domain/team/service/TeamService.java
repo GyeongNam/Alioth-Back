@@ -64,7 +64,9 @@ public class TeamService {
 
     //팀 목록
     public List<Team> findAll() {
-       return teamRepository.findAll();
+       return teamRepository.findAll().stream()
+               .filter(team -> team.getDelYN().equals("N"))
+               .toList();
     }
 
     //팀 상세 조회

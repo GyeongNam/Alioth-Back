@@ -28,17 +28,18 @@ public class ExcelController {
     private final SalesMemberService salesMemberService;
     private final ExcelService excelService;
 
-    @GetMapping(value = {"/export/{type}", "/export/{type}/{code}"})
+    @GetMapping(value = {"/export/{type}", "/export/{type}/{code}","/export/{type}/{code}/{status}"})
     public void downloadContractInfo(HttpServletResponse response,
                                      @AuthenticationPrincipal UserDetails userDetails,
                                      @RequestBody ExcelReqDto dto,
                                      @PathVariable(required = false) String type,
-                                     @PathVariable(required = false) String code
+                                     @PathVariable(required = false) String code,
+                                     @PathVariable(required = false) String status
     ) throws IOException, IllegalAccessException {
         SalesMembers salesMember = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername()));
         switch (type){
             case "contract":
-                excelService.contractExcel(salesMember, code, response, dto);
+                excelService.contractExcel(salesMember, code, status, response, dto);
                 break;
             case "customerList":
                 excelService.customerListExcel(salesMember, code, response, dto);

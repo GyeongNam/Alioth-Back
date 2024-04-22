@@ -93,12 +93,6 @@ public class SalesMemberService {
                                                             new EntityNotFoundException("존재하지 않는 사원입니다."));
     }
 
-    public List<SalesMemberResDto> findAllMembersByTeamId(Long teamId){
-        return salesMemberRepository.findAllByTeamId(teamId).stream()
-                .map(typeChange::smToSmResDto).collect(Collectors.toList());
-    }
-
-
     //관리자 사원 정보 수정(권한, 팀 소속, 고과평가)
     @Transactional
     public SalesMemberResDto adminMemberUpdate (Long salesMemberCode, SMAdminUpdateReqDto dto) {
@@ -122,6 +116,7 @@ public class SalesMemberService {
         return typeChange.smToSmResDto(member);
     }
 
+    @Transactional
     public void updateTeam(Long memberId,Team team){
         SalesMembers member = this.findById(memberId);
         member.updateTeam(team);
@@ -130,14 +125,16 @@ public class SalesMemberService {
 
     @Transactional
     public List<SalesMemberResDto> getAllMembers(){
-        return salesMemberRepository.findAll().stream().
-            map(typeChange::smToSmResDto).toList();
+        return salesMemberRepository.findAll().stream()
+                        .filter(salesMembers -> salesMembers.getQuit().equals("N"))
+                        .map(typeChange::smToSmResDto).toList();
     }
 
     @Transactional
     public List<SalesMemberResDto> getAllFPMembers(){
         return salesMemberRepository.findAll().stream()
                         .filter(salesMembers -> salesMembers.getRank()== SalesMemberType.FP)
+                        .filter(salesMembers -> salesMembers.getQuit().equals("N"))
                         .map(typeChange::smToSmResDto).toList();
     }
 
@@ -145,6 +142,7 @@ public class SalesMemberService {
     public List<SalesMemberResDto> getAllManagerMembers(){
         return salesMemberRepository.findAll().stream()
                 .filter(salesMembers -> salesMembers.getRank()== SalesMemberType.MANAGER)
+                .filter(salesMembers -> salesMembers.getQuit().equals("N"))
                 .map(typeChange::smToSmResDto).toList();
     }
 
@@ -155,6 +153,5 @@ public class SalesMemberService {
     @Transactional
     public void deleteMember(Long salesMemberCode){
         this.findBySalesMemberCode(salesMemberCode).deleteMember();
-        log.info("확인"+this.findBySalesMemberCode(salesMemberCode).getQuit());
     }
 }
