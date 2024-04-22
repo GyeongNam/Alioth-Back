@@ -10,6 +10,7 @@ import com.alioth.server.domain.board.dto.req.BoardCreateDto;
 import com.alioth.server.domain.board.dto.req.BoardUpdateDto;
 import com.alioth.server.domain.board.dto.res.BoardResDto;
 import com.alioth.server.domain.board.repository.BoardRepository;
+import com.alioth.server.domain.member.domain.SalesMemberType;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.service.SalesMemberService;
 import com.alioth.server.domain.notification.domain.Notification;
@@ -116,9 +117,16 @@ public class BoardService {
     }
 
     public List<BoardResDto> suggestionsList(Long sm_code) {
-        SalesMembers salesMembers = salesMemberService.findBySalesMemberCode(sm_code);
-        Long teamId = salesMembers.getTeam().getId();
-        List<Board> suggestions = boardRepository.findSuggestionsByTeam(teamId,BoardType.SUGGESTION,"N");
+        // 직급에 따라 접근이 제한된 SUGGESTION 게시글 조회
+        SalesMembers member = salesMemberService.findBySalesMemberCode(sm_code);
+        List<Board> suggestions;
+        if (member.getRank() == SalesMemberType.HQ) {
+            suggestions = boardRepository.findByBoardType(BoardType.SUGGESTION); // HQ는 모든 SUGGESTION 조회
+        } else if (member.getRank() == SalesMemberType.MANAGER) {
+            suggestions = boardRepository.findSuggestionsByTeam(member.getTeam().getId(), BoardType.SUGGESTION, "N");
+        } else {
+            suggestions = boardRepository.findMyBoards(sm_code, BoardType.SUGGESTION); // FP는 자신의 SUGGESTION만 조회
+        }
         return suggestions.stream()
                 .map(typeChange::BoardToBoardResDto)
                 .collect(Collectors.toList());
@@ -127,8 +135,15 @@ public class BoardService {
     public BoardResDto detail(Long sm_code, Long boardId) {
         Board board = this.findByBoardIdAndBoardDel_YN(boardId, "N");
 
-        if (BoardType.SUGGESTION.equals(board.getBoardType()) && !Objects.equals(board.getSalesMembers().getSalesMemberCode(), sm_code)) {
-            throw new AccessDeniedException("게시글을 작성한 사원만 접근할 수 있습니다.");
+        // 상세 정보 접근 권한 체크
+        if (BoardType.SUGGESTION.equals(board.getBoardType())) {
+            // 관리자 또는 글 작성자만 접근 가능
+            SalesMembers member = salesMemberService.findBySalesMemberCode(sm_code);
+            boolean isManagerOrHigher = member.getRank().equals(SalesMemberType.MANAGER) || member.getRank().equals(SalesMemberType.HQ);
+            boolean isAuthor = Objects.equals(board.getSalesMembers().getSalesMemberCode(), sm_code);
+            if (!isManagerOrHigher && !isAuthor) {
+                throw new AccessDeniedException("접근 권한이 없습니다.");
+            }
         }
 
         return typeChange.BoardToBoardResDto(board);
