@@ -66,6 +66,7 @@ public class SalesMembers extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private Team team;
 
+
     public void updatePassword(String updatePassword) {
         this.password = updatePassword;
     }
@@ -87,7 +88,9 @@ public class SalesMembers extends BaseEntity {
         this.extensionNumber = dto.extensionNumber();
     }
 
-
+    public void exitTeam(){
+        this.team = null;
+    }
     public void updateTeam(Team team){
         this.team= team;
     }
