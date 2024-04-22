@@ -10,6 +10,7 @@ import com.alioth.server.domain.team.domain.Team;
 import com.alioth.server.domain.team.service.TeamService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SalesMemberService {
 
     private final PasswordEncoder passwordEncoder;
@@ -155,4 +157,9 @@ public class SalesMemberService {
         return salesMemberRepository.findAllByTeamId(teamId);
     }
 
+    @Transactional
+    public void deleteMember(Long salesMemberCode){
+        this.findBySalesMemberCode(salesMemberCode).deleteMember();
+        log.info("확인"+this.findBySalesMemberCode(salesMemberCode).getQuit());
+    }
 }

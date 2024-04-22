@@ -58,7 +58,7 @@ public class SalesMemberController {
 
 
     @PatchMapping("/{id}/info")
-    public ResponseEntity<?> updateMemberInfo(@PathVariable("id")Long id) {
+    public ResponseEntity<?> updateMemberInfo(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(null);
     }
@@ -72,19 +72,19 @@ public class SalesMemberController {
             @RequestBody @Valid SMAdminUpdateReqDto dto,
             @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
-        if(salesMemberService.findBySalesMemberCode(
-                Long.parseLong(userDetails.getUsername())).getRank() != SalesMemberType.FP){
+        if (salesMemberService.findBySalesMemberCode(
+                Long.parseLong(userDetails.getUsername())).getRank() != SalesMemberType.FP) {
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
                     "successfully updated",
-                    salesMemberService.adminMemberUpdate(salesMemberCode,dto)
+                    salesMemberService.adminMemberUpdate(salesMemberCode, dto)
             );
         } else {
             throw new AccessDeniedException("권한이 없습니다.");
         }
     }
 
-//    사원 상세 조회 (지점장, 지역장)
+    //    사원 상세 조회 (지점장, 지역장)
     @GetMapping("/details/{salesMemberCode}")
     public ResponseEntity<CommonResponse> getMemberInfoAdmin(
             @PathVariable("salesMemberCode") Long salesMemberCode,
@@ -163,5 +163,23 @@ public class SalesMemberController {
             throw new AccessDeniedException("권한이 없습니다.");
         }
     }
+
+    @DeleteMapping("/delete/{salesMemberCode}")
+    public ResponseEntity<CommonResponse> deleteMember(@AuthenticationPrincipal UserDetails userDetails,
+                                                       @PathVariable("salesMemberCode") Long salesMemberCode
+    ) throws AccessDeniedException {
+        if (salesMemberService.findBySalesMemberCode(
+                Long.parseLong(userDetails.getUsername())).getRank() == SalesMemberType.HQ) {
+            salesMemberService.deleteMember(salesMemberCode);
+            log.info("확인"+salesMemberService.findBySalesMemberCode(salesMemberCode).getQuit());
+            return CommonResponse.responseMessage(
+                    HttpStatus.OK,
+                    "퇴사처리 되었습니다."
+            );
+        } else {
+            throw new AccessDeniedException("권한이 없습니다.");
+        }
+    }
+
 }
 

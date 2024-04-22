@@ -104,7 +104,7 @@ public class TeamController {
             teamService.deleteTeam(teamCode);
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
-                    "successfully deleted"
+                    "팀 삭제가 완료되었습니다."
             );
         } else {
             throw new AccessDeniedException("권한이 없습니다.");
