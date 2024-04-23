@@ -153,7 +153,7 @@ public class SalesMemberController {
     public ResponseEntity<CommonResponse> ManagerMemberList(@AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
         if (salesMemberService.findBySalesMemberCode(
-                Long.parseLong(userDetails.getUsername())).getRank() == SalesMemberType.MANAGER) {
+           Long.parseLong(userDetails.getUsername())).getRank() == SalesMemberType.HQ) {
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
                     "success",
@@ -181,3 +181,4 @@ public class SalesMemberController {
         }
     }
 }
+

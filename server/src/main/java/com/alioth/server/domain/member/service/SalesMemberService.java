@@ -123,6 +123,10 @@ public class SalesMemberService {
         salesMemberRepository.save(member);
     }
 
+    public List<SalesMembers> getAllMembersByTeam(Long teamId) {
+        return salesMemberRepository.findAllByTeamId(teamId);
+    }
+
     @Transactional
     public List<SalesMemberResDto> getAllMembers(){
         return salesMemberRepository.findAll().stream()
@@ -142,6 +146,7 @@ public class SalesMemberService {
     public List<SalesMemberResDto> getAllManagerMembers(){
         return salesMemberRepository.findAll().stream()
                 .filter(salesMembers -> salesMembers.getRank()== SalesMemberType.MANAGER)
+
                 .filter(salesMembers -> salesMembers.getQuit().equals("N"))
                 .map(typeChange::smToSmResDto).toList();
     }
@@ -149,6 +154,7 @@ public class SalesMemberService {
     public List<SalesMembers> getAllMembersByTeam(Long teamId) {
         return salesMemberRepository.findAllByTeamId(teamId);
     }
+
 
     @Transactional
     public void deleteMember(Long salesMemberCode){
@@ -160,5 +166,10 @@ public class SalesMemberService {
         for(SalesMembers salesMembers:  list){
             salesMembers.exitTeam();
         }
+
+    public void deleteMember(Long salesMemberCode){
+        this.findBySalesMemberCode(salesMemberCode).deleteMember();
+        log.info("확인"+this.findBySalesMemberCode(salesMemberCode).getQuit());
+
     }
 }
