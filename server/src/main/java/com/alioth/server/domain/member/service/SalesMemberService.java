@@ -154,4 +154,11 @@ public class SalesMemberService {
     public void deleteMember(Long salesMemberCode){
         this.findBySalesMemberCode(salesMemberCode).deleteMember();
     }
+
+    @Transactional
+    public void exitTeam(List<SalesMembers> list){
+        for(SalesMembers salesMembers:  list){
+            salesMembers.exitTeam();
+        }
+    }
 }

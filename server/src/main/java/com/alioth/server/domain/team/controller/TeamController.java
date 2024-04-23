@@ -101,10 +101,8 @@ public class TeamController {
                                                      @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
         if(this.loginUser(userDetails).getRank()==SalesMemberType.HQ){
+            salesMemberService.exitTeam(teamService.findTeamMembersByTeamCode(teamCode));
             teamService.deleteTeam(teamCode);
-            for(SalesMembers salesMembers:  teamService.findTeamMembersByTeamCode(teamCode)){
-                salesMembers.exitTeam();
-            }
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
                     "삭제되었습니다."

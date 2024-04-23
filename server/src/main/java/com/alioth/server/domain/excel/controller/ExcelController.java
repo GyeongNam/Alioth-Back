@@ -12,11 +12,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,18 +28,18 @@ public class ExcelController {
     private final SalesMemberService salesMemberService;
     private final ExcelService excelService;
 
-    @GetMapping(value = {"/export/{type}", "/export/{type}/{code}","/export/{type}/{code}/{status}"})
+
+    @PostMapping(value = {"/export/{type}", "/export/{type}/{code}"})
     public void downloadContractInfo(HttpServletResponse response,
                                      @AuthenticationPrincipal UserDetails userDetails,
                                      @RequestBody ExcelReqDto dto,
                                      @PathVariable(required = false) String type,
-                                     @PathVariable(required = false) String code,
-                                     @PathVariable(required = false) String status
+                                     @PathVariable(required = false) String code
     ) throws IOException, IllegalAccessException {
         SalesMembers salesMember = salesMemberService.findBySalesMemberCode(Long.parseLong(userDetails.getUsername()));
         switch (type){
             case "contract":
-                excelService.contractExcel(salesMember, code, status, response, dto);
+                excelService.contractExcel(salesMember, code, response, dto);
                 break;
             case "customerList":
                 excelService.customerListExcel(salesMember, code, response, dto);

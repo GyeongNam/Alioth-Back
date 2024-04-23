@@ -1,11 +1,14 @@
 package com.alioth.server.domain.excel.service;
 
 import com.alioth.server.common.domain.TypeChange;
+import com.alioth.server.domain.contract.domain.Contract;
 import com.alioth.server.domain.contract.dto.res.ContractResDto;
 import com.alioth.server.domain.contract.service.ContractService;
-import com.alioth.server.domain.dummy.domain.ContractStatus;
 import com.alioth.server.domain.dummy.domain.Custom;
 import com.alioth.server.domain.excel.dto.ExcelReqDto;
+import com.alioth.server.domain.contract.dto.res.ContractResDto;
+import com.alioth.server.domain.contract.service.ContractService;
+import com.alioth.server.domain.dummy.domain.Custom;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.res.SMTeamListResDto;
 import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
@@ -37,6 +40,7 @@ public class ExcelService {
     private final SalesMemberService salesMemberService;
     private final TeamService teamService;
     private final ContractService contractService;
+    private final TypeChange typeChange;
 
     public <T> Workbook createExcel(List<T> list) throws IllegalAccessException {
         Workbook workbook = new SXSSFWorkbook();
@@ -51,11 +55,11 @@ public class ExcelService {
         int i = 1;
         for (Object object : list) {
             Row row = sheet.createRow(i++);
-            int j = 0;
+            int j = 0 ;
             for (Field field : object.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 Cell cell = row.createCell(j++);
-                if (field.get(object) != null) {
+                if(field.get(object)!= null){
                     cell.setCellValue(field.get(object).toString());
                 } else {
                     cell.setCellValue("");
@@ -65,119 +69,73 @@ public class ExcelService {
         return workbook;
     }
 
-    public void contractExcel(SalesMembers salesMember, String code, String status, HttpServletResponse response, ExcelReqDto dto
+    public void contractExcel(SalesMembers salesMember, String code, HttpServletResponse response, ExcelReqDto dto
     ) throws IOException, IllegalAccessException {
-        switch (salesMember.getRank()) {
+        switch (salesMember.getRank()){
             case HQ:
-                contractExcelHq(code, status, response, dto);
+                contractExcelHq(code, response, dto);
                 break;
             case MANAGER:
-                contractExcelManager(salesMember, code, status, response, dto);
+                contractExcelManager(salesMember, code, response, dto);
                 break;
             case FP:
-                exportExcel(response, contractList(salesMember.getSalesMemberCode().toString(), status, dto));
+                exportExcel(response, contractList(salesMember.getSalesMemberCode().toString(), dto));
                 break;
         }
     }
 
     // 계약 HQ 경우 code = null, 팀 코드 , 사원 코드
-    public void contractExcelHq(String code, String status, HttpServletResponse response, ExcelReqDto dto
+    private void contractExcelHq(String code, HttpServletResponse response, ExcelReqDto dto
     ) throws IOException, IllegalAccessException {
         if (code == null || code.isEmpty()) {
-            switch (status) {
-                case null:
-                    exportExcel(response, contractService.findAllContractsByPeriod(dto).stream().toList());
-                    break;
-                case "New":
-                    exportExcel(response, contractService.findAllContractsByPeriod(dto)
-                            .stream().filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.New))
-                            .toList());
-                    break;
-                case "Renewals":
-                    exportExcel(response, contractService.findAllContractsByPeriod(dto)
-                            .stream().filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.Renewals))
-                            .toList());
-                    break;
-                case "Cancellation":
-                    exportExcel(response, contractService.findAllContractsByPeriod(dto)
-                            .stream().filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.Cancellation))
-                            .toList());
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + status);
-            }
-            ;
+            exportExcel(response, contractService.findAllContractsByPeriod(dto).stream().toList());
         } else {
-            if (Character.isLetter(code.charAt(0))) {
+            if (Character.isLetter(code.charAt(0))){
                 if (teamService.findByTeamCode(code).getDelYN().equals("N")) {
-                    exportExcel(response, contractTeamList(code, status, dto));
+                    exportExcel(response, contractTeamList(code, dto));
+
                 } else {
                     throw new EntityNotFoundException("잘못된 팀이거나 삭제된 팀입니다.");
                 }
             } else {
-                exportExcel(response, contractList(code, status, dto));
+                exportExcel(response, contractList(code, dto));
             }
         }
     }
 
     // 계약 Manager 로그인한 사용자가 팀이있는경우, code = null, 사원 코드
-    public void contractExcelManager(SalesMembers salesMember, String code, String status, HttpServletResponse response, ExcelReqDto dto
+    private void contractExcelManager(SalesMembers salesMember, String code, HttpServletResponse response, ExcelReqDto dto
     ) throws IOException, IllegalAccessException {
         teamExist(salesMember);
         if (code == null || code.isEmpty()) {
-            exportExcel(response, contractTeamList(salesMember.getTeam().getTeamCode(), status, dto));
+            exportExcel(response, contractTeamList(salesMember.getTeam().getTeamCode(),dto));
+
         } else if (code.matches("\\d+")) {
-            if (salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getTeam().getId()
+            if(salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getTeam().getId()
                     .equals(salesMember.getTeam().getId())
-            ) {
-                exportExcel(response, contractList(code, status, dto));
+            ){
+                exportExcel(response, contractList(code, dto));
             }
         }
     }
 
-    public List<ContractResDto> contractList(String code, String status, ExcelReqDto dto) {
+    public List<ContractResDto> contractList(String code, ExcelReqDto dto) {
         Long memberId = salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getId();
-        return switch (status) {
-            case null -> contractService.allContractsByMemberAndPeriod(memberId, dto);
-            case "New" -> contractService.allContractsByMemberAndPeriod(memberId, dto)
-                    .stream().filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.New))
-                    .toList();
-            case "Renewals" -> contractService.allContractsByMemberAndPeriod(memberId, dto)
-                    .stream().filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.Renewals))
-                    .toList();
-            case "Cancellation" -> contractService.allContractsByMemberAndPeriod(memberId, dto)
-                    .stream().filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.Cancellation))
-                    .toList();
-            default -> throw new IllegalStateException("잘못된 요청입니다.");
-        };
+        return contractService.allContractsByMemberAndPeriod(memberId, dto);
     }
 
-    public List<ContractResDto> contractTeamList(String code, String status, ExcelReqDto dto) {
+    public List<ContractResDto> contractTeamList(String code, ExcelReqDto dto) {
+        List<ContractResDto> teamContracts = new ArrayList<>();
         List<SalesMembers> teamMembers = teamService.findByTeamCode(code).getTeamMembers();
-        return switch (status) {
-            case null -> teamMembers.stream()
-                        .flatMap(member -> contractService.allContractsByMemberAndPeriod(member.getId(), dto).stream())
-                        .collect(Collectors.toList());
-            case "New" -> teamMembers.stream()
-                    .flatMap(member -> contractService.allContractsByMemberAndPeriod(member.getId(), dto).stream()
-                            .filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.New)))
-                    .collect(Collectors.toList());
-            case "Renewals" -> teamMembers.stream()
-                    .flatMap(member -> contractService.allContractsByMemberAndPeriod(member.getId(), dto).stream()
-                            .filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.Renewals)))
-                    .collect(Collectors.toList());
-            case "Cancellation" -> teamMembers.stream()
-                    .flatMap(member -> contractService.allContractsByMemberAndPeriod(member.getId(), dto).stream()
-                            .filter(contractResDto -> contractResDto.contractStatus().equals(ContractStatus.Cancellation)))
-                    .collect(Collectors.toList());
-            default -> throw new IllegalStateException("잘못된 요청입니다.");
-        };
+        for(SalesMembers member : teamMembers) {
+            teamContracts.addAll(contractService.allContractsByMemberAndPeriod(member.getId(), dto));
+        }
+        return teamContracts;
     }
-
 
     public void customerListExcel(SalesMembers salesMember, String code, HttpServletResponse response, ExcelReqDto dto
     ) throws IOException, IllegalAccessException {
-        switch (salesMember.getRank()) {
+        switch (salesMember.getRank()){
             case HQ:
                 customerListExcelHq(code, response, dto);
                 break;
@@ -185,11 +143,10 @@ public class ExcelService {
                 customerListExcelManager(salesMember, code, response, dto);
                 break;
             case FP:
-                exportExcel(response, customList(salesMember.getSalesMemberCode().toString(), dto));
+                exportExcel(response, customList(salesMember.getSalesMemberCode().toString(),dto));
                 break;
         }
     }
-
 
     // 고객 HQ 일 경우 code = null, 팀 코드, 사원 코드
     private void customerListExcelHq(String code, HttpServletResponse response, ExcelReqDto dto
@@ -216,8 +173,8 @@ public class ExcelService {
         if (code == null || code.isEmpty()) {
             exportExcel(response, customTeamList(salesMember.getTeam().getTeamCode(), dto));
         } else if (code.matches("\\d+")) {
-            if (salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getTeam().getId()
-                    .equals(salesMember.getTeam().getId())) {
+            if(salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getTeam().getId()
+                    .equals(salesMember.getTeam().getId())){
                 exportExcel(response, customList(code, dto));
             }
         }
@@ -225,7 +182,7 @@ public class ExcelService {
 
     public List<Custom> customList(String code, ExcelReqDto dto) {
         return contractService.customListByMemberId(
-                salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getId(),
+                salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getId() ,
                 dto
         );
     }
@@ -241,7 +198,7 @@ public class ExcelService {
     public void salesMembersExcel(SalesMembers salesMember, String code, HttpServletResponse response
     ) throws IOException, IllegalAccessException {
 
-        switch (salesMember.getRank()) {
+        switch (salesMember.getRank()){
             case HQ:
                 salesMembersExcelHq(code, response);
                 break;
@@ -256,6 +213,7 @@ public class ExcelService {
     // 사원 HQ 일 경우  code = null , 팀 코드
     private void salesMembersExcelHq(String code, HttpServletResponse response
     ) throws IOException, IllegalAccessException {
+
         if (code == null || code.isEmpty()) {
             List<SalesMemberResDto> list = salesMemberService.findAll();
             exportExcel(response, list);
@@ -264,7 +222,8 @@ public class ExcelService {
             if (team.getDelYN().equals("N")) {
                 List<SMTeamListResDto> memberList = teamService.findAllByTeamCode(code);
                 exportExcel(response, memberList);
-            } else {
+            }
+            else{
                 throw new EntityNotFoundException("해체된 팀입니다.");
             }
         } else {
