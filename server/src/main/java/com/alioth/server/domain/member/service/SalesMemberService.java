@@ -159,4 +159,8 @@ public class SalesMemberService {
         this.findBySalesMemberCode(salesMemberCode).deleteMember();
         log.info("확인"+this.findBySalesMemberCode(salesMemberCode).getQuit());
     }
+
+    public boolean existsBySalesMemberCode(Long salesMemberCode) {
+        return salesMemberRepository.existsBySalesMemberCode(salesMemberCode);
+    }
 }
