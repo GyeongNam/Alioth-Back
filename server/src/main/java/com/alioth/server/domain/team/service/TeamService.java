@@ -64,7 +64,9 @@ public class TeamService {
 
     //팀 목록
     public List<Team> findAll() {
-       return teamRepository.findAll();
+       return teamRepository.findAll().stream()
+               .filter(team -> team.getDelYN().equals("N"))
+               .toList();
     }
 
     //팀 상세 조회
@@ -81,15 +83,18 @@ public class TeamService {
 
     //사원 리스트 생성
     public List<SMTeamListResDto> findAllByTeamCode (String teamCode){
-        List<SalesMembers> memberList = teamRepository.findSalesMembersByTeamCode(teamCode);
         List<SMTeamListResDto> list = new ArrayList<>();
-        for (SalesMembers sm : memberList) {
+        for (SalesMembers sm : this.findTeamMembersByTeamCode(teamCode)) {
             if (sm.getQuit().equals("N")) {
                 SMTeamListResDto dto = typeChange.smToSmTeamListResDto(sm);
                 list.add(dto);
             }
         }
         return list;
+    }
+
+    public List<SalesMembers> findTeamMembersByTeamCode(String teamCode){
+        return teamRepository.findSalesMembersByTeamCode(teamCode);
     }
 }
 

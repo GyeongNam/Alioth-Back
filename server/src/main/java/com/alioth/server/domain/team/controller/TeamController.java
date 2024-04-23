@@ -47,7 +47,7 @@ public class TeamController {
                 List<SMTeamListResDto> list = team.getTeamMembers().stream().map(typeChange::smToSmTeamListResDto).toList();
                 return CommonResponse.responseMessage(
                         HttpStatus.CREATED,
-                        "successfully created"
+                        "팀이 성공적으로 생성됩니다."
                 );
                 //팀장에 MANAGER 직급 아닌 경우
             } else {
@@ -63,7 +63,6 @@ public class TeamController {
     @GetMapping("/list")
     public ResponseEntity<CommonResponse> getTeamList( @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
-        log.info("1231231_"+userDetails.getUsername());
         if (this.loginUser(userDetails).getRank() == SalesMemberType.HQ) {
             List<TeamResDto> list = new ArrayList<>();
             for(Team t : teamService.findAll()) {
@@ -72,7 +71,7 @@ public class TeamController {
             }
             return CommonResponse.responseMessage(
                     HttpStatus.CREATED,
-                    "successfully loaded",
+                    "팀 목록을 불러옵니다.",
                     list
             );
         } else {
@@ -89,7 +88,8 @@ public class TeamController {
         if (this.loginUser(userDetails).getRank() != SalesMemberType.FP) {
             teamService.updateTeam(dto, teamCode);
             return CommonResponse.responseMessage(
-                    HttpStatus.CREATED, "successfully updated"
+                    HttpStatus.CREATED,
+                    "변경되었습니다."
             );
         } else {
             throw new AccessDeniedException("권한이 없습니다.");
@@ -101,10 +101,11 @@ public class TeamController {
                                                      @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
         if(this.loginUser(userDetails).getRank()==SalesMemberType.HQ){
+            salesMemberService.exitTeam(teamService.findTeamMembersByTeamCode(teamCode));
             teamService.deleteTeam(teamCode);
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
-                    "팀 삭제가 완료되었습니다."
+                    "삭제되었습니다."
             );
         } else {
             throw new AccessDeniedException("권한이 없습니다.");
@@ -121,7 +122,7 @@ public class TeamController {
             List<SMTeamListResDto> list = teamService.findAllByTeamCode(teamCode);
             return CommonResponse.responseMessage(
                     HttpStatus.OK,
-                    "successfully loaded",
+                    "팀 상세정보를 성공적으로 조회했습니다.",
                     typeChange.teamToTeamResDto(team,teamManagerName,list)
             );
         } else {
@@ -147,7 +148,7 @@ public class TeamController {
             teamService.addMembersToTeam(teamCode, teamMembers);
             return CommonResponse.responseMessage(
                     HttpStatus.CREATED,
-                    "successfully added"
+                    "추가되었습니다."
             );
         } else {
             throw new AccessDeniedException("권한이 없습니다.");
