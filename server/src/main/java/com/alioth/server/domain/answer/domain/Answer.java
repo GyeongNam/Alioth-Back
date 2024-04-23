@@ -42,9 +42,6 @@ public class Answer extends BaseEntity{
     }
 
     public void update(AnswerReqDto answerReqDto){
-        if(!answerReqDto.title().isEmpty()){
-            this.title = answerReqDto.title();
-        }
         if(!answerReqDto.content().isEmpty()){
             this.content = answerReqDto.content();
         }

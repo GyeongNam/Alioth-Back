@@ -87,4 +87,5 @@ public class BoardController {
                 boardService.detail(Long.parseLong(userDetails.getUsername()), boardId)
         );
     }
+
 }
