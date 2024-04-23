@@ -230,7 +230,7 @@ public class TypeChange {
 
     public Answer AnswerReqToAnswer(AnswerReqDto answerReqDto, SalesMembers salesMembers, Board board){
         return Answer.builder()
-                .title(answerReqDto.title())
+
                 .content(answerReqDto.content())
                 .salesMembers(salesMembers)
                 .board(board)

@@ -153,9 +153,6 @@ public class SalesMemberService {
                 .map(typeChange::smToSmResDto).toList();
     }
 
-    public List<SalesMembers> getAllMembersByTeam(Long teamId) {
-        return salesMemberRepository.findAllByTeamId(teamId);
-    }
 
     @Transactional
     public void deleteMember(Long salesMemberCode){
