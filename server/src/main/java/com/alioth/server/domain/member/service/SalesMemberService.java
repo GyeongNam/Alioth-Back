@@ -133,6 +133,10 @@ public class SalesMemberService {
         salesMemberRepository.save(member);
     }
 
+    public List<SalesMembers> getAllMembersByTeam(Long teamId) {
+        return salesMemberRepository.findAllByTeamId(teamId);
+    }
+
     @Transactional
     public List<SalesMemberResDto> getAllMembers(){
         return salesMemberRepository.findAll().stream().

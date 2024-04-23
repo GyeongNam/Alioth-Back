@@ -1,8 +1,7 @@
-package com.alioth.statistics.service.batch;
+package com.alioth.statistics.service.stat;
 
 import com.alioth.statistics.domain.batch.dto.res.BatchMemberSalesResDto;
 import com.alioth.statistics.domain.batch.repository.BatchMemberSalesRepository;
-import com.alioth.statistics.domain.batch.repository.BatchRankProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class BatchStatMemberSalesService {
+public class StatMemberSalesService {
 
     private final BatchMemberSalesRepository memberSalesRepository;
 

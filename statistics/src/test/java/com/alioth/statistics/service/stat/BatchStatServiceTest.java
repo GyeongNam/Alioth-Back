@@ -1,4 +1,4 @@
-package com.alioth.statistics.service.batch;
+package com.alioth.statistics.service.stat;
 
 import com.alioth.statistics.domain.batch.repository.BatchMemberSalesRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,7 @@ class BatchStatServiceTest {
     private BatchMemberSalesRepository batchMemberSalesRepository;
 
     @Autowired
-    private BatchStatMemberSalesService batchStatService;
+    private StatMemberSalesService batchStatService;
 
     @Test
     @DisplayName("일별 맴버 결과 가져오기")

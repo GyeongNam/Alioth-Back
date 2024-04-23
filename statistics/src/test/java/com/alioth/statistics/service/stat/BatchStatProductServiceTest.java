@@ -1,4 +1,4 @@
-package com.alioth.statistics.service.batch;
+package com.alioth.statistics.service.stat;
 
 import com.alioth.statistics.domain.batch.BatchRankProduct;
 import com.alioth.statistics.domain.batch.dto.res.BatchProductCountResDto;
@@ -11,12 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -55,8 +54,7 @@ class BatchStatProductServiceTest {
 
 
     @Test
-    @DisplayName("일별 보험 상품 건수")
-    public void 일별보험상품건수() {
+    public void testMondayCheck() {
         LocalDateTime now = LocalDateTime.now();
         int year = now.getYear(); int month = now.getMonthValue(); int day = now.getDayOfMonth(); int hour = 0; int minute = 0;
         LocalDateTime endTime = LocalDateTime.of(year, month, 10, hour, minute);
@@ -80,7 +78,26 @@ class BatchStatProductServiceTest {
             dto.add(temp);
         }
 
-        System.out.println("collect = " + dto);
+        System.out.println("dto = " + dto);
     }
+
+
+    @Test
+    public void testWeekendCheck() {
+        LocalDateTime now = LocalDateTime.now();
+        int value = now.getMonth().getValue();
+
+
+
+
+
+    }
+
+
+
+
+
+
+
 
 }

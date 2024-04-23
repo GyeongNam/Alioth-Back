@@ -3,6 +3,7 @@ package com.alioth.server.common.domain;
 import com.alioth.server.domain.answer.domain.Answer;
 import com.alioth.server.domain.answer.dto.req.AnswerReqDto;
 import com.alioth.server.domain.answer.dto.res.AnswerResDto;
+import com.alioth.server.domain.batch.BatchHQSales;
 import com.alioth.server.domain.board.domain.Board;
 import com.alioth.server.domain.board.dto.req.BoardCreateDto;
 import com.alioth.server.domain.board.dto.res.BoardResDto;
@@ -236,4 +237,6 @@ public class TypeChange {
                 .board(board)
                 .build();
     }
+
+
 }
