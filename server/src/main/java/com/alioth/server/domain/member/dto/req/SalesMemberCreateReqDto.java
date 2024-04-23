@@ -27,7 +27,16 @@ public record SalesMemberCreateReqDto(
     String birthDay,
 
     @NotBlank(message = "주소는 필수 입력 값입니다.")
-    String address,
+    String zoneCode,
+
+    @NotBlank(message = "주소는 필수 입력 값입니다.")
+    String roadAddress,
+
+    @NotBlank(message = "주소는 필수 입력 값입니다.")
+    String jibunAddress,
+
+    @NotBlank(message = "주소는 필수 입력 값입니다.")
+    String detailAddress,
 
     @Valid
     SalesMemberType rank

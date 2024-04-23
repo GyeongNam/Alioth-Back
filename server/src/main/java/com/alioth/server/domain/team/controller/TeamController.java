@@ -96,6 +96,7 @@ public class TeamController {
         }
     }
 
+    // 팀 삭제
     @DeleteMapping("/delete/{teamCode}")
     public ResponseEntity<CommonResponse> deleteTeam(@PathVariable("teamCode") String teamCode,
                                                      @AuthenticationPrincipal UserDetails userDetails
