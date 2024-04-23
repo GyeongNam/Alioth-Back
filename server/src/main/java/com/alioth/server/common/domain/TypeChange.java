@@ -223,7 +223,7 @@ public class TypeChange {
     public AnswerResDto AnswerToAnswerResDto(Answer answer){
         return AnswerResDto.builder()
                 .answer_id(answer.getAnswerId())
-                .title(answer.getTitle())
+//                .title(answer.getTitle())
                 .content(answer.getContent())
                 .answer_name(answer.getSalesMembers().getName())
                 .build();
