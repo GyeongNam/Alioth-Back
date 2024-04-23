@@ -151,25 +151,15 @@ public class SalesMemberService {
                 .map(typeChange::smToSmResDto).toList();
     }
 
-    public List<SalesMembers> getAllMembersByTeam(Long teamId) {
-        return salesMemberRepository.findAllByTeamId(teamId);
-    }
-
-
     @Transactional
     public void deleteMember(Long salesMemberCode){
         this.findBySalesMemberCode(salesMemberCode).deleteMember();
     }
 
     @Transactional
-    public void exitTeam(List<SalesMembers> list){
-        for(SalesMembers salesMembers:  list){
+    public void exitTeam(List<SalesMembers> list) {
+        for (SalesMembers salesMembers : list) {
             salesMembers.exitTeam();
         }
-
-    public void deleteMember(Long salesMemberCode){
-        this.findBySalesMemberCode(salesMemberCode).deleteMember();
-        log.info("확인"+this.findBySalesMemberCode(salesMemberCode).getQuit());
-
     }
 }

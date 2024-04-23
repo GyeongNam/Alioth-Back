@@ -40,7 +40,13 @@ public class SalesMembers extends BaseEntity {
     private String birthDay;
 
     @Column(nullable = false, length = 200)
-    private String address;
+    private String zoneCode;
+
+    @Column(nullable = false)
+    private String roadAddress;
+
+    @Column(nullable = false)
+    private String detailAddress;
 
     @Column
     private String profileImage;
@@ -80,7 +86,9 @@ public class SalesMembers extends BaseEntity {
     public void updateMyInfo(SalesMemberUpdateReqDto dto){
         this.email = dto.email();
         this.phone = dto.phone();
-        this.address = dto.address();
+        this.zoneCode = dto.zoneCode();
+        this.roadAddress = dto.roadAddress();
+        this.detailAddress = dto.detailAddress();
         this.birthDay = dto.birthDay();
         this.name = dto.name();
         this.profileImage = dto.profileImage();

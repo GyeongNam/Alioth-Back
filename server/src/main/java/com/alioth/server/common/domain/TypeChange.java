@@ -51,7 +51,9 @@ public class TypeChange {
                 .name(dto.name())
                 .password(encodePassword)
                 .birthDay(dto.birthDay())
-                .address(dto.address())
+                .zoneCode(dto.zoneCode())
+                .roadAddress(dto.roadAddress())
+                .detailAddress(dto.detailAddress())
                 .rank(dto.rank())
                 .build();
 
@@ -77,7 +79,9 @@ public class TypeChange {
                 .performanceReview(member.getPerformanceReview())
                 .teamCode(member.getTeam() == null ? null : member.getTeam().getTeamCode())
                 .teamName(member.getTeam() == null ? null : member.getTeam().getTeamName())
-                .address(member.getAddress())
+                .zoneCode(member.getZoneCode())
+                .roadAddress(member.getRoadAddress())
+                .detailAddress(member.getDetailAddress())
                 .officeAddress(member.getOfficeAddress())
                 .extensionNumber(member.getExtensionNumber())
                 .phone(member.getPhone())
