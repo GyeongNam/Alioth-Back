@@ -46,9 +46,6 @@ public class SalesMembers extends BaseEntity {
     private String roadAddress;
 
     @Column(nullable = false)
-    private String jibunAddress;
-
-    @Column(nullable = false)
     private String detailAddress;
 
     @Column
@@ -91,7 +88,6 @@ public class SalesMembers extends BaseEntity {
         this.phone = dto.phone();
         this.zoneCode = dto.zoneCode();
         this.roadAddress = dto.roadAddress();
-        this.jibunAddress = dto.jibunAddress();
         this.detailAddress = dto.detailAddress();
         this.birthDay = dto.birthDay();
         this.name = dto.name();

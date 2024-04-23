@@ -53,7 +53,6 @@ public class TypeChange {
                 .birthDay(dto.birthDay())
                 .zoneCode(dto.zoneCode())
                 .roadAddress(dto.roadAddress())
-                .jibunAddress(dto.jibunAddress())
                 .detailAddress(dto.detailAddress())
                 .rank(dto.rank())
                 .build();
@@ -82,7 +81,6 @@ public class TypeChange {
                 .teamName(member.getTeam() == null ? null : member.getTeam().getTeamName())
                 .zoneCode(member.getZoneCode())
                 .roadAddress(member.getRoadAddress())
-                .jibunAddress(member.getJibunAddress())
                 .detailAddress(member.getDetailAddress())
                 .officeAddress(member.getOfficeAddress())
                 .extensionNumber(member.getExtensionNumber())

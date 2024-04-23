@@ -11,7 +11,6 @@ public record SMTeamListResDto(
     String email,
     String zoneCode,
     String roadAddress,
-    String jibunAddress,
     String detailAddress,
     String officeAddress,
     String extensionNumber,

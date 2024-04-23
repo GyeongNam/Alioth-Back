@@ -16,7 +16,6 @@ public record SalesMemberResDto(
         String birthDay,
         String zoneCode,
         String roadAddress,
-        String jibunAddress,
         String detailAddress,
         String profileImage,
         String performanceReview,

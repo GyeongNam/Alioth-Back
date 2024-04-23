@@ -15,7 +15,6 @@ public record SalesMemberUpdateReqDto(
         String birthDay,
         String zoneCode,
         String roadAddress,
-        String jibunAddress,
         String detailAddress,
         String profileImage,
         String officeAddress,

@@ -34,7 +34,6 @@ public class DataInitialization implements CommandLineRunner {
                     .birthDay("990123") // 마스킹
                     .zoneCode("21345")
                     .roadAddress("나는누구")
-                    .jibunAddress("자동반")
                     .detailAddress("상세광주?")
                     .rank(SalesMemberType.FP)
                     .build();
@@ -46,7 +45,6 @@ public class DataInitialization implements CommandLineRunner {
                     .password("a1234567!")
                     .birthDay("981101") // 마스킹
                     .zoneCode("21345")
-                    .jibunAddress("자동반")
                     .roadAddress("여기가 어디죠?")
                     .detailAddress("상세광주?") // 마스킹
                     .rank(SalesMemberType.MANAGER)
@@ -60,7 +58,6 @@ public class DataInitialization implements CommandLineRunner {
                     .birthDay("970410") // 마스킹
                     .zoneCode("21345")
                     .roadAddress("여기가 어디죠?")
-                    .jibunAddress("자동반")
                     .detailAddress("상세광주?") // 마스킹
                     .rank(SalesMemberType.HQ)
                     .build();
