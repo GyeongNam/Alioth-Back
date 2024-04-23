@@ -23,12 +23,4 @@ public class NotificationService {
     public List<Notification> getNotificationsForSalesMember(Long salesMemberId) {
         return notificationRepository.findAllBySalesMemberIdAndReadStatus(salesMemberId, ReadStatus.Unread);
     }
-
-    public Notification saveIfNotExists(Notification notification) {
-        Optional<Notification> existingNotification = notificationRepository.findByMessageId(notification.getMessageId());
-        if (existingNotification.isPresent()) {
-            return existingNotification.get();
-        }
-        return notificationRepository.save(notification);
-    }
 }

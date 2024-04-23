@@ -92,5 +92,6 @@ public class SalesMembers extends BaseEntity {
         this.team= team;
     }
 
-
+    public void deleteMember(){
+        this.quit = "Y";}
 }

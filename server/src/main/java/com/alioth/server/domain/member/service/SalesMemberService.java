@@ -10,6 +10,7 @@ import com.alioth.server.domain.team.domain.Team;
 import com.alioth.server.domain.team.service.TeamService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SalesMemberService {
 
     private final PasswordEncoder passwordEncoder;
@@ -96,6 +98,11 @@ public class SalesMemberService {
                 .map(typeChange::smToSmResDto).collect(Collectors.toList());
     }
 
+    public List<SalesMembers> getAllMembersByTeam(Long teamId) {
+        return salesMemberRepository.findAllByTeamId(teamId);
+    }
+
+
 
     //관리자 사원 정보 수정(권한, 팀 소속, 고과평가)
     @Transactional
@@ -126,6 +133,10 @@ public class SalesMemberService {
         salesMemberRepository.save(member);
     }
 
+    public List<SalesMembers> getAllMembersByTeam(Long teamId) {
+        return salesMemberRepository.findAllByTeamId(teamId);
+    }
+
     @Transactional
     public List<SalesMemberResDto> getAllMembers(){
         return salesMemberRepository.findAll().stream().
@@ -139,6 +150,17 @@ public class SalesMemberService {
                         .map(typeChange::smToSmResDto).toList();
     }
 
+    @Transactional
+    public List<SalesMemberResDto> getAllManagerMembers(){
+        return salesMemberRepository.findAll().stream()
+                .filter(salesMembers -> salesMembers.getRank()== SalesMemberType.MANAGER)
+                .map(typeChange::smToSmResDto).toList();
+    }
 
 
+    @Transactional
+    public void deleteMember(Long salesMemberCode){
+        this.findBySalesMemberCode(salesMemberCode).deleteMember();
+        log.info("확인"+this.findBySalesMemberCode(salesMemberCode).getQuit());
+    }
 }

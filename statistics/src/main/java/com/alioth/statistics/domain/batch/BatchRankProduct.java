@@ -30,5 +30,6 @@ public class BatchRankProduct {
 
     private String contractCount; // 상품별 건수
 
+    private LocalDateTime createdTime; // 입사 날짜
 
 }

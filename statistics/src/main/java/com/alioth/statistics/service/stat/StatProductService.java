@@ -1,4 +1,4 @@
-package com.alioth.statistics.service.batch;
+package com.alioth.statistics.service.stat;
 
 
 import com.alioth.statistics.domain.batch.BatchRankProduct;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class BatchStatProductService {
+public class StatProductService {
 
     private final BatchRankProductRepository productRepository;
 
@@ -52,6 +52,11 @@ public class BatchStatProductService {
     }
 
 
+
+
+
+
+
     public List<BatchProductCountResDto> productDayCount() {
         LocalDateTime now = LocalDateTime.now();
         int year = now.getYear(); int month = now.getMonthValue(); int day = now.getDayOfMonth(); int hour = 0; int minute = 0;
@@ -78,6 +83,9 @@ public class BatchStatProductService {
 
         return dto;
     }
+
+
+
 
 
 
