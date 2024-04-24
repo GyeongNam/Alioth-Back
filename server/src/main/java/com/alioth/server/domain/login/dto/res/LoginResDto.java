@@ -8,6 +8,8 @@ public record LoginResDto(
     String memberRank,
     String memberTeam,
     String name,
+    String email,
+    String image,
     String accessToken,
     String refreshToken
 ) {
