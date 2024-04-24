@@ -39,6 +39,6 @@ class BatchStatServiceTest {
     @Test
     @Transactional
     public void 일별맴버결과가져오기02() {
-        System.out.println("batchMemberSalesRepository = " + batchStatService.getMemberSales());
+        System.out.println("batchMemberSalesRepository = " + batchStatService.memberSalesMonth());
     }
 }
