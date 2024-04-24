@@ -161,4 +161,8 @@ public class SalesMemberService {
     public boolean existsBySalesMemberCode(Long salesMemberCode) {
         return salesMemberRepository.existsBySalesMemberCode(salesMemberCode);
     }
+
+    public boolean existsBySalesMemberCode(Long salesMemberCode) {
+        return salesMemberRepository.existsBySalesMemberCode(salesMemberCode);
+    }
 }

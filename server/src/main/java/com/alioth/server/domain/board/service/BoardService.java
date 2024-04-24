@@ -64,34 +64,39 @@ public class BoardService {
         boardRepository.save(board);
 
         if (board.getBoardType() == BoardType.SUGGESTION) {
+            // 이벤트에 대한 고유 ID 한 번만 생성
+            String eventId = UUID.randomUUID().toString();
             List<SalesMembers> teamMembers = salesMemberService.getAllMembersByTeam(author.getTeam().getId());
+
             // 각 팀 멤버에 대해 알림을 생성합니다.
             for (SalesMembers member : teamMembers) {
-                String uniqueId = UUID.randomUUID().toString(); // 고유 식별자 생성
-                Notification notification = Notification.builder()
-                        .salesMember(member)
-                        .title("새 건의사항")
-                        .message("새로운 건의사항이 등록되었습니다: " + board.getTitle())
-                        .readStatus(ReadStatus.Unread)
-                        .messageId(uniqueId)
-                        .build();
-                notificationRepository.save(notification);
-
-                // FCM 토큰이 있는 경우에만 FCM 메시지를 보냅니다.
-                String fcmToken = redisService.getFcmToken(member.getSalesMemberCode());
-                if (fcmToken != null) {
-                    FcmSendDto fcmSendDto = FcmSendDto.builder()
-                            .token(fcmToken)
+                if (!notificationRepository.existsByMessageId(eventId)) {
+                    Notification notification = Notification.builder()
+                            .salesMember(member)
                             .title("새 건의사항")
-                            .body("새로운 건의사항이 등록되었습니다: " + board.getTitle())
-                            .url("/BoardList")
+                            .message("새로운 건의사항이 등록되었습니다: " + board.getTitle())
+                            .readStatus(ReadStatus.Unread)
+                            .messageId(eventId) // 모든 알림에 동일한 이벤트 ID 사용
                             .build();
-                    fcmService.sendMessageTo(fcmSendDto);
+                    notificationRepository.save(notification);
+
+                    // FCM 메시지 발송
+                    String fcmToken = redisService.getFcmToken(member.getSalesMemberCode());
+                    if (fcmToken != null) {
+                        FcmSendDto fcmSendDto = FcmSendDto.builder()
+                                .token(fcmToken)
+                                .title("새 건의사항")
+                                .body("새로운 건의사항이 등록되었습니다: " + board.getTitle())
+                                .url("/BoardList")
+                                .build();
+                        fcmService.sendMessageTo(fcmSendDto);
+                    }
                 }
             }
         }
         return typeChange.BoardToBoardResDto(board);
     }
+
 
     public BoardResDto update(BoardUpdateDto boardUpdateDto, Long boardId, Long sm_code) {
         Board board = this.findById(boardId);

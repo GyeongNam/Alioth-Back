@@ -32,4 +32,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT b FROM Board b WHERE b.boardType = :boardType AND b.boardDel_YN = 'N'")
     List<Board> findByBoardType(@Param("boardType") BoardType boardType);
 
+
 }
