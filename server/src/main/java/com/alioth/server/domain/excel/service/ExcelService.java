@@ -88,7 +88,7 @@ public class ExcelService {
     private void contractExcelHq(String code, HttpServletResponse response, ExcelReqDto dto
     ) throws IOException, IllegalAccessException {
         if (code == null || code.isEmpty()) {
-                exportExcel(response, contractService.findAllContractsByPeriod(dto).stream().toList());
+            exportExcel(response, contractService.findAllContractsByPeriod(dto).stream().toList());
         } else {
             if (Character.isLetter(code.charAt(0))){
                 if (teamService.findByTeamCode(code).getDelYN().equals("N")) {
@@ -121,7 +121,7 @@ public class ExcelService {
 
     public List<ContractResDto> contractList(String code, ExcelReqDto dto) {
         Long memberId = salesMemberService.findBySalesMemberCode(Long.parseLong(code)).getId();
-            return contractService.allContractsByMemberAndPeriod(memberId, dto);
+        return contractService.allContractsByMemberAndPeriod(memberId, dto);
     }
 
     public List<ContractResDto> contractTeamList(String code, ExcelReqDto dto) {

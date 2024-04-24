@@ -51,7 +51,9 @@ public class TypeChange {
                 .name(dto.name())
                 .password(encodePassword)
                 .birthDay(dto.birthDay())
-                .address(dto.address())
+                .zoneCode(dto.zoneCode())
+                .roadAddress(dto.roadAddress())
+                .detailAddress(dto.detailAddress())
                 .rank(dto.rank())
                 .build();
 
@@ -77,7 +79,9 @@ public class TypeChange {
                 .performanceReview(member.getPerformanceReview())
                 .teamCode(member.getTeam() == null ? null : member.getTeam().getTeamCode())
                 .teamName(member.getTeam() == null ? null : member.getTeam().getTeamName())
-                .address(member.getAddress())
+                .zoneCode(member.getZoneCode())
+                .roadAddress(member.getRoadAddress())
+                .detailAddress(member.getDetailAddress())
                 .officeAddress(member.getOfficeAddress())
                 .extensionNumber(member.getExtensionNumber())
                 .phone(member.getPhone())
@@ -157,6 +161,7 @@ public class TypeChange {
                 .contractMemberName(contract.getContractMembers() != null ? contract.getContractMembers().getCM_name() : null)
                 .salesMemberName(contract.getSalesMembers() != null ? contract.getSalesMembers().getName() : null)  // 영업 사원 이름 추가
                 .salesMemberId(contract.getSalesMembers() != null ? contract.getSalesMembers().getId() : null)    // 영업 사원 ID 추가
+                .salesMemberResDto(contract.getSalesMembers() != null ? this.smToSmResDto(contract.getSalesMembers()) : null)
                 .build();
     }
 
