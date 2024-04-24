@@ -27,6 +27,14 @@ public class StatController {
     private final StatProductService productService;
 
 
+    @GetMapping("/api/batch/sales-member/day")
+    public ResponseEntity<CommonResponse> memberSalesDay() {
+        List<BatchMemberSalesResDto> dto = memberSalesService.memberSalesMonth();
+
+        return CommonResponse.responseMessage(HttpStatus.OK, "사원 일별 결과입니다", dto);
+    }
+
+
     @GetMapping("/api/batch/sales-member/month")
     public ResponseEntity<CommonResponse> memberSalesMonth() {
         List<BatchMemberSalesResDto> dto = memberSalesService.memberSalesMonth();
@@ -66,7 +74,39 @@ public class StatController {
     public ResponseEntity<CommonResponse> getTeamSalesDay() {
         List<BatchTeamSalesResDto> dto = teamSalesService.teamSalesDay();
 
-        return CommonResponse.responseMessage(HttpStatus.OK, "팀 일별 결과입니다", dto);
+        List<BatchTeamSalesResDto> tempList = new LinkedList<>();
+        BatchTeamSalesResDto temp1 = BatchTeamSalesResDto.builder()
+                .teamName("보험 1팀")
+                .teamCode("11122")
+                .contractPrice("11001000")
+                .contractCount("1134")
+                .cancelPrice("11444")
+                .cancelCount("11544")
+                .build();
+
+        BatchTeamSalesResDto temp2 = BatchTeamSalesResDto.builder()
+                .teamName("보험 2팀")
+                .teamCode("2222")
+                .contractPrice("32223")
+                .contractCount("221")
+                .cancelPrice("661123")
+                .cancelCount("666")
+                .build();
+
+        BatchTeamSalesResDto temp3 = BatchTeamSalesResDto.builder()
+                .teamName("보험 3팀")
+                .teamCode("5555")
+                .contractPrice("123123")
+                .contractCount("574")
+                .cancelPrice("7777")
+                .cancelCount("44")
+                .build();
+
+        tempList.add(temp1);
+        tempList.add(temp2);
+        tempList.add(temp3);
+
+        return CommonResponse.responseMessage(HttpStatus.OK, "팀 일별 결과입니다", tempList);
     }
 
     @GetMapping("/api/batch/sales-team/month")

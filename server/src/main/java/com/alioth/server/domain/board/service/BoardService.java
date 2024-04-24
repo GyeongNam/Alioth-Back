@@ -68,11 +68,11 @@ public class BoardService {
             String eventId = UUID.randomUUID().toString();
             List<SalesMembers> teamMembers = salesMemberService.getAllMembersByTeam(author.getTeam().getId());
 
-            // 각 팀 멤버에 대해 알림을 생성합니다.
-            for (SalesMembers member : teamMembers) {
-                if (!notificationRepository.existsByMessageId(eventId)) {
+            Long teamManagerCode = teamMembers.get(0).getTeam().getTeamManagerCode();
+
+            if (!notificationRepository.existsByMessageId(eventId)) {
                     Notification notification = Notification.builder()
-                            .salesMember(member)
+                            .salesMember(author)
                             .title("새 건의사항")
                             .message("새로운 건의사항이 등록되었습니다: " + board.getTitle())
                             .readStatus(ReadStatus.Unread)
@@ -81,7 +81,7 @@ public class BoardService {
                     notificationRepository.save(notification);
 
                     // FCM 메시지 발송
-                    String fcmToken = redisService.getFcmToken(member.getSalesMemberCode());
+                    String fcmToken = redisService.getFcmToken(teamManagerCode);
                     if (fcmToken != null) {
                         FcmSendDto fcmSendDto = FcmSendDto.builder()
                                 .token(fcmToken)
@@ -92,7 +92,34 @@ public class BoardService {
                         fcmService.sendMessageTo(fcmSendDto);
                     }
                 }
-            }
+
+
+
+            // 각 팀 멤버에 대해 알림을 생성합니다.
+//            for (SalesMembers member : teamMembers) {
+//                if (!notificationRepository.existsByMessageId(eventId)) {
+//                    Notification notification = Notification.builder()
+//                            .salesMember(member)
+//                            .title("새 건의사항")
+//                            .message("새로운 건의사항이 등록되었습니다: " + board.getTitle())
+//                            .readStatus(ReadStatus.Unread)
+//                            .messageId(eventId) // 모든 알림에 동일한 이벤트 ID 사용
+//                            .build();
+//                    notificationRepository.save(notification);
+//
+//                    // FCM 메시지 발송
+//                    String fcmToken = redisService.getFcmToken(member.getSalesMemberCode());
+//                    if (fcmToken != null) {
+//                        FcmSendDto fcmSendDto = FcmSendDto.builder()
+//                                .token(fcmToken)
+//                                .title("새 건의사항")
+//                                .body("새로운 건의사항이 등록되었습니다: " + board.getTitle())
+//                                .url("/BoardList")
+//                                .build();
+//                        fcmService.sendMessageTo(fcmSendDto);
+//                    }
+//                }
+//            }
         }
         return typeChange.BoardToBoardResDto(board);
     }
