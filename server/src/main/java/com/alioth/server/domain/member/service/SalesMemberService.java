@@ -157,4 +157,8 @@ public class SalesMemberService {
             salesMembers.exitTeam();
         }
     }
+
+    public boolean existsBySalesMemberCode(Long salesMemberCode) {
+        return salesMemberRepository.existsBySalesMemberCode(salesMemberCode);
+    }
 }

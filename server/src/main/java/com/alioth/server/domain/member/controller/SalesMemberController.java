@@ -180,5 +180,23 @@ public class SalesMemberController {
             throw new AccessDeniedException("권한이 없습니다.");
         }
     }
+
+    @GetMapping("/validate/{employeeNumber}")
+    public ResponseEntity<CommonResponse> validateEmployeeNumber(@PathVariable("employeeNumber") Long employeeNumber) {
+        boolean isValid = salesMemberService.existsBySalesMemberCode(employeeNumber);
+        if (isValid) {
+            return CommonResponse.responseMessage(
+                    HttpStatus.OK,
+                    "사원번호 유효합니다.",
+                    null
+            );
+        } else {
+            return CommonResponse.responseMessage(
+                    HttpStatus.NOT_FOUND,
+                    "사원번호를 다시 한 번 확인해주세요.",
+                    null
+            );
+        }
+    }
 }
 
