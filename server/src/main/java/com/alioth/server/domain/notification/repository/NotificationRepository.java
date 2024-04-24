@@ -12,6 +12,5 @@ import java.util.Optional;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> findAllBySalesMemberIdAndReadStatus(Long salesMemberId, ReadStatus readStatus);
-
-    Optional<Notification> findByMessageId(String messageId);
+    boolean existsByMessageId(String messageId);
 }
