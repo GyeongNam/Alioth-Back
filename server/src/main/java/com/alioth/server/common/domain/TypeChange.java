@@ -38,6 +38,8 @@ public class TypeChange {
                 .memberRank(findMember.getRank().toString())
                 .memberTeam(findMember.getTeam() != null ?  findMember.getTeam().getTeamCode() : "")
                 .name(findMember.getName())
+                .email(findMember.getEmail())
+                .image(findMember.getProfileImage())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

@@ -162,7 +162,8 @@ public class SalesMemberService {
         return salesMemberRepository.existsBySalesMemberCode(salesMemberCode);
     }
 
-    public boolean existsBySalesMemberCode(Long salesMemberCode) {
-        return salesMemberRepository.existsBySalesMemberCode(salesMemberCode);
+    public List<SalesMembers> getAllMembersByTeam(Long teamId) {
+        return salesMemberRepository.findAllByTeamId(teamId);
     }
+
 }
