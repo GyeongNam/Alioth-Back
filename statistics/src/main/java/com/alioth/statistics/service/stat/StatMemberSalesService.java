@@ -34,6 +34,18 @@ public class StatMemberSalesService {
         day = now.getDayOfMonth();
     }
 
+    public List<BatchMemberSalesResDto> memberSalesDay() {
+        YearMonth yearMonth = YearMonth.from(LocalDate.now());
+        LocalDate dateOfMonth = yearMonth.atEndOfMonth();
+        int dayOfMonth = dateOfMonth.getDayOfMonth();
+
+        LocalDateTime endTime = LocalDateTime.of(year, month, 11, 0, 0);
+        LocalDateTime startTime = endTime.minusMonths(1L);
+
+        return getMemberSales(startTime, endTime);
+    }
+
+
     public List<BatchMemberSalesResDto> memberSalesMonth() {
         YearMonth yearMonth = YearMonth.from(LocalDate.now());
         LocalDate dateOfMonth = yearMonth.atEndOfMonth();
