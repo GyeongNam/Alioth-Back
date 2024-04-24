@@ -80,16 +80,7 @@ public class StatTeamSalesService {
 
         List<BatchTeamSalesResDto> dto = teamSalesRepository.findByCreatedTimeBetween(startTime, endTime)
                 .stream()
-                .map(team -> {
-                    return BatchTeamSalesResDto.builder()
-                            .teamName(team.getTeamName())
-                            .teamCode(String.valueOf(team.getTeamCode()))
-                            .contractPrice(team.getContractPrice())
-                            .contractCount(team.getContractCount())
-                            .cancelPrice(team.getCancelPrice())
-                            .cancelCount(team.getCancelCount())
-                            .build();
-                })
+                .map(BatchTeamSalesResDto::ofBatchTeamSales)
                 .toList();
 
         return dto;
