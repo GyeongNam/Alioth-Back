@@ -142,7 +142,6 @@ public class SalesMemberService {
     public List<SalesMemberResDto> getAllManagerMembers(){
         return salesMemberRepository.findAll().stream()
                 .filter(salesMembers -> salesMembers.getRank()== SalesMemberType.MANAGER)
-
                 .filter(salesMembers -> salesMembers.getQuit().equals("N"))
                 .map(typeChange::smToSmResDto).toList();
     }
