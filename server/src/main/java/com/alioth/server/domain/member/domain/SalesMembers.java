@@ -79,7 +79,11 @@ public class SalesMembers extends BaseEntity {
 
     public void updateAdmin(SMAdminUpdateReqDto dto, Team team){
         this.rank = dto.rank();
+        this.performanceReview = dto.performanceReview();
         this.team = team;
+    }
+    public void updateAdmin(SMAdminUpdateReqDto dto){
+        this.rank = dto.rank();
         this.performanceReview = dto.performanceReview();
     }
 
@@ -100,7 +104,7 @@ public class SalesMembers extends BaseEntity {
         this.team = null;
     }
     public void updateTeam(Team team){
-        this.team= team;
+        this.team = team;
     }
 
     public void deleteMember(){

@@ -63,7 +63,7 @@ public class TeamController {
     @GetMapping("/list")
     public ResponseEntity<CommonResponse> getTeamList( @AuthenticationPrincipal UserDetails userDetails
     ) throws AccessDeniedException {
-        if (this.loginUser(userDetails).getRank() == SalesMemberType.HQ) {
+        if (this.loginUser(userDetails).getRank() != SalesMemberType.FP) {
             List<TeamResDto> list = new ArrayList<>();
             for(Team t : teamService.findAll()) {
                 String teamManagerName = salesMemberService.findBySalesMemberCode(t.getTeamManagerCode()).getName();
