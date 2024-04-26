@@ -55,14 +55,13 @@ public class SalesMemberController {
                 .message(member.getName() + "님의 비밀번호가 변경되었습니다.")
                 .result(member.getSalesMemberCode())
                 .build();
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(commonResponse);
     }
 
 
-    @PatchMapping("/{id}/info")
-    public ResponseEntity<?> updateMemberInfo(@PathVariable("id") Long id) {
+    @PatchMapping("/{salesMemberCode}/info")
+    public ResponseEntity<?> updateMemberInfo(@PathVariable("salesMemberCode") Long salesMemberCode) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(null);
     }

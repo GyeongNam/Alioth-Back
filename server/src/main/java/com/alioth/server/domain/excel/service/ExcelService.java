@@ -197,7 +197,6 @@ public class ExcelService {
 
     public void salesMembersExcel(SalesMembers salesMember, String code, HttpServletResponse response
     ) throws IOException, IllegalAccessException {
-
         switch (salesMember.getRank()){
             case HQ:
                 salesMembersExcelHq(code, response);
@@ -213,7 +212,6 @@ public class ExcelService {
     // 사원 HQ 일 경우  code = null , 팀 코드
     private void salesMembersExcelHq(String code, HttpServletResponse response
     ) throws IOException, IllegalAccessException {
-
         if (code == null || code.isEmpty()) {
             List<SalesMemberResDto> list = salesMemberService.findAll();
             exportExcel(response, list);
