@@ -166,4 +166,12 @@ public class SalesMemberService {
         return salesMemberRepository.findAllByTeamId(teamId);
     }
 
+
+    @Transactional
+    public void updateMemberImage(String memberCode, String memberImageUrl) {
+        SalesMembers findMember = findBySalesMemberCode(Long.valueOf(memberCode));
+        findMember.updateMemberImage(memberImageUrl);
+    }
+
+
 }
