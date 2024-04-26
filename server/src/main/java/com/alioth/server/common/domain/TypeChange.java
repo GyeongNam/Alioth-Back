@@ -57,6 +57,7 @@ public class TypeChange {
                 .roadAddress(dto.roadAddress())
                 .detailAddress(dto.detailAddress())
                 .rank(dto.rank())
+                .profileImage("https://sssalioth.s3.ap-northeast-2.amazonaws.com/member/defult-image.jpeg")
                 .build();
 
         return member;
@@ -77,6 +78,7 @@ public class TypeChange {
         return SalesMemberResDto.builder()
                 .rank(member.getRank())
                 .salesMemberCode(member.getSalesMemberCode())
+                .profileImage(member.getProfileImage())
                 .birthDay(member.getBirthDay())
                 .performanceReview(member.getPerformanceReview())
                 .teamCode(member.getTeam() == null ? null : member.getTeam().getTeamCode())
