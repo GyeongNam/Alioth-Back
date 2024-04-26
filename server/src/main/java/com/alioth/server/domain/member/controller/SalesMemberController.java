@@ -1,5 +1,6 @@
 package com.alioth.server.domain.member.controller;
 
+import com.alioth.server.common.aws.S3Service;
 import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.member.domain.SalesMemberType;
 import com.alioth.server.domain.member.domain.SalesMembers;
@@ -14,7 +15,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.Map;
 
@@ -25,6 +28,7 @@ import java.util.Map;
 public class SalesMemberController {
 
     private final SalesMemberService salesMemberService;
+    private final S3Service s3Service;
 
     @PostMapping("/create")
     public ResponseEntity<?> createMember(@RequestBody @Valid SalesMemberCreateReqDto dto) {
@@ -62,6 +66,20 @@ public class SalesMemberController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(null);
     }
+
+
+    @PatchMapping("/{memberCode}/image")
+    public ResponseEntity<?> updateMemberImage(@PathVariable("memberCode") String memberCode,
+                                               @ModelAttribute SalesMemberImageReqDto memberImage) throws IOException {
+        String profileImage = s3Service.saveFile(memberImage.memberImage());
+        salesMemberService.updateMemberImage(memberCode, profileImage);
+
+
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(profileImage);
+    }
+
 
 
     //HJ

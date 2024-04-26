@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Getter
@@ -103,6 +104,12 @@ public class SalesMembers extends BaseEntity {
         this.team= team;
     }
 
-    public void deleteMember(){
-        this.quit = "Y";}
+    public void deleteMember() {
+        this.quit = "Y";
+    }
+
+    public void updateMemberImage(String memberImage) {
+        this.profileImage = memberImage;
+    }
+
 }
