@@ -173,5 +173,16 @@ public class SalesMemberService {
         findMember.updateMemberImage(memberImageUrl);
     }
 
+    public SalesMembers findTeamManagerByTeamId(Long teamId) {
+        // This method assumes that each team has one manager who is distinctively marked
+        // and that you can directly fetch them through a repository method.
+        return salesMemberRepository.findManagerByTeamId(teamId).orElseThrow(() ->
+                new EntityNotFoundException("Team manager not found for team ID: " + teamId));
+    }
+
+    public List<SalesMembers> findAllHQMembers() {
+        return salesMemberRepository.findAllByRank(SalesMemberType.HQ);
+    }
+
 
 }
