@@ -131,7 +131,7 @@ public class SalesMemberService {
     public List<SalesMemberResDto> getAllMembers(){
         return salesMemberRepository.findAll().stream()
                         .filter(salesMembers -> salesMembers.getQuit().equals("N"))
-                        .map(typeChange::smToSmResDto).toList();
+                                        .map(typeChange::smToSmResDto).toList();
     }
 
     @Transactional
