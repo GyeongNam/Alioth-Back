@@ -95,8 +95,6 @@ public class SalesMembers extends BaseEntity {
         this.roadAddress = dto.roadAddress();
         this.detailAddress = dto.detailAddress();
         this.birthDay = dto.birthDay();
-        this.name = dto.name();
-        this.profileImage = dto.profileImage();
         this.officeAddress = dto.officeAddress();
         this.extensionNumber = dto.extensionNumber();
     }

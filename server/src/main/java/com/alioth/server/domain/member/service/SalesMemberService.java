@@ -117,6 +117,8 @@ public class SalesMemberService {
     public SalesMemberResDto updateMyInfo(Long salesMemberCode, SalesMemberUpdateReqDto dto){
         SalesMembers member = this.findBySalesMemberCode(salesMemberCode);
         member.updateMyInfo(dto);
+        SalesMemberResDto salesMemberResDto = typeChange.smToSmResDto(member);
+
         return typeChange.smToSmResDto(member);
     }
 

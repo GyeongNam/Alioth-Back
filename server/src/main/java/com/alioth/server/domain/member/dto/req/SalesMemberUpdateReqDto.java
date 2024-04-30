@@ -11,12 +11,10 @@ import lombok.Builder;
 public record  SalesMemberUpdateReqDto(
         String email,
         String phone,
-        String name,
         String birthDay,
         String zoneCode,
         String roadAddress,
         String detailAddress,
-        String profileImage,
         String officeAddress,
         String extensionNumber
 

@@ -5,7 +5,6 @@ import com.alioth.server.domain.board.dto.res.BoardResDto;
 import com.alioth.server.domain.contract.dto.res.ContractResDto;
 import com.alioth.server.domain.dummy.dto.res.SimpleListDTO;
 import com.alioth.server.domain.login.dto.res.LoginResDto;
-import com.alioth.server.domain.member.dto.res.SMTeamListResDto;
 import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
 import com.alioth.server.domain.notification.dto.res.NotificationResDto;
 import com.alioth.server.domain.schedule.dto.req.ScheduleReqDto;
@@ -31,7 +30,6 @@ public class CommonResponse {
             SimpleListDTO.class,
             LoginResDto.class,
             SalesMemberResDto.class,
-            SMTeamListResDto.class,
             NotificationResDto.class,
             ScheduleReqDto.class,
             TeamResDto.class
