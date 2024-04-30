@@ -97,8 +97,12 @@ public class SalesMemberService {
     @Transactional
     public SalesMemberResDto adminMemberUpdate (Long salesMemberCode, SMAdminUpdateReqDto dto) {
         SalesMembers member = this.findBySalesMemberCode(salesMemberCode);
-        Team team = teamService.findByTeamCode(dto.teamCode());
-        member.updateAdmin(dto, team);
+        if(dto.teamCode() != null){
+            Team team = teamService.findByTeamCode(dto.teamCode());
+            member.updateAdmin(dto, team);
+        } else {
+            member.updateAdmin(dto);
+        }
         salesMemberRepository.save(member);
         return typeChange.smToSmResDto(member);
     }
@@ -127,7 +131,7 @@ public class SalesMemberService {
     public List<SalesMemberResDto> getAllMembers(){
         return salesMemberRepository.findAll().stream()
                         .filter(salesMembers -> salesMembers.getQuit().equals("N"))
-                        .map(typeChange::smToSmResDto).toList();
+                                        .map(typeChange::smToSmResDto).toList();
     }
 
     @Transactional

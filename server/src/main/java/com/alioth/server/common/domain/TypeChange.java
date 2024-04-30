@@ -3,7 +3,6 @@ package com.alioth.server.common.domain;
 import com.alioth.server.domain.answer.domain.Answer;
 import com.alioth.server.domain.answer.dto.req.AnswerReqDto;
 import com.alioth.server.domain.answer.dto.res.AnswerResDto;
-import com.alioth.server.domain.batch.BatchHQSales;
 import com.alioth.server.domain.board.domain.Board;
 import com.alioth.server.domain.board.dto.req.BoardCreateDto;
 import com.alioth.server.domain.board.dto.res.BoardResDto;
@@ -17,7 +16,6 @@ import com.alioth.server.domain.login.dto.res.LoginResDto;
 import com.alioth.server.domain.member.domain.SalesMembers;
 import com.alioth.server.domain.member.dto.req.SalesMemberCreateReqDto;
 import com.alioth.server.domain.member.dto.res.SalesMemberResDto;
-import com.alioth.server.domain.member.dto.res.SMTeamListResDto;
 import com.alioth.server.domain.schedule.domain.Schedule;
 import com.alioth.server.domain.schedule.dto.req.ScheduleReqDto;
 import com.alioth.server.domain.schedule.dto.res.ScheduleResDto;
@@ -63,17 +61,6 @@ public class TypeChange {
         return member;
     }
 
-    public SMTeamListResDto smToSmTeamListResDto(SalesMembers member){
-        return SMTeamListResDto.builder()
-                .rank(member.getRank())
-                .name(member.getName())
-                .profileImage(member.getProfileImage())
-                .salesMemberCode(member.getSalesMemberCode())
-                .phone(member.getPhone())
-                .email(member.getEmail())
-                .build();
-    }
-
     public SalesMemberResDto smToSmResDto(SalesMembers member){
         return SalesMemberResDto.builder()
                 .rank(member.getRank())
@@ -81,8 +68,8 @@ public class TypeChange {
                 .profileImage(member.getProfileImage())
                 .birthDay(member.getBirthDay())
                 .performanceReview(member.getPerformanceReview())
-                .teamCode(member.getTeam() == null ? null : member.getTeam().getTeamCode())
-                .teamName(member.getTeam() == null ? null : member.getTeam().getTeamName())
+                .teamCode(member.getTeam() == null ? "NoTeam" : member.getTeam().getTeamCode())
+                .teamName(member.getTeam() == null ? "NoTeam" : member.getTeam().getTeamName())
                 .zoneCode(member.getZoneCode())
                 .roadAddress(member.getRoadAddress())
                 .detailAddress(member.getDetailAddress())
@@ -103,7 +90,7 @@ public class TypeChange {
                 .teamManagerName(teamManagerName)
                 .build();
     }
-    public TeamResDto teamToTeamResDto(Team team, String teamManagerName, List<SMTeamListResDto> list){
+    public TeamResDto teamToTeamResDto(Team team, String teamManagerName, List<SalesMemberResDto> list){
         return TeamResDto.builder()
                 .teamCode(team.getTeamCode())
                 .teamName(team.getTeamName())
