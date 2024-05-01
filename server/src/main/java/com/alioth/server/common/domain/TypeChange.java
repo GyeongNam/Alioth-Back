@@ -151,7 +151,7 @@ public class TypeChange {
                 .customName(contract.getCustom() != null ? contract.getCustom().getCustomerName() : null)
                 .contractMemberName(contract.getContractMembers() != null ? contract.getContractMembers().getCM_name() : null)
                 .salesMemberName(contract.getSalesMembers() != null ? contract.getSalesMembers().getName() : null)  // 영업 사원 이름 추가
-                .salesMemberId(contract.getSalesMembers() != null ? contract.getSalesMembers().getId() : null)    // 영업 사원 ID 추가
+                .salesMemberCode(contract.getSalesMembers() != null ? contract.getSalesMembers().getSalesMemberCode() : null)    // 영업 사원 ID 추가
                 .salesMemberResDto(contract.getSalesMembers() != null ? this.smToSmResDto(contract.getSalesMembers()) : null)
                 .build();
     }
@@ -221,6 +221,8 @@ public class TypeChange {
                 .answer_id(answer.getAnswerId())
 //                .title(answer.getTitle())
                 .content(answer.getContent())
+                .created_at(answer.getCreated_at())
+                .salesMemberCode(answer.getSalesMembers().getSalesMemberCode())
                 .answer_name(answer.getSalesMembers().getName())
                 .build();
     }
