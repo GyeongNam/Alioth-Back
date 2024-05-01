@@ -126,6 +126,9 @@ public class SalesMemberController {
     public ResponseEntity<CommonResponse> updateMyInfo(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody @Valid SalesMemberUpdateReqDto dto) {
+
+
+
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
                 "success",

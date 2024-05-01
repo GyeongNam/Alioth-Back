@@ -97,7 +97,7 @@ public class SalesMemberService {
     @Transactional
     public SalesMemberResDto adminMemberUpdate (Long salesMemberCode, SMAdminUpdateReqDto dto) {
         SalesMembers member = this.findBySalesMemberCode(salesMemberCode);
-        if(dto.teamCode() != null){
+        if(!dto.teamCode().equals("NoTeam")){
             Team team = teamService.findByTeamCode(dto.teamCode());
             member.updateAdmin(dto, team);
         } else {
@@ -117,6 +117,8 @@ public class SalesMemberService {
     public SalesMemberResDto updateMyInfo(Long salesMemberCode, SalesMemberUpdateReqDto dto){
         SalesMembers member = this.findBySalesMemberCode(salesMemberCode);
         member.updateMyInfo(dto);
+        SalesMemberResDto salesMemberResDto = typeChange.smToSmResDto(member);
+
         return typeChange.smToSmResDto(member);
     }
 
