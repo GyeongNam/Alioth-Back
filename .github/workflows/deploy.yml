@@ -76,7 +76,7 @@ jobs:
         REPOSITORY: alioth-hub
         IMAGE_TAG: v100
       run: |
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./server/Dockerfile .
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./server/Dockerfile ./server
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
 
