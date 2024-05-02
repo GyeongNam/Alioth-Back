@@ -1,4 +1,4 @@
-FROM openjdk:21 as stage1
+FROM openjdk:21-jdk-slim as stage1
 
 WORKDIR /server
 
@@ -8,7 +8,7 @@ COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
-RUN apk add --no-cache findutils
+
 # Gradle Wrapper 스크립트에 실행 권한을 부여
 RUN chmod +x ./gradlew
 
