@@ -34,7 +34,6 @@ jobs:
     - name: Grant execute permission for gradlew
       run: |
         chmod +x ./server/gradlew
-        chmod +x ./statistics/gradlew
 
     - name: install kubectl
       uses: azure/setup-kubectl@v3
@@ -86,7 +85,6 @@ jobs:
         REGISTRY: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com
         REPOSITORY: alioth-hub
       run: |
-        IMAGE_TAG=${{ steps.newtag.outputs.tag }}
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f Dockerfile .
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
