@@ -44,6 +44,12 @@ jobs:
 
 
 # aws 권한 세팅 (aws configure 팀 키값)
+
+    - name: configure aws check
+      run: |
+        echo "${{ secrets.AWS_ACCESS_KEY_ID }}"
+        echo "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+
     - name: configure aws
       uses: aws-actions/configure-aws-credentials@v1
       with:
