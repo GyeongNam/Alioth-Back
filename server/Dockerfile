@@ -1,3 +1,4 @@
+# openjdk:14 이후부턴 xargs가 없기 때문에 문제가 됩니다. 따라서 알파인 버전같은 걸 사용
 FROM openjdk:21-jdk-slim as stage1
 
 WORKDIR /server
