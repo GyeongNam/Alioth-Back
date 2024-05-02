@@ -62,11 +62,18 @@ jobs:
         echo "${{ secrets.JWT_YML }}" | base64 --decode > src/main/resources/jwt.yml
         find src
 
+    - name: Get image tag(version)
+      id: image
+      run: |
+        VERSION=$(echo ${{ github.sha }} | cut -c1-5)
+        echo VERSION=$VERSION
+        echo "::set-output name=version::$VERSION"
+
     - name: Build and push docker image to ecr
       env:
         REGISTRY: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com
         REPOSITORY: alioth-hub
-        IMAGE_TAG: v100
+        IMAGE_TAG: ${{ steps.image.outputs.version }}
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./server/Dockerfile ./server
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
