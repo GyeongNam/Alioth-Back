@@ -32,7 +32,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: chmod +x ./server/gradlew
 
     - name: install kubectl
       uses: azure/setup-kubectl@v3
