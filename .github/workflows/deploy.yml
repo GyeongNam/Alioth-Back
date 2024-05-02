@@ -85,8 +85,8 @@ jobs:
         REGISTRY: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com
         REPOSITORY: alioth-hub
       run: |
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f Dockerfile .
-        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        docker build -t $REGISTRY/$REPOSITORY:v100 -f Dockerfile .
+        docker push $REGISTRY/$REPOSITORY:v100
 
     # kubectl rollout restart deployment kip-backend
     - name: eks kubectl apply
