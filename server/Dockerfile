@@ -10,9 +10,7 @@ COPY settings.gradle .
 COPY src src
 
 # Gradle Wrapper 스크립트에 실행 권한을 부여
-RUN chmod +x gradlew
-
-# /app/build/libs/*.jar
+RUN chmod +x ./server/gradlew
 RUN ./server/gradlew bootJar
 
 FROM openjdk:21
