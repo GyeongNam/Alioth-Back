@@ -11,6 +11,7 @@ COPY src src
 
 # Gradle Wrapper 스크립트에 실행 권한을 부여
 RUN chmod +x ./gradlew
+
 RUN ./gradlew bootJar
 
 FROM openjdk:21
