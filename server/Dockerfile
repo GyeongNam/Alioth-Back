@@ -8,7 +8,7 @@ COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
-
+RUN apt-get update && apt-get install -y xargs
 # Gradle Wrapper 스크립트에 실행 권한을 부여
 RUN chmod +x ./gradlew
 
