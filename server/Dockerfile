@@ -15,7 +15,7 @@ RUN chmod +x gradlew
 # /app/build/libs/*.jar
 RUN ./gradlew bootJar
 
-FROM openjdk:11
+FROM openjdk:21
 
 WORKDIR /server
 
