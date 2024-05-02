@@ -55,9 +55,8 @@ public class TypeChange {
                 .roadAddress(dto.roadAddress())
                 .detailAddress(dto.detailAddress())
                 .rank(dto.rank())
-                .profileImage("https://sssalioth.s3.ap-northeast-2.amazonaws.com/member/defult-image.jpeg")
+                .profileImage("https://aliothsss.s3.ap-northeast-2.amazonaws.com/member/defaultImage.jpg")
                 .build();
-
         return member;
     }
 
