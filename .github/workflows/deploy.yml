@@ -83,8 +83,8 @@ jobs:
 
     - name: Build and push docker image to ecr
       env:
-        REGISTRY: 471112897563.dkr.ecr.ap-northeast-2.amazonaws.com
-        REPOSITORY: kip
+        REGISTRY: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com
+        REPOSITORY: alioth-hub
       run: |
         IMAGE_TAG=${{ steps.newtag.outputs.tag }}
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f Dockerfile .
