@@ -13,7 +13,7 @@ COPY src src
 RUN chmod +x gradlew
 
 # /app/build/libs/*.jar
-RUN ./gradlew bootJar
+RUN ./server/gradlew bootJar
 
 FROM openjdk:21
 
