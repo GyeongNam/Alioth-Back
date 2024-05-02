@@ -14,7 +14,6 @@ RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
 
 FROM openjdk:21
-
 WORKDIR /server
 
 # 빌드된 JAR 파일을 복사
