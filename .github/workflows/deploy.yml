@@ -26,6 +26,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: |
         chmod +x ./server/gradlew
+        chmod +x ./statistics/gradlew
 
     - name: install kubectl
       uses: azure/setup-kubectl@v3
@@ -35,11 +36,6 @@ jobs:
 
 
 # aws 권한 세팅 (aws configure 팀 키값)
-
-    - name: configure aws check
-      run: |
-        echo "${{ secrets.AWS_ACCESS_KEY_ID }}"
-        echo "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
 
     - name: configure aws
       uses: aws-actions/configure-aws-credentials@v1
