@@ -66,8 +66,8 @@ jobs:
         REPOSITORY: alioth-hub
         IMAGE_TAG: server ${{ github.run_number }}
       run: |
-        docker build -t $REGISTRY/$REPOSITORY:latest -f ./server/Dockerfile ./server
-        docker push $REGISTRY/$REPOSITORY:latest
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./server/Dockerfile ./server
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
     - name: Build and push docker image to ecr stat
       env:
@@ -75,8 +75,8 @@ jobs:
         REPOSITORY: alioth-stat
         IMAGE_TAG: statistics ${{ github.run_number }}
       run: |
-        docker build -t $REGISTRY/$REPOSITORY:latest -f ./statistics/Dockerfile ./statistics
-        docker push $REGISTRY/$REPOSITORY:latest
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./statistics/Dockerfile ./statistics
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
     - name: eks kubectl apply gateway
       run: |
