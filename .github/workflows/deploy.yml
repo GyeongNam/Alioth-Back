@@ -64,7 +64,7 @@ jobs:
       env:
         REGISTRY: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com
         REPOSITORY: alioth-hub
-        IMAGE_TAG: server ${{ github.run_number }}
+        IMAGE_TAG: server${{ github.run_number }}
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./server/Dockerfile ./server
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
@@ -73,7 +73,7 @@ jobs:
       env:
         REGISTRY: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com
         REPOSITORY: alioth-stat
-        IMAGE_TAG: statistics ${{ github.run_number }}
+        IMAGE_TAG: statistics${{ github.run_number }}
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./statistics/Dockerfile ./statistics
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
