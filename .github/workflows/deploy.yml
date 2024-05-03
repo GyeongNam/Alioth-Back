@@ -84,3 +84,8 @@ jobs:
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./statistics/Dockerfile ./statistics
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+    - name: eks kubectl apply gateway
+      run: |
+        kubectl apply -f ./gateway/k8s/alioth-gateway-depl-serv.yml
+        kubectl rollout restart deployment alioth-gateway-depl
