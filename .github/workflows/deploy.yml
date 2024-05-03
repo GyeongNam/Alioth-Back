@@ -65,7 +65,7 @@ jobs:
 #        echo VERSION=$VERSION
 #        echo "::set-output name=version::$VERSION"
 
-    - name: Build and push docker image to ecr
+    - name: Build and push docker image to ecr server
       env:
         REGISTRY: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com
         REPOSITORY: alioth-hub
@@ -73,7 +73,12 @@ jobs:
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./server/Dockerfile ./server
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+    - name: Build and push docker image to ecr stat
+      env:
+        REGISTRY: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com
+        REPOSITORY: alioth-stat
+        IMAGE_TAG: ${{ github.run_number }}
+      run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./statistics/Dockerfile ./statistics
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-
-
