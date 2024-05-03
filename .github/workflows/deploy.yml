@@ -78,7 +78,16 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./statistics/Dockerfile ./statistics
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
-    - name: eks kubectl apply gateway
+    - name: eks kubectl apply ingress
+      run: |
+        kubectl apply -f ./server/gateway/k8s/ingress.yml
+
+    - name: eks kubectl apply server gateway
       run: |
         kubectl apply -f ./server/gateway/k8s/alioth-gateway-depl-serv.yml
         kubectl rollout restart deployment alioth-gateway-depl
+
+    - name: eks kubectl apply statistics gateway
+      run: |
+        kubectl apply -f ./server/gateway/k8s/alioth-gateway-depl-stat.yml
+        kubectl rollout restart deployment alioth-gateway-stat
