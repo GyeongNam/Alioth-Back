@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: alioth-gateway-stat
-        image: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com/alioth-hub:latest
+        image: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com/alioth-stat:latest
         ports:
         - containerPort: 80
 ---
