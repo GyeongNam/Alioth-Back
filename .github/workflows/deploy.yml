@@ -87,5 +87,5 @@ jobs:
 
     - name: eks kubectl apply gateway
       run: |
-        kubectl apply -f ./gateway/k8s/alioth-gateway-depl-serv.yml
+        kubectl apply -f ./server/gateway/k8s/alioth-gateway-depl-serv.yml
         kubectl rollout restart deployment alioth-gateway-depl
