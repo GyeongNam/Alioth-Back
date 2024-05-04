@@ -91,3 +91,4 @@ jobs:
       run: |
         kubectl apply -f ./server/gateway/k8s/alioth-gateway-depl-stat.yml
         kubectl rollout restart deployment alioth-gateway-stat-depl
+
