@@ -52,12 +52,14 @@ jobs:
 
     - name: Set properties
       run: |
-        mkdir -p src/main/resources
+        mkdir -p /server/src/main/resources
         echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
         find src
         echo "${{ secrets.FCM_CREDENTIALS }}" | base64 --decode > src/main/resources/fcm-certification.json
         find src
-    
+        mkdir -p /server/src/main/resources
+        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+        find src
 
     - name: Build and push docker image to ecr server
       env:
