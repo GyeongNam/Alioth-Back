@@ -18,14 +18,14 @@ public class FireBaseConfig {
     @PostConstruct
     public void init(){
         try{
-            InputStream serviceAccountStream = new ClassPathResource("firebase/fcm-certification.json").getInputStream();
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
-                    .build();
-//            FileInputStream serviceAccount = new FileInputStream(System.getProperty("user.dir")+"/server/src/main/resources/firebase/fcm-certification.json");
+//            InputStream serviceAccountStream = new ClassPathResource("firebase/fcm-certification.json").getInputStream();
 //            FirebaseOptions options = new FirebaseOptions.Builder()
-//                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                    .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
 //                    .build();
+            FileInputStream serviceAccount = new FileInputStream(System.getProperty("user.dir")+"/src/main/resources/firebase/fcm-certification.json");
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .build();
             FirebaseApp.initializeApp(options);
         }catch (Exception e){
             e.printStackTrace();
