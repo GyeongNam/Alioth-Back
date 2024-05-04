@@ -57,6 +57,7 @@ jobs:
         find src
         echo "${{ secrets.FCM_CREDENTIALS }}" | base64 --decode > src/main/resources/fcm-certification.json
         find src
+    
 
     - name: Build and push docker image to ecr server
       env:
