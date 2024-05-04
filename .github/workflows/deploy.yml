@@ -56,16 +56,17 @@ jobs:
         mkdir -p ./server/src/main/resources/firebase/
         mkdir -p ./statistics/src/main/resources/
 
-    - name: create-json
-      uses: jsdaniell/create-json@v1.2.3
-      with:
-        name: "fcm-certification.json"
-        json: ${{ secrets.FCM_CREDENTIALS }}
-        dir: './server/src/main/resources/firebase/'
+#    - name: create-json
+#      uses: jsdaniell/create-json@v1.2.3
+#      with:
+#        name: "fcm-certification.json"
+#        json: ${{ secrets.FCM_CREDENTIALS }}
+#        dir: './server/src/main/resources/firebase/'
 
     - name: Set properties
       run: |
         echo "${{ secrets.SERVER_APPLICATION_YML }}" | base64 --decode > ./server/src/main/resources/application.yml
+        echo "${{ secrets.FCM_CREDENTIALS }}" | base64 --decode > ./server/src/main/resources/firebase/fcm-certification.json
         echo "${{ secrets.STATISTICS_APPLICATION_YML }}" | base64 --decode > ./statistics/src/main/resources/application.yml
 
     - name: Build and push docker image to ecr server
