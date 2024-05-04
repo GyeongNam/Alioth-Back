@@ -20,7 +20,7 @@ public class FireBaseConfig {
     @PostConstruct
     public void init(){
         try{
-            InputStream serviceAccountStream = new ClassPathResource("firebase/fcm-certification").getInputStream();
+            InputStream serviceAccountStream = new ClassPathResource("firebase/fcm-certification.json").getInputStream();
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
                     .build();
