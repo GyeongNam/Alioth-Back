@@ -50,6 +50,13 @@ jobs:
     - name: Login to ECR
       uses: aws-actions/amazon-ecr-login@v1
 
+    - name: create-json
+      uses: spanielled/create-json@v1.2.3
+      with:
+        name: "fcm-certification.json"
+        json: ${{ secrets.FCM_CREDENTIALS }}
+        dir: './server/src/main/resources/firebase/'
+        
     - name: Set properties
       run: |
         mkdir -p ./server/src/main/resources
@@ -58,13 +65,6 @@ jobs:
         mkdir -p ./statistics/src/main/resources
         echo "${{ secrets.STATISTICS_APPLICATION_YML }}" | base64 --decode > ./statistics/src/main/resources/application.yml
         find ./statistics/src
-
-    - name: create-json
-      uses: spanielled/create-json@v1.2.3
-      with:
-        name: "fcm-certification.json"
-        json: ${{ secrets.FCM_CREDENTIALS }}
-        dir: './server/src/main/resources/firebase/'
 
     - name: Build and push docker image to ecr server
       env:
