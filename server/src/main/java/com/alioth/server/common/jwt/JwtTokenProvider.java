@@ -21,7 +21,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
-@PropertySource("classpath:jwt.yml")
 @Component
 public class JwtTokenProvider {
 
@@ -32,10 +31,10 @@ public class JwtTokenProvider {
     private final RedisService redisService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public JwtTokenProvider(@Value("${access-key}") String accessSecretKey,
-                            @Value("${refresh-key}")String refreshSecretKey,
-                            @Value("${access-expired}")long expirationMinutes,
-                            @Value("${refresh-expired}")long refreshExpirationMinutes,
+    public JwtTokenProvider(@Value("${jwt.access-key}") String accessSecretKey,
+                            @Value("${jwt.refresh-key}")String refreshSecretKey,
+                            @Value("${jwt.access-expired}")long expirationMinutes,
+                            @Value("${jwt.refresh-expired}")long refreshExpirationMinutes,
                             RedisService redisService) {
         this.accessSecretKey = accessSecretKey;
         this.refreshSecretKey = refreshSecretKey;
