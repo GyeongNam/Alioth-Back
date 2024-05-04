@@ -20,15 +20,11 @@ public class FireBaseConfig {
     @PostConstruct
     public void init(){
         try{
-
-            InputStream serviceAccountStream = new ClassPathResource("firebase/fcm-certification.json").getInputStream();
-            Resource resource = new ClassPathResource("firebase/fcm-certification.json");
-            File file = resource.getFile();
-            String filePath = file.getAbsolutePath();
-            log.info("123123 : " + filePath);
+            InputStream serviceAccountStream = new ClassPathResource("firebase/fcm-certification").getInputStream();
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
                     .build();
+
 //            FileInputStream serviceAccount = new FileInputStream(System.getProperty("user.dir")+"/server/src/main/resources/firebase/fcm-certification.json");
 //            FirebaseOptions options = new FirebaseOptions.Builder()
 //                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
