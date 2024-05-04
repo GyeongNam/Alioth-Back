@@ -64,19 +64,17 @@ jobs:
       env:
         REGISTRY: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com
         REPOSITORY: alioth-hub
-        IMAGE_TAG: server${{ github.run_number }}
       run: |
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./server/Dockerfile ./server
-        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        docker build -t $REGISTRY/$REPOSITORY:latest -f ./server/Dockerfile ./server
+        docker push $REGISTRY/$REPOSITORY:latest
 
     - name: Build and push docker image to ecr stat
       env:
         REGISTRY: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com
         REPOSITORY: alioth-stat
-        IMAGE_TAG: statistics${{ github.run_number }}
       run: |
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./statistics/Dockerfile ./statistics
-        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        docker build -t $REGISTRY/$REPOSITORY:latest -f ./statistics/Dockerfile ./statistics
+        docker push $REGISTRY/$REPOSITORY:latest
 
     - name: eks kubectl apply ingress
       run: |
