@@ -23,23 +23,18 @@ import java.util.Map;
 
 @Component
 public class JwtTokenProvider {
-
-    private final String accessSecretKey;
-    private final String refreshSecretKey;
-    private final long expirationMinutes;
-    private final long refreshExpirationMinutes;
+    @Value("${jwt.access-key}")
+    private String accessSecretKey;
+    @Value("${jwt.refresh-key}")
+    private String refreshSecretKey;
+    @Value("${jwt.access-expired}")
+    private long expirationMinutes;
+    @Value("${jwt.refresh-expired}")
+    private long refreshExpirationMinutes;
     private final RedisService redisService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public JwtTokenProvider(@Value("${jwt.access-key}") String accessSecretKey,
-                            @Value("${jwt.refresh-key}")String refreshSecretKey,
-                            @Value("${jwt.access-expired}")long expirationMinutes,
-                            @Value("${jwt.refresh-expired}")long refreshExpirationMinutes,
-                            RedisService redisService) {
-        this.accessSecretKey = accessSecretKey;
-        this.refreshSecretKey = refreshSecretKey;
-        this.expirationMinutes = expirationMinutes;
-        this.refreshExpirationMinutes = refreshExpirationMinutes;
+    public JwtTokenProvider(RedisService redisService) {
         this.redisService = redisService;
     }
 
