@@ -61,7 +61,7 @@ jobs:
       with:
         name: "fcm-certification.json"
         json: ${{ secrets.FCM_CREDENTIALS }}
-        dir: './src/main/resources/firebase/'
+        dir: './server/src/main/resources/firebase/'
 
     - name: Set properties
       run: |
