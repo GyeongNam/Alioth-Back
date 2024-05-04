@@ -78,11 +78,6 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:latest -f ./statistics/Dockerfile ./statistics
         docker push $REGISTRY/$REPOSITORY:latest
 
-    - name: eks kubectl apply ingress
-      run: |
-        kubectl apply -f ./k8s/ingress.yml
-        kubectl rollout restart deployment aws-load-balancer-controller -n kube-system
-        
     - name: eks kubectl apply server gateway
       run: |
         kubectl apply -f ./k8s/alioth-gateway-depl-serv.yml
@@ -93,3 +88,7 @@ jobs:
         kubectl apply -f ./k8s/alioth-gateway-depl-stat.yml
         kubectl rollout restart deployment alioth-gateway-stat-depl
 
+    - name: eks kubectl apply ingress
+      run: |
+        kubectl apply -f ./k8s/ingress.yml
+        kubectl rollout restart deployment aws-load-balancer-controller -n kube-system
