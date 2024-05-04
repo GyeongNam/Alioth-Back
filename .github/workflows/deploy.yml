@@ -60,7 +60,7 @@ jobs:
       uses: jsdaniell/create-json@v1.2.3
       with:
         name: "fcm-certification.json"
-        json: ${{ secrets.FCM_CREDENTIALS }} | base64 --decode > ./server/src/main/resources/firebase/fcm-certification.json
+        json: ${{ secrets.FCM_CREDENTIALS }}
         dir: './src/main/resources/firebase/'
 
     - name: Set properties
