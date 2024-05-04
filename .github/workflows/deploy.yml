@@ -51,12 +51,12 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: create-json
-      uses: spanielled/create-json@v1.2.3
+      uses: jsdaniell/create-json@v1.2.3
       with:
         name: "fcm-certification.json"
         json: ${{ secrets.FCM_CREDENTIALS }}
         dir: './server/src/main/resources/firebase/'
-        
+
     - name: Set properties
       run: |
         mkdir -p ./server/src/main/resources
