@@ -55,7 +55,8 @@ jobs:
         mkdir -p ./server/src/main/resources
         echo "${{ secrets.SERVER_APPLICATION_YML }}" | base64 --decode > ./server/src/main/resources/application.yml
         find ./server/src
-        echo "${{ secrets.FCM_CREDENTIALS }}" | base64 --decode > ./server/src/main/resources/fcm-certification.json
+        mkdir -p ./server/src/main/resources/firebase
+        echo "${{ secrets.FCM_CREDENTIALS }}" | base64 --decode > ./server/src/main/resources/firebase/fcm-certification.json
         find ./server/src
         mkdir -p ./statistics/src/main/resources
         echo "${{ secrets.STATISTICS_APPLICATION_YML }}" | base64 --decode > ./statistics/src/main/resources/application.yml
