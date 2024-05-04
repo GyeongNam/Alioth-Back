@@ -57,7 +57,7 @@ jobs:
         find src
         echo "${{ secrets.FCM_CREDENTIALS }}" | base64 --decode > src/main/resources/fcm-certification.json
         find src
-        mkdir -p /server/src/main/resources
+        mkdir -p /statistics/src/main/resources
         echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
         find src
 
