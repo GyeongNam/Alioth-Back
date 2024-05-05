@@ -23,14 +23,14 @@ spec:
     - host: server.alioth.site
       http:
         paths:
-          - path: /stat
+          - path: /statistics
             pathType: Prefix
             backend:
               service:
                 name: alioth-gateway-stat-service
                 port:
                   number: 80
-          - path: /serv
+          - path: /server
             pathType: Prefix
             backend:
               service:

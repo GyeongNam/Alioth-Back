@@ -57,32 +57,10 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-
     public String recreateAccessToken(String oldAccessToken) throws JsonProcessingException {
         String subject = decodeJwtPayloadSubject(oldAccessToken);
-
-//        userRefreshTokenRepository.findByUserIdAndReissueCountLessThan(
-//                        Long.parseLong(subject.split(":")[0]), reissueLimit)
-//                .ifPresentOrElse(
-//                        UserRefreshToken::increaseReissueCount,
-//                        () -> {
-//                            throw new ExpiredJwtException(null, null, "Refresh token expried.");
-//                        }
-//                );
         return createAccessToken(subject);
     }
-
-
-//    public void validateRefreshToken(String refreshToken, String oldAccessToken) throws JsonProcessingException {
-//        validateAndParseToken(refreshToken);
-//        String memberCode = decodeJwtPayloadSubject(oldAccessToken).split(":")[0];
-//        //String redis_refreshToken = redisService.getValues(memberCode + ":RefreshToken");
-//
-//        userRefreshTokenRepository.findByUserIdAndReissueCountLessThan(Long.parseLong(memberId), reissueLimit)
-//                .filter(memberRefreshToken -> memberRefreshToken.validateRefreshToken(refreshToken))
-//                .orElseThrow(() -> new ExpiredJwtException(null, null, "Refresh token expired."));
-//
-//    }
     public Claims validateRefreshToken(String refreshToken) {
         Key key = Keys.hmacShaKeyFor(refreshSecretKey.getBytes(StandardCharsets.UTF_8));
         return Jwts.parserBuilder()
@@ -92,7 +70,6 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-
     public String decodeJwtPayloadSubject(String oldAccessToken) throws JsonProcessingException {
         return objectMapper.readValue(
                 new String(Base64.getDecoder().decode(oldAccessToken.split("\\.")[1]),
@@ -101,10 +78,7 @@ public class JwtTokenProvider {
                 .get("sub").toString();
     }
 
-
-
     private Jws<Claims> validateAndParseToken(String refreshToken) {
-        // validateTokenAndGetSubject에서 따로 분리
         return Jwts.parser()
                 .setSigningKey(accessSecretKey.getBytes())
                 .parseClaimsJws(refreshToken);
@@ -113,7 +87,4 @@ public class JwtTokenProvider {
     public String validateTokenAndGetSubject(String token) {
         return validateAndParseToken(token).getBody().getSubject();
     }
-
-
-
 }
