@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 **/main/resources/*.yml
 **/main/resources/aws.yml
+**/main/resources/application.yml
 **/main/resources/jwt.yml
 
 ### STS ###

@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/image")
+@RequestMapping("/server/api/image")
 public class ImageUploadController {
 
     private final ImageService imageService;

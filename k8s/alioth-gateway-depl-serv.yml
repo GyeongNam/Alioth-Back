@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alioth-gateway-serv-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alioth-gateway-serv
+  template:
+  # pod의 네임
+    metadata:
+      labels:
+        app: alioth-gateway-serv
+    spec:
+      containers:
+      - name: alioth-gateway-serv
+        image: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com/alioth-hub:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alioth-gateway-serv-service
+spec:
+# ClusterIp는 클러스터 내부에서만 접근 가능한 service를 생성
+  type: ClusterIP
+  ports:
+  - name : http
+    port: 80
+    targetPort: 8080
+  - name: https
+    port: 443
+    targetPort: 8080
+  selector:
+    app: alioth-gateway-serv
