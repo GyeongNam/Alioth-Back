@@ -18,7 +18,7 @@ public class HealthController {
                 "서버 이상 무"
         );
     }
-    @GetMapping("stat/")
+    @GetMapping("statistics/")
     public ResponseEntity<CommonResponse> HealthCheck2(){
 
         return CommonResponse.responseMessage(
