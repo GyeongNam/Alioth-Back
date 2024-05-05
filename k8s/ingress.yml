@@ -7,6 +7,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "alb"
     alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/group.name: "group1"
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:719865047578:certificate/7f9e938a-5a18-4342-8939-b674545a7030
     alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-2016-08
