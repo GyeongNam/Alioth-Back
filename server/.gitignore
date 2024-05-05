@@ -4,6 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+**/main/resources/*.yml
 **/main/resources/aws.yml
 **/main/resources/jwt.yml
 
