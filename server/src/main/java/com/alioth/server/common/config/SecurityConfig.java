@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorize -> authorize
+                                .requestMatchers("/").permitAll()
                                 .requestMatchers(LoginApiUrl).permitAll()
                                 .requestMatchers(SwaggerUrl).permitAll()
                                 .requestMatchers(DummyApiUrl).permitAll()
