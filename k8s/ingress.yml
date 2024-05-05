@@ -28,9 +28,12 @@ spec:
             backend:
               service:
                 name: alioth-gateway-stat-service
+                port:
+                  number: 80
           - path: /serv
             pathType: Prefix
             backend:
               service:
                 name: alioth-gateway-serv-service
-
+                port:
+                  number: 80
