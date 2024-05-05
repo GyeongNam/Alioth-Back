@@ -17,7 +17,7 @@ spec:
       - name: alioth-gateway-serv
         image: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com/alioth-hub:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
@@ -29,6 +29,6 @@ spec:
   ports:
   - name : http
     port: 80
-    targetPort: 8080
+    targetPort: 80
   selector:
     app: alioth-gateway-serv
