@@ -91,4 +91,3 @@ jobs:
     - name: eks kubectl apply ingress
       run: |
         kubectl apply -f ./k8s/ingress.yml
-        kubectl rollout restart deployment aws-load-balancer-controller -n kube-system
