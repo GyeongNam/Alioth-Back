@@ -9,10 +9,10 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/group.name: "group1"
-#    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:719865047578:certificate/ea906a08-1852-467a-be08-55f3d9dac556
-#    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-2016-08
-#    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80,"HTTPS": 443}]'
-#    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:719865047578:certificate/ea906a08-1852-467a-be08-55f3d9dac556
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-2016-08
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80,"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
     external-dns.alpha.kubernetes.io/hostname: server.alioth.site
     alb.ingress.kubernetes.io/load-balancer-name: "aliothALB"
     meta.helm.sh/release-name: aws-load-balancer-controller
