@@ -18,4 +18,12 @@ public class HealthController {
                 "서버 이상 무"
         );
     }
+    @GetMapping("/serv/")
+    public ResponseEntity<CommonResponse> HealthCheck2(){
+
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "서버 이상 무"
+        );
+    }
 }

@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/serv/").permitAll()
                                 .requestMatchers(LoginApiUrl).permitAll()
                                 .requestMatchers(SwaggerUrl).permitAll()
                                 .requestMatchers(DummyApiUrl).permitAll()
