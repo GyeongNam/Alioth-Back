@@ -23,7 +23,7 @@ public class HealthController {
 
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
-                "서버 이상 무"
+                "statistics 이상 무"
         );
     }
 }
