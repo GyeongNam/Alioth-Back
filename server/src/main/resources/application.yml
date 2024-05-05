@@ -17,4 +17,18 @@ spring:
       port: 6379
 firebase:
   api-url: "https://fcm.googleapis.com/v1/projects/alioth-fcm/messages:send"
-  config-path: "/firebase/alioth-fcm-firebase-adminsdk-tforn-c7ffd79e05.json"
+  config-path: "/firebase/fcm-certification.json"
+
+
+cloud:
+  aws:
+    s3:
+      bucket: aliothsss #<S3 버킷 이름>
+    credentials:
+      access-key: AKIA2PG2M5INGTJHHVC6 # <저장해놓은 액세스 키>
+      secret-key: 8tavJ9yR/INxi4I0USyRAISRm1Q/OiQzgKieFJ9z # <저장해놓은 비밀 액세스 키>
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
