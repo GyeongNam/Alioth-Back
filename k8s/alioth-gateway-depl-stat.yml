@@ -30,5 +30,8 @@ spec:
   - name : http
     port: 80
     targetPort: 8081
+  - name: https
+    port: 443
+    targetPort: 8081
   selector:
     app: alioth-gateway-stat
