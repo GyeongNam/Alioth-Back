@@ -7,7 +7,6 @@ spec:
     matchLabels:
       app: alioth-deployment
   template:
-  # pod의 네임
     metadata:
       labels:
         app: alioth-deployment
@@ -17,6 +16,18 @@ spec:
         image: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com/alioth-hub:latest
         ports:
         - containerPort: 8080
+        readinessProbe: # Readiness Probe 추가
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe: # Liveness Probe (필요한 경우)
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
         resources:
           requests:
             cpu: 250m
@@ -26,6 +37,18 @@ spec:
         image: 719865047578.dkr.ecr.ap-northeast-2.amazonaws.com/alioth-stat:latest
         ports:
         - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
         resources:
           requests:
             cpu: 250m
