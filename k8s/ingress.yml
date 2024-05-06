@@ -18,7 +18,7 @@ metadata:
     meta.helm.sh/release-name: aws-load-balancer-controller
     meta.helm.sh/release-namespace: kube-system
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
-    alb.ingress.kubernetes.io/healthcheck-path: /server/
+    alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/healthcheck-port: '443'
     alb.ingress.kubernetes.io/success-codes: '200'
 spec:
