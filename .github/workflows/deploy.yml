@@ -78,23 +78,19 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:latest -f ./statistics/Dockerfile ./statistics
         docker push $REGISTRY/$REPOSITORY:latest
 
-    - name: eks kubectl apply server gateway
+    - name: eks kubectl apply alioth-deployment
       run: |
-        kubectl apply -f ./k8s/alioth-gateway-depl-serv.yml
-        kubectl rollout restart deployment alioth-gateway-serv-depl
+        kubectl apply -f ./k8s/alioth-deployment.yml
+        kubectl rollout restart deployment alioth-deployment
 
-    - name: eks kubectl apply statistics gateway
+    - name: eks kubectl apply alioth-service
       run: |
-        kubectl apply -f ./k8s/alioth-gateway-depl-stat.yml
-        kubectl rollout restart deployment alioth-gateway-stat-depl
+        kubectl apply -f ./k8s/alioth-service.yml
+        kubectl rollout restart deployment alioth-service
 
     - name: Configure Horizontal Pod server Autoscaler
       run: |
-        kubectl apply -f ./k8s/server-hpa.yml
-
-    - name: Configure Horizontal Pod statistics Autoscaler
-      run: |
-        kubectl apply -f ./k8s/statistics-hpa.yml
+        kubectl apply -f ./k8s/alioth-hpa.yml
 
     - name: eks kubectl apply ingress
       run: |
