@@ -88,6 +88,14 @@ jobs:
         kubectl apply -f ./k8s/alioth-gateway-depl-stat.yml
         kubectl rollout restart deployment alioth-gateway-stat-depl
 
+    - name: Configure Horizontal Pod server Autoscaler
+      run: |
+        kubectl apply -f ./k8s/server-hpa.yaml
+
+    - name: Configure Horizontal Pod statistics Autoscaler
+      run: |
+        kubectl apply -f ./k8s/statistics-hpa.yaml
+
     - name: eks kubectl apply ingress
       run: |
         kubectl apply -f ./k8s/ingress.yml
