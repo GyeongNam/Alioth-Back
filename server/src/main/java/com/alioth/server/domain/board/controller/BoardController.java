@@ -4,7 +4,7 @@ import com.alioth.server.common.aws.S3Service;
 import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.board.dto.req.BoardCreateDto;
 import com.alioth.server.domain.board.dto.req.BoardUpdateDto;
-import com.alioth.server.domain.board.dto.req.SugBoradImageReqDto;
+import com.alioth.server.domain.board.dto.req.SugBoardImageReqDto;
 import com.alioth.server.domain.board.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -93,7 +92,7 @@ public class BoardController {
     }
 
     @PostMapping("/image/upload")
-    public ResponseEntity<CommonResponse> uploadImage(@ModelAttribute("file") SugBoradImageReqDto file) throws IOException {
+    public ResponseEntity<CommonResponse> uploadImage(@ModelAttribute("file") SugBoardImageReqDto file) throws IOException {
         String imageUrl = s3Service.saveFile(file.boardImage(), "/suggestionboard");
 
         return CommonResponse.responseMessage(
