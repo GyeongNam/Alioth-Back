@@ -17,10 +17,6 @@ metadata:
     alb.ingress.kubernetes.io/load-balancer-name: "alioth-alb"
     meta.helm.sh/release-name: aws-load-balancer-controller
     meta.helm.sh/release-namespace: kube-system
-    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
-    alb.ingress.kubernetes.io/healthcheck-path: /
-    alb.ingress.kubernetes.io/healthcheck-port: '8080'
-    alb.ingress.kubernetes.io/success-codes: '200'
 spec:
   ingressClassName: alb
   rules:
