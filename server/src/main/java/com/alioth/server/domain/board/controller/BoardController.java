@@ -97,7 +97,7 @@ public class BoardController {
 
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
-                "이미지 url 반환",
+                "이미지 S3 url 반환",
                 imageUrl
         );
     }
