@@ -87,7 +87,7 @@ jobs:
       run: |
         kubectl apply -f ./k8s/alioth-service.yml
 
-    - name: Configure Horizontal Pod server Autoscaler
+    - name: Configure Horizontal Pod Autoscaler
       run: |
         kubectl apply -f ./k8s/alioth-hpa.yml
 
