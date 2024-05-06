@@ -87,6 +87,7 @@ public class TypeChange {
                 .teamCode(team.getTeamCode())
                 .teamName(team.getTeamName())
                 .teamManagerName(teamManagerName)
+                .performanceReview(team.getPerformanceReview())
                 .build();
     }
     public TeamResDto teamToTeamResDto(Team team, String teamManagerName, List<SalesMemberResDto> list){
@@ -95,6 +96,7 @@ public class TypeChange {
                 .teamName(team.getTeamName())
                 .teamManagerName(teamManagerName)
                 .teamMemberList(list)
+                .performanceReview(team.getPerformanceReview())
                 .build();
     }
 
@@ -103,6 +105,7 @@ public class TypeChange {
                 .teamCode(teamCode)
                 .teamName(dto.teamName())
                 .teamManagerCode(dto.teamManagerCode())
+                .performanceReview(dto.performanceReview() == null ? "" : dto.performanceReview() )
                 .build();
     }
 
