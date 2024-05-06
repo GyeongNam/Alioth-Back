@@ -90,11 +90,11 @@ jobs:
 
     - name: Configure Horizontal Pod server Autoscaler
       run: |
-        kubectl apply -f ./k8s/server-hpa.yaml
+        kubectl apply -f ./k8s/server-hpa.yml
 
     - name: Configure Horizontal Pod statistics Autoscaler
       run: |
-        kubectl apply -f ./k8s/statistics-hpa.yaml
+        kubectl apply -f ./k8s/statistics-hpa.yml
 
     - name: eks kubectl apply ingress
       run: |
