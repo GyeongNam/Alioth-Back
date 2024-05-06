@@ -10,6 +10,7 @@ public record TeamResDto(
   String teamName,
   String teamCode,
   String teamManagerName,
+  String performanceReview,
   List<SalesMemberResDto> teamMemberList
 
 ) {}
