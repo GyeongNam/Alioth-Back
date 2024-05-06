@@ -8,5 +8,5 @@ spec:
     kind: Deployment
     name: alioth-gateway-stat-depl
   minReplicas: 2
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 50
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 70

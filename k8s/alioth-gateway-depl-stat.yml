@@ -3,7 +3,6 @@ kind: Deployment
 metadata: 
   name: alioth-gateway-stat-depl
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: alioth-gateway-stat
@@ -22,7 +21,7 @@ spec:
           requests:
             cpu: 250m
           limits:
-            cpu: 500m
+            cpu: 700m
 ---
 apiVersion: v1
 kind: Service
