@@ -86,7 +86,6 @@ jobs:
     - name: eks kubectl apply alioth-service
       run: |
         kubectl apply -f ./k8s/alioth-service.yml
-        kubectl rollout restart deployment alioth-service
 
     - name: Configure Horizontal Pod server Autoscaler
       run: |
