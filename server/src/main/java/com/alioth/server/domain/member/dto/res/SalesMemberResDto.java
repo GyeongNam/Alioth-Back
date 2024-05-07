@@ -22,7 +22,9 @@ public record SalesMemberResDto(
         String teamName,
         String officeAddress,
         String extensionNumber,
-        SalesMemberType rank
+        SalesMemberType rank,
+        Long monthlyTargetPrice,
+        Long monthlyTargetCount
 
 ) {
 

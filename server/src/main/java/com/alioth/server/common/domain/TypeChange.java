@@ -77,6 +77,8 @@ public class TypeChange {
                 .phone(member.getPhone())
                 .name(member.getName())
                 .email(member.getEmail())
+                .monthlyTargetCount(member.getMonthlyTargetCount())
+                .monthlyTargetPrice(member.getMonthlyTargetPrice())
                 .build();
     }
 
@@ -88,6 +90,8 @@ public class TypeChange {
                 .teamName(team.getTeamName())
                 .teamManagerName(teamManagerName)
                 .performanceReview(team.getPerformanceReview())
+                .monthlyTargetPrice(team.getMonthlyTargetPrice())
+                .monthlyTargetCount(team.getMonthlyTargetCount())
                 .build();
     }
     public TeamResDto teamToTeamResDto(Team team, String teamManagerName, List<SalesMemberResDto> list){
@@ -97,6 +101,8 @@ public class TypeChange {
                 .teamManagerName(teamManagerName)
                 .teamMemberList(list)
                 .performanceReview(team.getPerformanceReview())
+                .monthlyTargetPrice(team.getMonthlyTargetPrice())
+                .monthlyTargetCount(team.getMonthlyTargetCount())
                 .build();
     }
 
@@ -105,7 +111,9 @@ public class TypeChange {
                 .teamCode(teamCode)
                 .teamName(dto.teamName())
                 .teamManagerCode(dto.teamManagerCode())
-                .performanceReview(dto.performanceReview() == null ? "" : dto.performanceReview() )
+                .performanceReview(dto.performanceReview() == null ? "" : dto.performanceReview())
+                .monthlyTargetPrice(dto.monthlyTargetPrice() == null ? null : dto.monthlyTargetPrice())
+                .monthlyTargetCount(dto.monthlyTargetCount() == null ? null : dto.monthlyTargetCount())
                 .build();
     }
 
@@ -199,6 +207,7 @@ public class TypeChange {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .boardType(board.getBoardType())
+                .writerName(board.getSalesMembers().getName())
                 .salesMemberCode(board.getSalesMembers().getSalesMemberCode())
                 .created_at(board.getCreated_at())  // 날짜 필드 추가
                 .updated_at(board.getUpdated_at())
@@ -220,18 +229,16 @@ public class TypeChange {
     // 답변
     public AnswerResDto AnswerToAnswerResDto(Answer answer){
         return AnswerResDto.builder()
-                .answer_id(answer.getAnswerId())
-//                .title(answer.getTitle())
+                .answerId(answer.getAnswerId())
+                .title(answer.getTitle())
                 .content(answer.getContent())
                 .created_at(answer.getCreated_at())
-                .salesMemberCode(answer.getSalesMembers().getSalesMemberCode())
-                .answer_name(answer.getSalesMembers().getName())
+                .replyMember(answer.getSalesMembers().getName())
                 .build();
     }
 
     public Answer AnswerReqToAnswer(AnswerReqDto answerReqDto, SalesMembers salesMembers, Board board){
         return Answer.builder()
-
                 .content(answerReqDto.content())
                 .salesMembers(salesMembers)
                 .board(board)

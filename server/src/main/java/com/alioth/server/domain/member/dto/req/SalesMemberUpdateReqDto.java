@@ -17,4 +17,5 @@ public record SalesMemberUpdateReqDto(
         String zoneCode,
         String roadAddress,
         String detailAddress
+
 ){}

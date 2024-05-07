@@ -11,6 +11,8 @@ public record TeamResDto(
   String teamCode,
   String teamManagerName,
   String performanceReview,
+  Long monthlyTargetCount,
+  Long monthlyTargetPrice,
   List<SalesMemberResDto> teamMemberList
 
 ) {}
