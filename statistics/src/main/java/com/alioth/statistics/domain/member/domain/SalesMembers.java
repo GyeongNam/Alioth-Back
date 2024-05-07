@@ -36,7 +36,13 @@ public class SalesMembers extends BaseEntity {
     private String birthDay;
 
     @Column(nullable = false, length = 200)
-    private String address;
+    private String zoneCode;
+
+    @Column(nullable = false)
+    private String roadAddress;
+
+    @Column(nullable = false)
+    private String detailAddress;
 
     @Column
     private String profileImage;
