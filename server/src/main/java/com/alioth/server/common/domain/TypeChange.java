@@ -55,9 +55,8 @@ public class TypeChange {
                 .roadAddress(dto.roadAddress())
                 .detailAddress(dto.detailAddress())
                 .rank(dto.rank())
-                .profileImage("https://sssalioth.s3.ap-northeast-2.amazonaws.com/member/defult-image.jpeg")
+                .profileImage("https://aliothsss.s3.ap-northeast-2.amazonaws.com/member/defaultImage.jpg")
                 .build();
-
         return member;
     }
 
@@ -88,6 +87,7 @@ public class TypeChange {
                 .teamCode(team.getTeamCode())
                 .teamName(team.getTeamName())
                 .teamManagerName(teamManagerName)
+                .performanceReview(team.getPerformanceReview())
                 .build();
     }
     public TeamResDto teamToTeamResDto(Team team, String teamManagerName, List<SalesMemberResDto> list){
@@ -96,6 +96,7 @@ public class TypeChange {
                 .teamName(team.getTeamName())
                 .teamManagerName(teamManagerName)
                 .teamMemberList(list)
+                .performanceReview(team.getPerformanceReview())
                 .build();
     }
 
@@ -104,6 +105,7 @@ public class TypeChange {
                 .teamCode(teamCode)
                 .teamName(dto.teamName())
                 .teamManagerCode(dto.teamManagerCode())
+                .performanceReview(dto.performanceReview() == null ? "" : dto.performanceReview() )
                 .build();
     }
 
