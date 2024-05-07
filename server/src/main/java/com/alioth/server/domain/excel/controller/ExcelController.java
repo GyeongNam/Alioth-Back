@@ -23,7 +23,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/excel")
+@RequestMapping("/server/api/excel")
 public class ExcelController {
     private final SalesMemberService salesMemberService;
     private final ExcelService excelService;

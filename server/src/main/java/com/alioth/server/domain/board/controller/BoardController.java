@@ -4,7 +4,7 @@ import com.alioth.server.common.aws.S3Service;
 import com.alioth.server.common.response.CommonResponse;
 import com.alioth.server.domain.board.dto.req.BoardCreateDto;
 import com.alioth.server.domain.board.dto.req.BoardUpdateDto;
-import com.alioth.server.domain.board.dto.req.SugBoradImageReqDto;
+import com.alioth.server.domain.board.dto.req.SugBoardImageReqDto;
 import com.alioth.server.domain.board.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.io.IOException;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/board")
+@RequestMapping("/server/api/board")
 public class BoardController {
 
     private final BoardService boardService;
@@ -93,12 +93,12 @@ public class BoardController {
     }
 
     @PostMapping("/image/upload")
-    public ResponseEntity<CommonResponse> uploadImage(@ModelAttribute("file") SugBoradImageReqDto file) throws IOException {
+    public ResponseEntity<CommonResponse> uploadImage(@ModelAttribute("file") SugBoardImageReqDto file) throws IOException {
         String imageUrl = s3Service.saveFile(file.boardImage(), "/suggestionboard");
 
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
-                "이미지 url 반환",
+                "이미지 S3 url 반환",
                 imageUrl
         );
     }
