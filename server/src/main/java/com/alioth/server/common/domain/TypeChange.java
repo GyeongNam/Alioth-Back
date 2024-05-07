@@ -8,6 +8,7 @@ import com.alioth.server.domain.board.dto.req.BoardCreateDto;
 import com.alioth.server.domain.board.dto.res.BoardResDto;
 import com.alioth.server.domain.contract.domain.Contract;
 import com.alioth.server.domain.contract.dto.req.ContractCreateDto;
+import com.alioth.server.domain.contract.dto.res.ContractExcelResDto;
 import com.alioth.server.domain.contract.dto.res.ContractResDto;
 import com.alioth.server.domain.dummy.domain.ContractMembers;
 import com.alioth.server.domain.dummy.domain.Custom;
@@ -158,6 +159,29 @@ public class TypeChange {
                 .build();
     }
 
+    public ContractExcelResDto ContractResDtoTOcontractExcelResDto(ContractResDto contractResDto){
+        return ContractExcelResDto.builder()
+                .contractId(contractResDto.contractId())
+                .contractCode(contractResDto.contractCode())
+                .contractDate(contractResDto.contractDate())
+                .contractExpireDate(contractResDto.contractExpireDate())
+                .contractPeriod(contractResDto.contractPeriod())
+                .contractTotalPrice(contractResDto.contractTotalPrice())
+                .contractPaymentAmount(contractResDto.contractPaymentAmount())
+                .contractPaymentFrequency(contractResDto.contractPaymentFrequency())
+                .contractPaymentMaturityInstallment(contractResDto.contractPaymentMaturityInstallment())
+                .contractCount(contractResDto.contractCount())
+                .contractPaymentMethod(contractResDto.contractPaymentMethod())
+                .contractPayer(contractResDto.contractPayer())
+                .contractConsultation(contractResDto.contractConsultation())
+                .contractStatus(contractResDto.contractStatus())
+                .insuranceProductName(contractResDto.insuranceProductName())
+                .customName(contractResDto.customName())
+                .contractMemberName(contractResDto.contractMemberName())
+                .salesMemberName(contractResDto.salesMemberName())
+                .salesMemberCode(contractResDto.salesMemberCode())
+                .build();
+    }
 
 
     // 일정
