@@ -70,7 +70,7 @@ public class SalesMemberController {
     @PatchMapping("/{memberCode}/image")
     public ResponseEntity<?> updateMemberImage(@PathVariable("memberCode") String memberCode,
                                                @ModelAttribute SalesMemberImageReqDto memberImage) throws IOException {
-        String profileImage = s3Service.saveFile(memberImage.memberImage());
+        String profileImage = s3Service.saveFile(memberImage.memberImage(), "/member");
         salesMemberService.updateMemberImage(memberCode, profileImage);
 
 
