@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -173,7 +174,7 @@ public class BoardService {
             if(member.getTeam() != null){
                 suggestions = boardRepository.findSuggestionsByTeam(member.getTeam().getId(), BoardType.SUGGESTION, "N");
             }else{
-                throw new AccessDeniedException("팀원을 아직 배정받지 않아 접근하기 어렵습니다.");
+                suggestions = new ArrayList<>();
             }
         } else {
             suggestions = boardRepository.findMyBoards(sm_code, BoardType.SUGGESTION); // FP는 자신의 SUGGESTION만 조회
