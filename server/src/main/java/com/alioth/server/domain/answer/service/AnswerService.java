@@ -68,10 +68,8 @@ public class AnswerService {
 
     public AnswerResDto detail(Long sm_code, Long answerId) {
         Answer answer = this.findById(answerId);
-        if(
-               !(Objects.equals(answer.getBoard().getSalesMembers().getSalesMemberCode(), sm_code)
-                        ||
-                        Objects.equals(answer.getSalesMembers().getSalesMemberCode(), sm_code))
+        if(!(Objects.equals(answer.getBoard().getSalesMembers().getSalesMemberCode(), sm_code) ||
+                Objects.equals(answer.getSalesMembers().getSalesMemberCode(), sm_code))
         ){
             throw new AccessDeniedException("건의사항을 작성한 사람이나 해당 건의사항에 권한이 있는 팀장이 아닙니다.");
         }

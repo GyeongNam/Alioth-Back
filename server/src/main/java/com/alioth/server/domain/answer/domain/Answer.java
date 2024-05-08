@@ -19,6 +19,9 @@ public class Answer extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String title="RE:";
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;

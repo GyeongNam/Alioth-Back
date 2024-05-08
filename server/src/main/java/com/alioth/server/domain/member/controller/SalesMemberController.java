@@ -72,9 +72,6 @@ public class SalesMemberController {
                                                @ModelAttribute SalesMemberImageReqDto memberImage) throws IOException {
         String profileImage = s3Service.saveFile(memberImage.memberImage(), "/member");
         salesMemberService.updateMemberImage(memberCode, profileImage);
-
-
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(profileImage);
     }
