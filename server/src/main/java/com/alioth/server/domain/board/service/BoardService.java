@@ -174,7 +174,7 @@ public class BoardService {
             if(member.getTeam() != null){
                 suggestions = boardRepository.findSuggestionsByTeam(member.getTeam().getId(), BoardType.SUGGESTION, "N");
             }else{
-                suggestions = new ArrayList<>();
+                suggestions = boardRepository.findMyBoards(sm_code, BoardType.SUGGESTION);
             }
         } else {
             suggestions = boardRepository.findMyBoards(sm_code, BoardType.SUGGESTION); // FP는 자신의 SUGGESTION만 조회
