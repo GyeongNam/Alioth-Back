@@ -11,6 +11,5 @@ public record AnswerResDto(
         String content,
         String answer_name,
         LocalDateTime created_at,
-        LocalDateTime updated_at,
-        String replyMember
+        LocalDateTime updated_at
 ) {}

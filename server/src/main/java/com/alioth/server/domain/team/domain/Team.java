@@ -53,6 +53,12 @@ public class Team {
         if(dto.performanceReview() != null){
             this.performanceReview = dto.performanceReview();
         }
+        if(dto.monthlyTargetCount()!=null){
+            this.monthlyTargetCount = dto.monthlyTargetCount();
+        }
+        if(dto.monthlyTargetPrice()!=null){
+            this.monthlyTargetPrice = dto.monthlyTargetPrice();
+        }
     }
 
     public void deleteTeam(){

@@ -233,7 +233,7 @@ public class TypeChange {
                 .title(answer.getTitle())
                 .content(answer.getContent())
                 .created_at(answer.getCreated_at())
-                .replyMember(answer.getSalesMembers().getName())
+                .answer_name(answer.getSalesMembers().getName())
                 .build();
     }
 
