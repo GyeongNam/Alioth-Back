@@ -3,6 +3,8 @@ package com.alioth.server.domain.member.dto.res;
 
 import com.alioth.server.domain.member.domain.SalesMemberType;
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import lombok.Getter;
 

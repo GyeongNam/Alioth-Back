@@ -88,6 +88,7 @@ public class SalesController {
                 dto);
     }
 
+
     @GetMapping("/statistics/api/sales/hq/{date}/price")
     public ResponseEntity<CommonResponse> getSalesHQTotalPrice(@PathVariable String date) {
         SalesHQTotalPriceResDto dto = salesHQService.getSalesHQTotalPrice(date);
