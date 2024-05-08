@@ -39,7 +39,8 @@ public record SalesMemberResDto(
         @Column(name = "목표 금액")
         Long monthlyTargetPrice,
         @Column(name = "목표 건수")
-        Long monthlyTargetCount
+        Long monthlyTargetCount,
+
         @Column(name = "직급")
         SalesMemberType rank
 
