@@ -76,6 +76,17 @@ public class SalesMemberService {
                 .build();
     }
 
+    public Long salesMemberTarget(Long memberCode) {
+        SalesMembers findMember = salesMemberRepository.findBySalesMemberCode(memberCode)
+                .orElseThrow(() -> new EntityNotFoundException("사원 정보가 없습니다."));
+
+        if(findMember.getMonthlyTargetPrice() == null || findMember.getMonthlyTargetPrice() == 0L) {
+            return 0L;
+        }
+
+        return findMember.getMonthlyTargetPrice();
+    }
+
     public Long salesMemberTarget(Long memberCode, String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate temp = LocalDate.parse(date+"-01", formatter);
