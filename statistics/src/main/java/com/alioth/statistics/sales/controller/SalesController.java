@@ -2,6 +2,7 @@ package com.alioth.statistics.sales.controller;
 
 import com.alioth.statistics.common.response.CommonResponse;
 import com.alioth.statistics.sales.dto.res.*;
+import com.alioth.statistics.sales.service.SalesHQService;
 import com.alioth.statistics.sales.service.SalesMemberService;
 import com.alioth.statistics.sales.service.SalesTeamService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class SalesController {
 
     private final SalesMemberService salesMemberService;
     private final SalesTeamService salesTeamService;
+    private final SalesHQService salesHQService;
 
     @GetMapping("/api/stat/sales/{memberCode}/{date}")
     public ResponseEntity<CommonResponse> getPriceTargetMonth(@PathVariable Long memberCode,
@@ -82,7 +84,29 @@ public class SalesController {
 
         return CommonResponse.responseMessage(
                 HttpStatus.OK,
-                "팀 매출 목표",
+                "팀 매출 가격",
+                dto);
+    }
+
+
+
+    @GetMapping("/statistics/api/sales/hq/{date}/price")
+    public ResponseEntity<CommonResponse> getSalesHQTotalPrice(@PathVariable String date) {
+        SalesHQTotalPriceResDto dto = salesHQService.getSalesHQTotalPrice(date);
+
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "전사 매출 전체 현황",
+                dto);
+    }
+
+    @GetMapping("/statistics/api/sales/hq/{date}/team-price")
+    public ResponseEntity<CommonResponse> getTeamSalesTotal(@PathVariable String date) {
+        List<SalesHQTotalTeamPriceResDto> dto = salesHQService.getTeamSalesTotal(date);
+
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "전사가 보는 팀 리스트 매출",
                 dto);
     }
 
