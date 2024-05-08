@@ -62,41 +62,52 @@ public class BoardService {
         SalesMembers author = salesMemberService.findBySalesMemberCode(sm_code);
         Board board = typeChange.BoardCreateDtoToBoard(boardCreateDto, author);
 
-
-
-
         boardRepository.save(board);
 
+        String eventId = UUID.randomUUID().toString();
         if (board.getBoardType() == BoardType.SUGGESTION) {
-            // 이벤트에 대한 고유 ID 한 번만 생성
-            String eventId = UUID.randomUUID().toString();
-            //List<SalesMembers> teamMembers = salesMemberService.getAllMembersByTeam(author.getTeam().getId());
-
-            Long teamManagerCode = author.getTeam().getTeamManagerCode();
-
-            if (!notificationRepository.existsByMessageId(eventId)) {
-                    Notification notification = Notification.builder()
-                            .salesMember(author)
-                            .title("새 건의사항")
-                            .message("새로운 건의사항이 등록되었습니다: " + board.getTitle())
-                            .readStatus(ReadStatus.Unread)
-                            .messageId(eventId) // 모든 알림에 동일한 이벤트 ID 사용
-                            .build();
-                    notificationRepository.save(notification);
-
-                    // FCM 메시지 발송
-                    String fcmToken = redisService.getFcmToken(teamManagerCode);
-                    if (fcmToken != null) {
-                        FcmSendDto fcmSendDto = FcmSendDto.builder()
-                                .token(fcmToken)
-                                .title("새 건의사항")
-                                .body("새로운 건의사항이 등록되었습니다: " + board.getTitle())
-                                .url("/BoardList")
-                                .build();
-                        fcmService.sendMessageTo(fcmSendDto);
+            if (author.getTeam() != null && author.getRank() == SalesMemberType.MANAGER) {
+                // 저자가 FP이고 매니저가 있다면 해당 팀 매니저에게 알림
+                SalesMembers teamManager = salesMemberService.findTeamManagerByTeamId(author.getTeam().getId());
+                sendNotification(eventId, teamManager, board);
+            } else if (author.getRank() == SalesMemberType.HQ) {
+                // 저자가 HQ일 경우 다른 HQ 멤버들에게 알림
+                List<SalesMembers> allHQMembers = salesMemberService.findAllHQMembers();
+                for (SalesMembers hqMember : allHQMembers) {
+                    if (!hqMember.equals(author)) {
+                        sendNotification(eventId, hqMember, board);
                     }
                 }
+            }
+        }
+        return typeChange.BoardToBoardResDto(board);
+    }
 
+
+    private void sendNotification(String eventId, SalesMembers recipient, Board board) throws IOException {
+        if (!notificationRepository.existsByMessageId(eventId)) {
+            Notification notification = Notification.builder()
+                    .salesMember(recipient)
+                    .title("새 건의사항")
+                    .message("새로운 건의사항이 등록되었습니다: " + board.getTitle())
+                    .readStatus(ReadStatus.Unread)
+                    .messageId(eventId)
+                    .build();
+            notificationRepository.save(notification);
+
+            // FCM 메시지 발송
+            String fcmToken = redisService.getFcmToken(recipient.getSalesMemberCode());
+            if (fcmToken != null) {
+                FcmSendDto fcmSendDto = FcmSendDto.builder()
+                        .token(fcmToken)
+                        .title("새 건의사항")
+                        .body("새로운 건의사항이 등록되었습니다: " + board.getTitle())
+                        .url("/BoardList")
+                        .build();
+                fcmService.sendMessageTo(fcmSendDto);
+            }
+        }
+    }
 
 
             // 각 팀 멤버에 대해 알림을 생성합니다.
@@ -124,9 +135,9 @@ public class BoardService {
 //                    }
 //                }
 //            }
-        }
-        return typeChange.BoardToBoardResDto(board);
-    }
+//        }
+//        return typeChange.BoardToBoardResDto(board);
+//    }
 
 
     public BoardResDto update(BoardUpdateDto boardUpdateDto, Long boardId, Long sm_code) {
@@ -159,7 +170,11 @@ public class BoardService {
         if (member.getRank() == SalesMemberType.HQ) {
             suggestions = boardRepository.findByBoardType(BoardType.SUGGESTION); // HQ는 모든 SUGGESTION 조회
         } else if (member.getRank() == SalesMemberType.MANAGER) {
-            suggestions = boardRepository.findSuggestionsByTeam(member.getTeam().getId(), BoardType.SUGGESTION, "N");
+            if(member.getTeam() != null){
+                suggestions = boardRepository.findSuggestionsByTeam(member.getTeam().getId(), BoardType.SUGGESTION, "N");
+            }else{
+                throw new AccessDeniedException("팀원을 아직 배정받지 않아 접근하기 어렵습니다.");
+            }
         } else {
             suggestions = boardRepository.findMyBoards(sm_code, BoardType.SUGGESTION); // FP는 자신의 SUGGESTION만 조회
         }
