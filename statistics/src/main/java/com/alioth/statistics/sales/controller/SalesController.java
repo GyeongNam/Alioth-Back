@@ -24,7 +24,7 @@ public class SalesController {
     private final SalesTeamService salesTeamService;
     private final SalesHQService salesHQService;
 
-    @GetMapping("/api/stat/sales/{memberCode}/{date}")
+    @GetMapping("/statistics/api/stat/sales/{memberCode}/{date}")
     public ResponseEntity<CommonResponse> getPriceTargetMonth(@PathVariable Long memberCode,
                                                               @PathVariable String date) {
         List<SalesMemberMonthResDto> dto = salesMemberService.memberSalesMonth(memberCode, date);
@@ -36,7 +36,7 @@ public class SalesController {
     }
 
 
-    @GetMapping("/api/stat/sales/{memberCode}/{date}/price")
+    @GetMapping("/statistics/api/stat/sales/{memberCode}/{date}/price")
     public ResponseEntity<CommonResponse> getMemberPrice(@PathVariable Long memberCode,
                                                               @PathVariable String date) {
         SalesMemberTotalPriceRedDto dto = salesMemberService.memberSalesPrice(memberCode, date);
@@ -48,7 +48,7 @@ public class SalesController {
     }
 
 
-    @GetMapping("/api/stat/sales/{memberCode}/{date}/target")
+    @GetMapping("/statistics/api/stat/sales/{memberCode}/{date}/target")
     public ResponseEntity<CommonResponse> getMemberTarget(@PathVariable Long memberCode,
                                                          @PathVariable String date) {
         //Long target = salesMemberService.salesMemberTarget(memberCode, date);
@@ -87,7 +87,6 @@ public class SalesController {
                 "팀 매출 가격",
                 dto);
     }
-
 
 
     @GetMapping("/statistics/api/sales/hq/{date}/price")

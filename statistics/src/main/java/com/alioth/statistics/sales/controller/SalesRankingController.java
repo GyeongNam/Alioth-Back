@@ -26,7 +26,7 @@ public class SalesRankingController {
     private final StatProductService productService;
 
     /* 기본 월 표시 */
-    @GetMapping("api/stat/sales-ranking/member")
+    @GetMapping("/statistics/api/stat/sales-ranking/member")
     public ResponseEntity<CommonResponse> memberSalesMonth() {
         List<SalesMemberRankResDto> dto = salesRankingService.memberSalesMonth();
 
@@ -39,7 +39,7 @@ public class SalesRankingController {
 
     /* 기본 월 표시 */
 
-    @GetMapping("api/stat/sales-ranking/member/{date}")
+    @GetMapping("/statistics/api/stat/sales-ranking/member/{date}")
     public ResponseEntity<CommonResponse> memberSalesMonth(@PathVariable("date") String date) {
         List<SalesMemberRankResDto> dto = salesRankingService.memberSalesMonth(date);
 
@@ -52,14 +52,14 @@ public class SalesRankingController {
 
 
 
-    @GetMapping("/api/batch/contract-rank/price")
+    @GetMapping("/statistics/api/batch/contract-rank/price")
     public ResponseEntity<CommonResponse> getRankProductsPrice() {
         List<BatchProductPriceResDto> dto = productService.productDayPrice();
 
         return CommonResponse.responseMessage(HttpStatus.OK, "보험별 금액별 결과입니다", dto);
     }
 
-    @GetMapping("/api/batch/contract-rank/price/{date}")
+    @GetMapping("/statistics/api/batch/contract-rank/price/{date}")
     public ResponseEntity<CommonResponse> getRankProductsPrice(@PathVariable("date") String date) {
         List<BatchProductPriceResDto> dto = productService.productDayPrice(date);
 
@@ -75,7 +75,7 @@ public class SalesRankingController {
     }
 
 
-    @GetMapping("/api/batch/contract-rank/count/{date}")
+    @GetMapping("/statistics/api/batch/contract-rank/count/{date}")
     public ResponseEntity<CommonResponse> getRankProductsCount(@PathVariable("date") String date) {
         List<BatchProductCountResDto> dto = productService.productDayCount(date);
 
