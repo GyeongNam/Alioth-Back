@@ -1,10 +1,9 @@
 package com.alioth.statistics.sales.controller;
 
 import com.alioth.statistics.common.response.CommonResponse;
-import com.alioth.statistics.sales.dto.res.SalesMemberMonthResDto;
-import com.alioth.statistics.sales.dto.res.SalesMemberTargetResDto;
-import com.alioth.statistics.sales.dto.res.SalesMemberTotalPriceRedDto;
+import com.alioth.statistics.sales.dto.res.*;
 import com.alioth.statistics.sales.service.SalesMemberService;
+import com.alioth.statistics.sales.service.SalesTeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +20,11 @@ import java.util.List;
 public class SalesController {
 
     private final SalesMemberService salesMemberService;
+    private final SalesTeamService salesTeamService;
 
     @GetMapping("/api/stat/sales/{memberCode}/{date}")
     public ResponseEntity<CommonResponse> getPriceTargetMonth(@PathVariable Long memberCode,
                                                               @PathVariable String date) {
-
         List<SalesMemberMonthResDto> dto = salesMemberService.memberSalesMonth(memberCode, date);
 
         return CommonResponse.responseMessage(
@@ -35,11 +34,9 @@ public class SalesController {
     }
 
 
-
     @GetMapping("/api/stat/sales/{memberCode}/{date}/price")
     public ResponseEntity<CommonResponse> getMemberPrice(@PathVariable Long memberCode,
                                                               @PathVariable String date) {
-
         SalesMemberTotalPriceRedDto dto = salesMemberService.memberSalesPrice(memberCode, date);
 
         return CommonResponse.responseMessage(
@@ -49,12 +46,11 @@ public class SalesController {
     }
 
 
-
     @GetMapping("/api/stat/sales/{memberCode}/{date}/target")
     public ResponseEntity<CommonResponse> getMemberTarget(@PathVariable Long memberCode,
                                                          @PathVariable String date) {
-
-        Long target = salesMemberService.salesMemberTarget(memberCode, date);
+        //Long target = salesMemberService.salesMemberTarget(memberCode, date);
+        Long target = salesMemberService.salesMemberTarget(memberCode);
         Long price = salesMemberService.memberSalesTargetResPrice(memberCode, date);
 
         SalesMemberTargetResDto dto = SalesMemberTargetResDto.builder()
@@ -69,11 +65,25 @@ public class SalesController {
     }
 
 
+    @GetMapping("/statistics/api/sales/{memberTeamCode}/{date}/target")
+    public ResponseEntity<CommonResponse> getTeamTarget(@PathVariable String memberTeamCode, @PathVariable String date) {
+        SalesTeamTargetResDto dto = salesTeamService.teamTarget(memberTeamCode, date);
+
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "팀 매출 목표",
+                dto);
+    }
 
 
+    @GetMapping("/statistics/api/sales/{memberTeamCode}/{date}/price")
+    public ResponseEntity<CommonResponse> getTeamPrice(@PathVariable String memberTeamCode, @PathVariable String date) {
+        SalesTeamTotalPriceResDto dto = salesTeamService.teamTotalPrice(memberTeamCode, date);
 
-
-
-
+        return CommonResponse.responseMessage(
+                HttpStatus.OK,
+                "팀 매출 목표",
+                dto);
+    }
 
 }

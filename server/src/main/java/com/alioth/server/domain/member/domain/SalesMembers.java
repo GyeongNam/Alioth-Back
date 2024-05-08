@@ -58,6 +58,12 @@ public class SalesMembers extends BaseEntity {
     @Column
     private String extensionNumber;
 
+    @Column
+    private Long monthlyTargetPrice;
+
+    @Column
+    private Long monthlyTargetCount;
+
     @Builder.Default
     @Column(nullable = false)
     private String quit = "N";

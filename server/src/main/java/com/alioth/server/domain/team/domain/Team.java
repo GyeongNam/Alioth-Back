@@ -28,6 +28,10 @@ public class Team {
     private String teamCode;
     @Column(nullable = false)
     private Long teamManagerCode;
+    @Column
+    private Long monthlyTargetPrice;
+    @Column
+    private Long monthlyTargetCount;
     @Column(nullable = false)
     @Builder.Default
     private String delYN = "N";
