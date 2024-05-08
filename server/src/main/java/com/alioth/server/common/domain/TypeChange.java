@@ -63,7 +63,7 @@ public class TypeChange {
 
     public SalesMemberResDto smToSmResDto(SalesMembers member){
         return SalesMemberResDto.builder()
-                .rank(member.getRank())
+//                .rank(member.getRank())
                 .salesMemberCode(member.getSalesMemberCode())
                 .profileImage(member.getProfileImage() == null ? "" : member.getProfileImage())
                 .birthDay(member.getBirthDay())
@@ -253,10 +253,11 @@ public class TypeChange {
     // 답변
     public AnswerResDto AnswerToAnswerResDto(Answer answer){
         return AnswerResDto.builder()
-                .answerId(answer.getAnswerId())
-                .title(answer.getTitle())
+                .answer_id(answer.getAnswerId())
+//                .title(answer.getTitle())
                 .content(answer.getContent())
-                .created_at(answer.getCreated_at()
+                .created_at(answer.getCreatedAt())
+                .salesMemberCode(answer.getSalesMembers().getSalesMemberCode())
                 .answer_name(answer.getSalesMembers().getName())
                 .build();
     }

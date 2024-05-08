@@ -6,10 +6,11 @@ import java.time.LocalDateTime;
 
 @Builder
 public record AnswerResDto(
-        Long answerId,
+        Long answer_id,
         String title,
         String content,
         String answer_name,
         LocalDateTime created_at,
-        LocalDateTime updated_at
+        LocalDateTime updated_at,
+        Long salesMemberCode
 ) {}
