@@ -224,8 +224,8 @@ public class TypeChange {
                 .content(board.getContent())
                 .boardType(board.getBoardType())
                 .salesMemberCode(board.getSalesMembers().getSalesMemberCode())
-                .created_at(board.getCreated_at())  // 날짜 필드 추가
-                .updated_at(board.getUpdated_at())
+                .created_at(board.getCreatedAt())  // 날짜 필드 추가
+                .updated_at(board.getUpdatedAt())
                 .build();
     }
 
@@ -247,7 +247,7 @@ public class TypeChange {
                 .answer_id(answer.getAnswerId())
 //                .title(answer.getTitle())
                 .content(answer.getContent())
-                .created_at(answer.getCreated_at())
+                .created_at(answer.getCreatedAt())
                 .salesMemberCode(answer.getSalesMembers().getSalesMemberCode())
                 .answer_name(answer.getSalesMembers().getName())
                 .build();
