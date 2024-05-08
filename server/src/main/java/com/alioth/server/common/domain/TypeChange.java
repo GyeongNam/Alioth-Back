@@ -63,7 +63,7 @@ public class TypeChange {
 
     public SalesMemberResDto smToSmResDto(SalesMembers member){
         return SalesMemberResDto.builder()
-//                .rank(member.getRank())
+                .rank(member.getRank())
                 .salesMemberCode(member.getSalesMemberCode())
                 .profileImage(member.getProfileImage() == null ? "" : member.getProfileImage())
                 .birthDay(member.getBirthDay())
@@ -90,9 +90,9 @@ public class TypeChange {
                 .teamCode(team.getTeamCode())
                 .teamName(team.getTeamName())
                 .teamManagerName(teamManagerName)
-                .performanceReview(team.getPerformanceReview())
-                .monthlyTargetPrice(team.getMonthlyTargetPrice())
-                .monthlyTargetCount(team.getMonthlyTargetCount())
+                .performanceReview(team.getPerformanceReview() == null ? "" : team.getPerformanceReview())
+                .monthlyTargetPrice(team.getMonthlyTargetPrice() == null ? null : team.getMonthlyTargetPrice())
+                .monthlyTargetCount(team.getMonthlyTargetCount() == null ? null : team.getMonthlyTargetCount())
                 .build();
     }
     public TeamResDto teamToTeamResDto(Team team, String teamManagerName, List<SalesMemberResDto> list){
@@ -101,9 +101,9 @@ public class TypeChange {
                 .teamName(team.getTeamName())
                 .teamManagerName(teamManagerName)
                 .teamMemberList(list)
-                .performanceReview(team.getPerformanceReview())
-                .monthlyTargetPrice(team.getMonthlyTargetPrice())
-                .monthlyTargetCount(team.getMonthlyTargetCount())
+                .performanceReview(team.getPerformanceReview() == null ? "" : team.getPerformanceReview())
+                .monthlyTargetPrice(team.getMonthlyTargetPrice() == null ? null : team.getMonthlyTargetPrice())
+                .monthlyTargetCount(team.getMonthlyTargetCount() == null ? null : team.getMonthlyTargetCount())
                 .build();
     }
 
