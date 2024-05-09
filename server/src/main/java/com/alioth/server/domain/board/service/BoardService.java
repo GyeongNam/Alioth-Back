@@ -66,8 +66,9 @@ public class BoardService {
         boardRepository.save(board);
 
         String eventId = UUID.randomUUID().toString();
+
         if (board.getBoardType() == BoardType.SUGGESTION) {
-            if (author.getTeam() != null && author.getRank() == SalesMemberType.MANAGER) {
+            if (author.getTeam() != null && author.getRank() != SalesMemberType.MANAGER) {
                 // 저자가 FP이고 매니저가 있다면 해당 팀 매니저에게 알림
                 SalesMembers teamManager = salesMemberService.findTeamManagerByTeamId(author.getTeam().getId());
                 sendNotification(eventId, teamManager, board);
